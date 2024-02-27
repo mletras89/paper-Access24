@@ -1,0 +1,219 @@
+\section{Fundamentals}\label{sec:fundamentals}
+The problem of mapping applications to many-core targets is often described by a \emph{specification graph}~\cite{Blickle1998,teichHSWCOUT,Teich:2017} composed of (i) an \emph{application graph}, (ii) an \emph{architecture graph}, and (iii) a set of \emph{mapping edges} that will be explained in the following.
+\subsection{Application Graph}\label{sec:application}
+An application is modeled as a bipartite graph of actors and channels, called an \emph{application graph}, as defined below:
+\begin{definition}[Application Graph]\label{def:application}
+%The application graph $\pgraph = (\SetActors,\SetChannels,\SetPGEdges,\Delay,\Capacity,\Size,\Produce,\Consume,\execTime)$ is a bipartite graph with its vertices partitioned into a \emph{set of actors} $\SetActors$ and a \emph{set of channels} $\SetChannels$.
+An application graph $\pgraph = (\SetActors \cup \SetChannels,\SetPGEdges)$ is a bipartite graph with its vertices partitioned into a \emph{set of actors} $\SetActors$ and a \emph{set of channels} $\SetChannels$.
+Such an application graph can be derived from a \ac{DFG} by explicitly modeling the \ac{FIFO} channels as vertices.
+%E.g., the application graph in~\cref{fig:specification} (left) has been derived from the \ac{DFG} in~\cref{fig:dfg}.
+%Each channel represents a \ac{FIFO} buffer.
+The \emph{delay} function $\Delay: \SetChannels \to \NaturalwithZero$, \emph{capacity} function $\Capacity: \SetChannels \to \Natural$, and \emph{size} function $\Size: \SetChannels \to \Natural$, respectively, assign each channel a number of initial tokens, a maximal number of tokens that can be stored, and the token size in bytes.
+The set of directed edges $\SetPGEdges = \SetPGEdgesOut \cup \SetPGEdgesIn$ describes the flow of data between actors and channels and is partitioned into actor outgoing ($\SetPGEdgesOut \subseteq \SetActors \times \SetChannels$) and actor incoming ($\SetPGEdgesIn \subseteq \SetChannels \times \SetActors$) edges.
+Throughout this paper, we assume marked graph semantics~\cite{chep_1971-marked-graphs} of the application graph.
+Finally, the function $\execTime: \SetActors \times \SetCoreTypes \rightarrow \Natural \cup \{\bot\}$ represents the execution time $\execTime(\actor, \coretype)$ of an actor $\actor$ when mapped on a core of type $\coretype \in \SetCoreTypes$.
+The $\bot$ value indicates that an actor $\actor$ cannot be mapped to a particular core type $\theta$.
+\end{definition}
+In \cref{fig:specification,fig:TokenBased}, an example of an application graph $\pgraph$ consisting of five actors $\SetActors=\{\actor_1,\ldots,\actor_{5}\}$ communicating via five channels $\SetChannels=\{\channel_1,\ldots,\channel_{5}\}$ is given.
+Each communication channel $\channel \in \SetChannels$ has annotated its corresponding number of initial tokens $\Delay(\channel)$, capacity $\Capacity(\channel)$, and size of each token $\Size(\channel)$.
+According to the assumed marked graph semantics, each actor consumes exactly one token from each input channel and produces one token on each output channel upon firing.
+
+\subsection{Multi-cast Actors}\label{sec:multi-cast-actors}
+
+Generally, an application graph might contain so-called \emph{multi-cast actors} $\actorMulticast \in \SetActorsMulticast \subset \SetActors$, e.g., actor $\actor_2 \in \SetActorsMulticast$ in~\cref{fig:TokenBased}.
+In each actor firing of a multi-cast actor $\actorMulticast$, one token is consumed from its \emph{input channel} $\channel_{in}$, and for each \emph{output channel} $\channel_{out}$, one token is produced containing copied data of the consumed token. %, see~\cref{eq:multicast-cons-prod-one}.
+To exemplify, actor $\actor_2$ copies each token consumed from input channel $\channel_1$ to actors $\actor_3$ and $\actor_4$ by producing for each output channel $\channel_{out} \in \{\channel_2,\channel_3\}$ a token containing identical data.
+\par
+Formally, each multi-cast actor $\actorMulticast \in \SetActorsMulticast$ has exactly one input channel and multiple output channels, as specified in~\cref{eq:multicast-one-in-multi-out}.
+The size of the tokens contained in the input and output channels must be identical (see~\cref{eq:multicast-token-size}), e.g., $\Size(\channel_3) = \Size(\channel_2) = \Size(\channel_1)$.
+Finally, there must not be any initial tokens in the output channels, and the channel capacity of all output channels must be identical (see~\cref{eq:multicast-capacity-and-delay}), e.g., $\Delay(\channel_2) = \Delay(\channel_3) = 0$ and $\Capacity(\channel_2) = \Capacity(\channel_3)$.
+\scalebox{0.90}{\parbox{1.10\columnwidth}{
+\begin{align}
+ &\forall \actorMulticast \in \SetActorsMulticast : |(\SetChannels\times\{\actorMulticast\}) \cap \SetPGEdges| = 1 \land |(\{\actorMulticast\}\times\SetChannels) \cap \SetPGEdges| \ge 1 \label{eq:multicast-one-in-multi-out} \\
+ &\quad\land\forall (\channel_{in}, \actorMulticast), (\actorMulticast, \channel_{out}), (\actorMulticast, \channel'_{out}) \in \SetPGEdges: \Size(\channel_{in}) = \Size(\channel_{out}) \label{eq:multicast-token-size} \\
+%&\quad\quad\land\Consume(\channel_{in}, \actorMulticast) = \Produce( \actorMulticast, \channel_{out}) = 1 \label{eq:multicast-cons-prod-one} \\
+ &\quad\quad\land\Delay(\channel_{out}) = 0 \land \Capacity(\channel_{out}) = \Capacity(\channel'_{out}) \label{eq:multicast-capacity-and-delay}
+\end{align}}}
+\par
+Each multi-cast actor represents a memory footprint reduction opportunity by replacing it and its adjacent channels with an \ac{MRB}, as shown and explained in the caption of~\cref{fig:fifoRealizations}.
+
+\subsection{Multi-reader Buffer Realization}
+
+A concept for unifying multiple \acp{FIFO} carrying identical data was first introduced by~\cite{Mamidala:2011} (there called broadcast-\acs{FIFO}).
+However, the proposed broadcast-\acs{FIFO} has slightly altered semantics compared to the behavior of the multiple point-to-point \acs{FIFO} channels it replaces.
+A concept preserving \ac{FIFO} semantics has then been presented in~\cite{lft_2023-MRBs} \revised{by introducing \acp{MRB}}, which will be explained in the following.
+\par
+By definition, an \ac{MRB} $\GenMRB$ has one writer $\Writer$ and multiple readers $\Reader \in \{ \actor \mid (\GenMRB, \actor) \in \SetPGEdges \}$.
+For the example shown in~\cref{fig:mergingChannel}, the \ac{MRB} $\channel_{\{1,2,3\}}$ has the writer $\actor_1$, and the actors $\actor_3$ and $\actor_4$ are its readers.
+An \ac{MRB} has a write index $\Write_{\GenMRB} \in \{0,1,\ldots,\Capacity(\GenMRB)-1\}$ that indicates the next position in $\GenMRB$'s buffer to be filled with the next token produced by the writer.
+Moreover, for each reader $\Reader$, there is a read index $\Read_{\GenMRB,\Reader} \in \{-1,0,1,\ldots,\Capacity(\GenMRB)-1\}$ that indicates the position in $\GenMRB$'s buffer from which the reader will consume the next token.
+The special value $-1$ denotes that $\GenMRB$ is empty from $\Reader$'s perspective.
+\par
+Then, the number of available tokens $\Tokens(\GenMRB,\Reader)$ from the perspective of a reader $\Reader$ and the number of free places $\Free(\GenMRB)$ in $\GenMRB$ from the perspective of the writer $\Writer$ can be determined as follows:
+\vspace{-2mm}\\
+\scalebox{0.90}{\parbox{1.10\columnwidth}{
+\begin{align*}
+  \Tokens(\GenMRB,\Reader) &=
+    \begin{cases}
+       0                                                                                      & \text{if } \Read_{\GenMRB,\Reader} = -1 \\
+       ((\Write_{\GenMRB} - \Read_{\GenMRB,\Reader} - 1)\ \mathrm{mod}\ \Capacity(\GenMRB))+1 & \text{otherwise}
+    \end{cases} \\
+  \Free(\GenMRB)           &=
+    \Capacity(\GenMRB) - \max_{(\GenMRB, \Reader) \in \SetPGEdges}{\Tokens(\GenMRB,\Reader)}
+\end{align*}}}
+\par
+%Of course, the presented \ac{MRB} realization supports multi-rate dataflow.
+It is worth noting that the presented \ac{MRB} realization presented here can support even multi-rate dataflow.
+To demonstrate this, assume that the writer $\Writer$ produces $\Produce(\Writer)$ tokens and a reader $\Reader$ consumes $\Consume(\Reader)$ tokens upon firing.
+Naturally, the writer $\Writer$ can only fire when $\Free(\GenMRB) \ge \Produce(\Writer)$ holds.
+Similarly, $\Tokens(\GenMRB,\Reader) \ge \Consume(\Reader)$ must be satisfied for a reader $\Reader$ to fire.
+\par
+When firing actor $\Writer$, each read index $\Read_{\GenMRB,\Reader}$ with value $-1$ (i.e., indicating that the \ac{MRB} is empty from $\Reader$'s perspective) is set to the value $\Write_{\GenMRB}$ (\cref{eq:readnotempty}).
+Then, \cref{eq:writeupdate} is applied, which advances the writer index $\Write_{\GenMRB}$ by the number of produced tokens.
+\vspace{-2mm}\\
+\scalebox{0.90}{\parbox{1.10\columnwidth}{
+\begin{align}
+  \displaystyle\mathop{\forall}_{(\GenMRB, \Reader) \in \SetPGEdges}
+    \Read_{\GenMRB,\Reader} & \leftarrow 
+      \begin{cases}
+         \Write_{\GenMRB}        & \text{if } \Read_{\GenMRB,\Reader} = -1 \\
+         \Read_{\GenMRB,\Reader} & \text{otherwise}
+      \end{cases} \label{eq:readnotempty}\\
+  \Write(\GenMRB)           &\leftarrow (\Write_{\GenMRB} + \Produce(\Writer))\ \mathrm{mod}\ \Capacity(\GenMRB) \label{eq:writeupdate}
+\end{align}}}
+\par
+Accordingly, upon each firing of a reader $\Reader$, the corresponding read index $\Read_{\GenMRB,\Reader}$ is updated as follows:
+\scalebox{0.90}{\parbox{1.10\columnwidth}{
+\begin{align*}
+  \Read_{\GenMRB,\Reader}   &\leftarrow
+    \begin{cases}
+      -1                                                                             & \text{if } \Tokens(\GenMRB,\Reader) = \Consume(\Reader) \\
+      (\Read_{\GenMRB,\Reader}+\Consume(\Reader))\ \mathrm{mod}\ \Capacity(\GenMRB)  & \text{otherwise}
+    \end{cases}
+\end{align*}}}
+\par
+To exemplify, the \ac{MRB}'s read and write indices after various firings of the connected actors $\actor_1$, $\actor_3$, and $\actor_4$ are depicted in~\cref{fig:stateOfMRB}.
+\begin{figure}[t]
+\centering
+  \begin{subfigure}[b]{0.48\columnwidth}
+   \centering
+    \resizebox{\columnwidth}{!}{
+    \begin{tikzpicture}
+      \writingFIFOEmpty
+    \end{tikzpicture}
+    }
+    \caption{\label{fig:MRBStateOne}Initial state of the \ac{MRB}}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.48\columnwidth}
+   \centering
+    \resizebox{\columnwidth}{!}{
+    \begin{tikzpicture}
+      \writingFIFO
+    \end{tikzpicture}
+    }
+    \caption{\label{fig:MRBStateTwo}After firing $\langle \actor_1, \actor_1, \actor_1 \rangle$}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.48\columnwidth}
+   \centering
+    \resizebox{\columnwidth}{!}{
+    \begin{tikzpicture}
+      \writingFIFOSecond
+    \end{tikzpicture}
+    }
+    \caption{\label{fig:MRBStateThree}\ac{MRB} after $\langle \actor_3, \actor_3, \actor_3, \actor_1 \rangle$}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.48\columnwidth}
+   \centering
+    \resizebox{\columnwidth}{!}{
+    \begin{tikzpicture}
+      \writingFIFOThird
+    \end{tikzpicture}
+    }
+    \caption{\label{fig:MRBStateFour}\ac{MRB} after $\langle \actor_4, \actor_3 \rangle$}
+  \end{subfigure}
+  \caption{\label{fig:stateOfMRB}\ac{MRB} with one write index (pointer) indicating the location of the next token to be written.
+    Moreover, each reading actor requires an index pointing to the position of the next token to read.\vspace{-3mm}}
+\end{figure}
+There, actors $\actor_1$, $\actor_3$, and $\actor_4$ are, respectively, associated with the write index $\Write_{\channel_{\{1,2,3\}}}$ and the read indices $\Read_{\channel_{\{1,2,3\}},\actor_3}$ and $\Read_{\channel_{\{1,2,3\}},\actor_4}$.
+\par
+Assuming the \ac{MRB} is initially empty, these read and write indices have the values shown in~\cref{fig:MRBStateOne}.
+Thus, $\Tokens(\channel_{\{1,2,3\}}, \actor_3) = \Tokens(\channel_{\{1,2,3\}}, \actor_4) = 0$ and $\Free(\channel_{\{1,2,3\}}) = \Capacity(\channel_{\{1,2,3\}}) - \max \{ 0, 0 \} = 4$.
+At this point (see~\cref{fig:MRBStateOne}), it is only possible to perform write operations.
+Before firing $\actor_1$, we must check if there is at least one free place available for the produced token, i.e., $\Free(\channel_{\{1,2,3\}}) = 4 \geq 1$.
+\par
+Next, assume actor $\actor_1$ fires three times, resulting in the state shown in~\cref{fig:MRBStateTwo}.
+There, the write index $\Write_{\channel_{\{1,2,3\}}}$ has advanced to $3$, pointing to the next free place in the \ac{MRB}'s buffer.
+The read indices $\Read_{\channel_{\{1,2,3\}},\actor_3}$ and $\Read_{\channel_{\{1,2,3\}},\actor_4}$ have been updated during the first firing of actor $\actor_1$ from $-1$ to $0$, pointing to the first token contained in the \ac{MRB}.
+At this point (see~\cref{fig:MRBStateTwo}), we can also perform read operations.
+Before firing a reader, we need to verify if there exist sufficient tokens to be consumed by the reader.
+For instance, we are able to fire actor $\actor_3$ because $\Tokens(\channel_{\{1,2,3\}}, \actor_3) = ((3-0-1)\ \mathrm{mod}\ 4) + 1 = 3 \geq 1$.
+\par
+After firing the sequence $\langle \actor_3, \actor_3, \actor_3, \actor_1 \rangle$, the resulting state is shown in~\cref{fig:MRBStateThree}.
+There, the readers track different information about the state of the \ac{MRB}.
+The reader $\actor_3$ points to $\Read_{\channel_{\{1,2,3\}},\actor_3}=3$ and observes $\Tokens(\channel_{\{1,2,3\}}, \actor_3)=((0-3-1)\ \mathrm{mod}\ 4)+1 = 1$ token, whereas reader $\actor_4$ points to $\Read_{\channel_{\{1,2,3\}},\actor_4}=0$ and observes $\Tokens(\channel_{\{1,2,3\}}, \actor_4)=((0-0-1)\ \mathrm{mod}\ 4)+1 = 4$ tokens.
+From the perspective of the writer $\actor_1$, the \ac{MRB} is full.
+At this point (see~\cref{fig:MRBStateThree}), let the firing sequence $\langle \actor_4, \actor_3 \rangle$ be observed.
+\par
+The resulting state of the \ac{MRB} is shown in \cref{fig:MRBStateFour}.
+From the perspective of $\actor_3$, the \ac{MRB} is empty, i.e., $\Read_{\channel_{\{1,2,3\}},\actor_3}$ is $-1$.
+The token placed at position $0$ has been consumed because $\actor_4$ has read it now, seeing $\Tokens(\channel_{\{1,2,3\}}, \actor_4)=((0-1-1)\ \mathrm{mod}\ 4)+1 = 3$ more tokens.
+From the perspective of $\actor_1$, there is one free place as $\Free(\channel_{\{1,2,3\}}) = \Capacity(\channel_{\{1,2,3\}}) - \max \{ 0, 3 \} = 4 - 3 = 1$.
+
+\subsection{Architecture Graph}\label{sec:architecture}
+A heterogeneous many-core target architecture, e.g., as depicted in the right part of~\cref{fig:specification}, can be modeled formally by an abstract \emph{architecture graph}:
+\begin{definition}[Architecture Graph]\label{def:architecture}
+An architecture graph $\rgraph$ is a tuple $(\SetResources, \SetLinks)$ composed of a set of vertices $\SetResources$ modeling hardware resources and a set of edges $\SetLinks \subseteq \SetResources \times \SetResources$ denoting communication links between resources. 
+\end{definition}
+\par
+Here, the set of vertices $\SetResources = \SetCores \cup \SetMemories \cup \SetInterconnects$ represents the resources of the architecture where each $\core \in \SetCores$ denotes a core, each $\memory \in \SetMemories$ a memory, and each $\interconnect \in \SetInterconnects$ an interconnect.
+The set of cores $\SetCores$ is partitioned into sets $\SetCores_{\coretype_1}, \SetCores_{\coretype_2}, \ldots \SetCores_{\coretype_{|\SetCoreTypes|}}$.
+Each set $\SetCores_\coretype$ describes the set of cores of identical core type $\coretype \in \SetCoreTypes$.
+\par
+The set of memory resources $\SetMemories = \SetMemoriesLocal \cup \SetTileLocalMemories \cup \{\GlobalMemory\}$ can be partitioned into \emph{core-local memories} ($\memory_{\core_i} \in \SetMemoriesLocal$), \emph{tile-local memories} ($\memory_{\tile_j} \in \SetTileLocalMemories$), and the \emph{global memory} ($\GlobalMemory$).
+Each core $\core_i \in \SetCores$ has a core-local memory $\memory_{\core_i}$ reachable via a link $(\core_i,\memory_{\core_i}) \in \SetLinks$.
+Each memory $\memory \in \SetMemories$ has a \emph{capacity} $\MemoryCapacity{\memory}$, which denotes the number of bytes that can be stored in the memory.
+\par
+The set of interconnects $\SetInterconnects$ is partitioned into the \ac{NoC} ($\NoC \in \SetInterconnects$) and a set of crossbars $\crossbar{} \in \SetCrossbars = \SetInterconnects \setminus \{\NoC\}$.
+Each interconnect $\interconnect \in \SetInterconnects$ is annotated with its bandwidth $\Bandwidth{\interconnect}$, which is used to calculate data transfer delays.
+The time required to transport $\eta$ bytes of data over a crossbar $\crossbar{}$ can be calculated as $\eta / \Bandwidth{\crossbar{}}$.
+\par
+Resources of a given architecture, excluding the \ac{NoC} and the global memory ($\GlobalMemory$), i.e., processors, local memories, tile-local memories, and crossbars, are organized as a set of tiles $\SetTiles$.
+Each tile $\tile \in \SetTiles$ consists of a set of cores and their core-local memories, a tile-local memory, and a tile crossbar connecting the cores and memories of the tile.
+As each resource belongs to exactly one tile, tiles are (i) \emph{disjoint}, i.e., $\forall \tile_i, \tile_j \in \SetTiles : \tile_i \cap \tile_j = \emptyset$ where $i \neq j$ and (ii) \emph{covering}, i.e., $\cup_{\tile \in \SetTiles} \tile = \SetResources \setminus \{ \GlobalMemory, \NoC \}$.
+\par
+Intra-tile communication is provided by links connecting each core and memory of the respective tile via the tile crossbar.
+To exemplify, consider the tile $\tile_1$ presented in \cref{fig:specification}.
+It is composed of six cores $\{\core_1,\ldots,\core_6\}$, six core-local memories $\{\memory_{\core_1},\ldots,\memory_{\core_6}\}$, the tile-local memory $\memory_{\tile_1}$, and the tile-crossbar $\crossbar{1}$.
+Each core in tile $\tile_1$ has an exclusive communication link with its corresponding core-local memory, e.g., there exists a link $(\core_i,\memory_{\core_i})$ that connects core $\core_i$ with its memory $\memory_{\core_i}$.
+Moreover, each memory of the tile can be reached via the tile-crossbar $\crossbar{1}$.
+If core $\core_1$ sends data to $\core_4$, such data will traverse the tile-crossbar $\crossbar{1}$ via the links $(\core_1,\crossbar{1})$ and $(\crossbar{1},\memory_{\core_4})$ to be stored in the core-local memory $\memory_{\core_4}$ of core $\core_4$.
+\par
+For inter-tile communication, links are provided that connect each tile to the \ac{NoC} ($\NoC$), which in turn is connected to the global memory ($\GlobalMemory$).
+\par
+The set of resources involved in a data transfer between a core $\core$ and a memory $\memory$ will be denoted by a \emph{routing function} $\Routing: \SetCores \times \SetMemories \rightarrow \PowerSet{\SetResources}$%
+\footnote{Here, the $\PowerSet{X}$ notation denotes the power set of the set $X$, i.e., the set of all subsets of $X$.}, as explained in the following.
+\par
+In the simplest case, a data transfer happens between a core $\core_i$ and its local memory $\memory_{\core_i}$.
+Then, no interconnect resources are involved, i.e., $\Routing(\core_i, \memory_{\core_i}) = \{\core_i, \memory_{\core_i}\}$.
+\par
+Else, if the core $\core$ and the memory $\memory$ share the same tile ($\exists \tile_j \in \SetTiles: \core, \memory \in \tile_j$), an \emph{intra-tile} data transfer is performed.
+In this case, the data transfer only traverses the tile crossbar $\crossbar{j}$, i.e., $\Routing(\core, \memory) = \{ \core, \crossbar{j}, \memory \}$.
+\par
+Otherwise, an \emph{inter-tile} transfer is needed as the core $\core$ and the memory $\memory$ are allocated in different tiles, i.e., $\core \in \tile_j$, $\memory \in \tile_k$, and $\tile_j \neq \tile_k$.
+Then, the data needs to travel over the tile crossbar $\crossbar{j}$ of the tile containing the core $\core$, the \ac{NoC} interconnect $\NoC$, and the tile crossbar $\crossbar{k}$ of the tile containing the memory $\memory$, i.e., $\Routing(\core, \memory) = \{ \core, \crossbar{j}, \NoC, \crossbar{k}, \memory \}$.
+\par
+In all other cases, the global memory is used, and the involved interconnect resources are the tile crossbar $\crossbar{j}$ and the \ac{NoC}, i.e., $\Routing(\core, \GlobalMemory) = \{ \core, \crossbar{j}, \NoC, \GlobalMemory\}$.
+
+\subsection{Specification graph}\label{sec:specification}
+
+To perform explorations of allocations and mappings of actors to cores as well as channels to memories, a specification finally contains a set of \emph{mapping edges} $\SetMappings = \SetMappingsActors \cup \SetMappingsChannels$ that is partitioned into a set of potential mappings $\SetMappingsActors = \{ (\actor, \core) \in  \SetActors \times \SetCores \mid \exists \coretype \in \SetCoreTypes: \core \in \SetCores_\coretype \land \execTime(\actor, \coretype) \neq \bot \}$%
+\footnote{Remember, $\execTime(\actor, \coretype) = \bot$ denotes that an actor $\actor$ cannot be mapped to a particular core type $\coretype$.}
+of actors to cores and a set of potential mappings $\SetMappingsChannels = \SetChannels \times \SetMemories$ of channels to memories.
+These mapping edges specify that every memory can store each channel and that each actor $\actor$ can be mapped to every core $\core \in \SetCores_\coretype$ of a type $\coretype$ that can execute the actor $\actor$.
+With these definitions, a \emph{specification graph} can be defined as follows:
+\begin{definition}[Specification Graph]
+A specification graph $\sgraph$ is a tuple $(\SetSGVertices, \SetSGEdges)$ composed of a set of vertices $\SetSGVertices$ and a set of edges $\SetSGEdges$.
+The set of vertices $\SetSGVertices = \SetActors \cup \SetChannels \cup \SetResources$ is formed from the union of vertices of the application graph $\pgraph$ and the architecture graph $\rgraph$.
+Similarly, the set of edges $\SetSGEdges = \SetPGEdges \cup \SetLinks \cup \SetMappings$ is formed from the union of edges of both graphs and the set of \emph{mapping edges}.
+\end{definition}
+\Cref{fig:specification} illustrates an example of an application graph, an architecture graph, and an exemplified set of actor-to-core and channel-to-memory mappings.

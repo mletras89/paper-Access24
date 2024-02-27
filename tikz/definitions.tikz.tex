@@ -1,0 +1,258 @@
+\definecolor{amaranth}{rgb}{0.9, 0.17, 0.31}
+\definecolor{amber}{rgb}{1.0, 0.75, 0.0}
+\definecolor{amber(sae/ece)}{rgb}{1.0, 0.49, 0.0}
+\definecolor{amethyst}{rgb}{0.6, 0.4, 0.8}
+\definecolor{ao(english)}{rgb}{0.0, 0.5, 0.0}
+\definecolor{applegreen}{rgb}{0.55, 0.71, 0.0}
+\definecolor{azure(colorwheel)}{rgb}{0.0, 0.5, 1.0}
+\definecolor{babyblue}{rgb}{0.54, 0.81, 0.94}
+\definecolor{carmine}{rgb}{0.59, 0.0, 0.09}
+\definecolor{bananayellow}{rgb}{1.0, 0.88, 0.21}
+\definecolor{bleudefrance}{rgb}{0.19, 0.55, 0.91}
+\definecolor{bluegray}{rgb}{0.4, 0.6, 0.8}
+\definecolor{blue(ncs)}{rgb}{0.0, 0.53, 0.74}
+\definecolor{bluencs}{rgb}{0.0,0.53,0.74}
+\definecolor{blue-violet}{rgb}{0.54, 0.17, 0.89}
+\definecolor{brickred}{rgb}{0.8, 0.25, 0.33}
+\definecolor{britishracinggreen}{rgb}{0.0, 0.26, 0.15}
+\definecolor{brown(traditional)}{rgb}{0.59, 0.29, 0.0}
+\definecolor{bubblegum}{rgb}{0.99, 0.76, 0.8}
+\definecolor{burntorange}{rgb}{0.8, 0.33, 0.0}
+\definecolor{candyapplered}{rgb}{1.0, 0.03, 0.0}
+\definecolor{caribbeangreen}{rgb}{0.0, 0.8, 0.6}
+\definecolor{chromeyellow}{rgb}{1.0, 0.65, 0.0}
+\definecolor{cssgreen}{rgb}{0.0, 0.5, 0.0}
+\definecolor{darkpastelgreen}{rgb}{0.01, 0.75, 0.24}
+\definecolor{darkspringgreen}{rgb}{0.09, 0.45, 0.27}
+\definecolor{emerald}{rgb}{0.31, 0.78, 0.47}
+\definecolor{fashionfuchsia}{rgb}{0.96, 0.0, 0.63}
+\definecolor{forestgreen(traditional)}{rgb}{0.0, 0.27, 0.13}
+\definecolor{forestgreen(web)}{rgb}{0.13, 0.55, 0.13}
+\definecolor{greenApple}{rgb}{0.09,0.45,0.27}
+\definecolor{green(ryb)}{rgb}{0.4, 0.69, 0.2}
+\definecolor{harlequin}{rgb}{0.25, 1.0, 0.0}
+\definecolor{jade}{rgb}{0.0, 0.66, 0.42}
+\definecolor{lasallegreen}{rgb}{0.03, 0.47, 0.19}
+\definecolor{orange(colorwheel)}{rgb}{1.0, 0.5, 0.0}
+\definecolor{orange-red}{rgb}{1.0, 0.27, 0.0}
+\definecolor{harlequin}{rgb}{0.25, 1.0, 0.0}
+\definecolor{green(colorwheel)(x11green)}{rgb}{0.0, 1.0, 0.0}
+\definecolor{actioncolor}{RGB}{158,184,246}
+\definecolor{actiondyncolor}{RGB}{201, 106, 103}
+\definecolor{guardcolor}{RGB}{238, 205, 127}
+\definecolor{internationalorange}{rgb}{1.0, 0.31, 0.0}
+\definecolor{dartmouthgreen}{rgb}{0.05, 0.5, 0.06}
+\definecolor{green(ryb)}{rgb}{0.4, 0.69, 0.2}
+\definecolor{green-yellow}{rgb}{0.68, 1.0, 0.18}
+%\definecolor{green(html/cssgreen)}{rgb}{0.0, 0.5, 0.0}
+\definecolor{kellygreen}{rgb}{0.3, 0.73, 0.09}
+\definecolor{cosmiclatte}{rgb}{1.0, 0.97, 0.91}
+\definecolor{darkpastelgreen}{rgb}{0.01, 0.75, 0.24}
+\definecolor{electricgreen}{rgb}{0.0, 1.0, 0.0}
+\definecolor{green(munsell)}{rgb}{0.0, 0.66, 0.47}
+\definecolor{blue(munsell)}{rgb}{0.0, 0.5, 0.69}
+\definecolor{azureBlue}{rgb}{0.0, 0.5, 1.0}
+\definecolor{amber}{rgb}{1.0, 0.75, 0.0}
+\definecolor{blueViolet}{rgb}{0.54, 0.17, 0.89}
+\definecolor{britishgreen}{rgb}{0.0, 0.26, 0.15}
+\definecolor{bluebell}{rgb}{0.64, 0.64, 0.82}
+\definecolor{blush}{rgb}{0.87, 0.36, 0.51}
+\definecolor{blue(pigment)}{rgb}{0.2, 0.2, 0.6}
+\definecolor{canaryyellow}{rgb}{1.0, 0.94, 0.0}
+
+\tikzstyle{dynActors}                   = [draw=red!50,fill=red!25,circle,minimum size=8mm,inner sep=0pt,outer sep=0pt,line width=0.5mm]
+\tikzstyle{staticActors}                = [draw=blue!50,fill=blue!25,circle,minimum size=8mm,inner sep=0pt,outer sep=0pt,line width=0.5mm]
+\tikzstyle{dynActorsBorder}             = [draw=red!50,dashed,line width=0.4mm]
+\tikzstyle{nodesCluster1}               = [draw=black,circle,minimum size=8mm,inner sep=0pt,outer sep=0pt,thick]
+\tikzstyle{nodesCluster2}               = [draw=black,fill=black!10,circle,minimum size=8mm,inner sep=0pt,outer sep=0pt, thick]
+\tikzstyle{nodesCluster1Border}         = [draw=black,line width=0.4mm,fill=blue(ncs)!60,opacity=0.40]
+\tikzstyle{nodesCluster2Border}         = [draw=black,line width=0.4mm,fill=applegreen!60,opacity=0.40]
+\tikzstyle{nodesFSM}                    = [draw,fill=blue!20,circle,minimum size=8mm,inner sep=0pt,outer sep=0pt,thick]
+\tikzstyle{nodesFSMClusterOne}          = [draw,fill=white,circle,minimum size=1.5cm,inner sep=0pt,outer sep=0pt,line width=0.7mm]
+\tikzstyle{nodesFSMClusterTwo}          = [draw,fill=white,circle,minimum size=2cm,inner sep=0pt,outer sep=0pt,thick]
+\tikzstyle{backgroundFSM}               = [minimum size=8mm,inner sep=0pt,outer sep=0pt,thick]
+\tikzstyle{nodesFSMProdFSM}             = [draw,fill=white,rectangle,minimum width=3.5cm, minimum height=0.8cm,inner sep=0pt,outer sep=0pt,line width=0.5mm]
+\tikzstyle{mappingEdge}                 = [draw=black,dotted,line width=0.3mm]
+\tikzstyle{tokenDelayGraph}             = [draw=black,fill=black,circle,minimum size=0.5cm,inner sep=0pt,outer sep=0pt]
+
+\tikzstyle{ActorStyle} = [line width=0.25mm,circle, draw, minimum height=0.5cm, fill=candyapplered!30]
+
+\tikzstyle{TaskReadStyle} = [line width=0.25mm,rectangle, draw, minimum width=1.5cm, minimum height=0.5cm, fill=green!20]
+\tikzstyle{TaskWriteStyle}= [line width=0.25mm,rectangle, draw, minimum width=1.5cm, minimum height=0.5cm, fill=green(munsell)!40]
+
+\tikzstyle{ActorBroadcastStyle} = [line width=0.25mm,circle, draw, minimum height=0.5cm, fill=amethyst!30]
+\tikzstyle{ChannelStyle} = [line width=0.25mm, circle, draw, minimum height=0.5cm, fill=green(munsell)!30]
+\tikzstyle{MappingStyle} = [opacity=0.7,->,>=triangle 60, line width=0.4mm,densely dashed]
+
+\tikzstyle{ArrowStyle} = [->,>=triangle 60, line width=0.3mm]
+
+\tikzstyle{ArchitectureLinkStyle} = [-Latex,line width=0.3mm]
+
+\tikzstyle{CoreType1} = [fill=canaryyellow!160,rectangle, minimum width=1cm, minimum height=2cm,draw]
+\tikzstyle{LocalMemType} = [fill=ao(english)!50,rectangle, minimum width=1cm, minimum height=2cm,draw]
+
+\tikzstyle{CoreType3} = [fill=azure(colorwheel)!120,rectangle, minimum width=1cm, minimum height=2cm,draw]
+
+\tikzstyle{CrossbarStyle} = [fill=canaryyellow!360,rectangle, minimum width=6.2cm, minimum height=0.5cm,draw]
+\tikzstyle{TileLocalMemStyle} = [fill=ao(english)!50,rectangle, minimum width=0.5cm, minimum height=6.2cm,draw]
+
+
+
+%\tikzstyle{DRAMSP}                = [color=applegreen, line width=0.3mm,solid]
+%\tikzstyle{DRAMSPMergingAlways}   = [color=ao(english), line width=0.3mm, solid]
+%\tikzstyle{DRAMSPMergingExplore}  = [color=black, line width=0.3mm, solid]
+
+\tikzstyle{DRAMSP}                = [color=blue, line width=0.3mm, dashed]
+\tikzstyle{DRAMSPMergingAlways}   = [color=blue, line width=0.3mm, dashdotted]
+\tikzstyle{DRAMSPMergingExplore}  = [color=blue, line width=0.3mm, solid]
+
+\tikzstyle{ILPDRAMSP}                = [color=red, line width=0.3mm, dashed]
+\tikzstyle{ILPDRAMSPMergingAlways}   = [color=red, line width=0.3mm, dashdotted]
+\tikzstyle{ILPDRAMSPMergingExplore}  = [color=red , line width=0.3mm, solid]
+
+%\tikzstyle{ILPDRAMSP}                = [color=red, line width=0.3mm,solid]
+%\tikzstyle{ILPDRAMSPMergingAlways}   = [color=blue, line width=0.3mm, solid]
+%\tikzstyle{ILPDRAMSPMergingExplore}  = [color=orange, line width=0.3mm, solid]
+
+\tikzstyle{HeuristicTopologicalInit}        =  [color=black, line width=0.3mm, dashed] 
+\tikzstyle{HeuristicTopologicalInitAlways}  =  [color=black, line width=0.3mm, dashdotted]
+\tikzstyle{HeuristicTopologicalInitExplore} =  [color=black, line width=0.3mm, solid]
+
+\tikzstyle{HeuristicInverseInit}        =  [color=ao(english), line width=0.3mm, dashed] 
+\tikzstyle{HeuristicInverseInitAlways}  =  [color=ao(english), line width=0.3mm, dashdotted]
+\tikzstyle{HeuristicInverseInitExplore} =  [color=ao(english), line width=0.3mm, solid]
+
+
+\tikzstyle{BindingsHeuristicILPDRAMSP}                = [color=red, line width=0.3mm,dashed]
+\tikzstyle{BindingsHeuristicILPDRAMSPMergingAlways}   = [color=blue, line width=0.3mm, dashed]
+\tikzstyle{BindingsHeuristicILPDRAMSPMergingExplore}  = [color=orange, line width=0.3mm, dashed]
+
+\tikzstyle{TokenILPDRAMSP}                = [color=red, line width=0.3mm,dashed]
+\tikzstyle{TokenILPDRAMSPMergingAlways}   = [color=blue, line width=0.3mm, dashed]
+\tikzstyle{TokenILPDRAMSPMergingExplore}  = [color=orange, line width=0.3mm, dashed]
+
+
+\tikzstyle{FillDRAMSP} = [draw=black, fill=candyapplered!60   , line width=0.2mm,solid]
+\tikzstyle{FillDRAMSPMergingExplore} = [draw=black, fill=azureBlue!60, line width=0.2mm,solid,postaction={pattern=crosshatch dots}]
+\tikzstyle{FillDRAMSPMergingAlways} = [draw=black, fill=amber, line width=0.2mm,solid,  ]
+
+
+
+\tikzstyle{ScatterReference}=[draw=black,scatter,only marks,mark=o,mark options={scale=2}] 
+\tikzstyle{ScatterAlways}   =[draw=black,scatter,only marks,mark=square,mark options={scale=2}]
+\tikzstyle{ScatterExplore}  =[draw=black,scatter,only marks,mark=triangle,mark options={scale=2}]
+
+\tikzstyle{NonDominatedReference}=[draw=black,scatter,only marks,mark=*,mark options={scale=2}] 
+\tikzstyle{NonDominatedAlways}   =[draw=black,scatter,only marks,mark=square*,mark options={scale=2}]
+\tikzstyle{NonDominatedExplore}  =[draw=black,scatter,only marks,mark=triangle*,mark options={scale=2}]
+
+\tikzstyle{ScatterGlobal}=[draw=black,scatter,only marks,mark=*,mark options={scale=2},opacity=0.5]
+\tikzstyle{SpiderReference} = [thick,color= applegreen,mark= ball,ball color = applegreen, mark size =4pt, fill= applegreen!50]
+\tikzstyle{SpiderAlways}    = [thick,color= ao(english),mark= ball,ball color =ao(english) , mark size =4pt, fill=ao(english)!20]
+\tikzstyle{SpiderExplore}   = [thick,color= black,mark= ball,ball color = black, mark size =4pt, fill= black!20]
+
+
+\tikzstyle{CoreOneBar} =   [line width=0.2mm,draw=black,fill=canaryyellow!160]
+\tikzstyle{CoreTwoBar} =   [line width=0.2mm,draw=black,fill=azure(colorwheel)!90]
+\tikzstyle{CoreThreeBar} = [line width=0.2mm,draw=black,fill=candyapplered!80]
+
+\tikzstyle{CrossbarBar} = [line width=0.2mm,draw=black,fill=canaryyellow!40]
+\tikzstyle{NOCBar} = [line width=0.2mm,draw=black,fill=canaryyellow!300]
+\tikzstyle{LocalMemBar} = [line width=0.2mm,draw=black,fill=ao(english)!15]
+\tikzstyle{TileMemBar} = [line width=0.2mm,draw=black,fill=ao(english)!60]
+\tikzstyle{GlobalMemBar} = [line width=0.2mm,draw=black,fill=ao(english)!120]
+
+\newganttchartelement{Broadcastbar}{        
+    Broadcastbar/.style={ 
+      draw=black,
+      %draw,
+      fill=amethyst!30,
+      line width=0.25mm,
+     %rounded corners=0.15mm
+    },
+    %guardbar height=0.22mm,
+    Broadcastbar top shift=0.05,
+    Broadcastbar height=0.4mm,
+}
+
+\newganttchartelement{Actorbar}{
+    Actorbar/.style={ 
+      draw=black,
+      fill=candyapplered!20,
+      line width=0.25mm,
+    },
+    %guardbar height=0.22mm,
+    Actorbar top shift=0.05,
+    Actorbar height=0.4mm,
+}   
+
+\newganttchartelement{DRAMbar}{
+    DRAMbar/.style={ 
+      draw,
+      fill=chromeyellow!25,
+      line width=0.25mm,
+    },
+    %guardbar height=0.22mm,
+    DRAMbar top shift=0.05,
+    DRAMbar height=0.4mm,
+}   
+
+%     pattern=north west lines,
+%      pattern color=orange!90,
+
+\newganttchartelement{CrossbarOpPrevbar}{ 
+    CrossbarOpPrevbar/.style={
+      draw=black,
+      fill=green!20,
+      pattern=north west lines,
+      pattern color=black!20,
+      line width=0.2mm,
+    },
+    CrossbarOpPrevbar top shift=0.05,
+    CrossbarOpPrevbar height=0.4mm,
+}   
+
+
+\newganttchartelement{CrossbarReadbar}{ 
+    CrossbarReadbar/.style={
+      draw=black,
+      fill=green!20,
+      line width=0.2mm,
+    },
+    CrossbarReadbar top shift=0.05,
+    CrossbarReadbar height=0.4mm,
+}   
+
+\newganttchartelement{CrossbarWritebar}{
+    CrossbarWritebar/.style={ 
+      draw=black,
+      fill=green(munsell)!40,
+      line width=0.2mm,
+%      opacity=0.4,
+    },
+    CrossbarWritebar top shift=0.05,
+    CrossbarWritebar height=0.4mm,
+}  
+
+\newganttchartelement{CrossbarWritebarCore}{
+    CrossbarWritebarCore/.style={ 
+      draw=none,
+      fill=green(munsell)!40,
+      line width=0.2mm,
+      opacity=0.5,
+    },
+    CrossbarWritebarCore top shift=0.05,
+    CrossbarWritebarCore height=0.4mm,
+}  
+
+
+\newganttchartelement{CrossbarReadbarCore}{ 
+    CrossbarReadbarCore/.style={
+      draw=none,
+      fill=green!20,
+      line width=0.2mm,
+      opacity=0.5,
+    },
+    CrossbarReadbarCore top shift=0.05,
+    CrossbarReadbarCore height=0.4mm,
+}   

@@ -1,0 +1,276 @@
+start results
+        read all input files in ./runs
+        read group ILP-multicamera-always-MRB
+        read file ./runs/ILP-multicamera-always-MRB.2.tsv
+STR MemFootprint[MIN]
+STR ResourcesCost[MIN]
+STR Thp[MAX]
+
+        read file ./runs/ILP-multicamera-always-MRB.4.tsv
+        read file ./runs/ILP-multicamera-always-MRB.1.tsv
+        read file ./runs/ILP-multicamera-always-MRB.3.tsv
+        read file ./runs/ILP-multicamera-always-MRB.0.tsv
+        read group ILP-Binding-multicamera-1instance-explore-MRB
+        read file ./runs/ILP-Binding-multicamera-1instance-explore-MRB.4.tsv
+        read file ./runs/ILP-Binding-multicamera-1instance-explore-MRB.1.tsv
+        read file ./runs/ILP-Binding-multicamera-1instance-explore-MRB.3.tsv
+        read file ./runs/ILP-Binding-multicamera-1instance-explore-MRB.0.tsv
+        read file ./runs/ILP-Binding-multicamera-1instance-explore-MRB.2.tsv
+        read group ILP-multicamera
+        read file ./runs/ILP-multicamera.4.tsv
+        read file ./runs/ILP-multicamera.3.tsv
+        read file ./runs/ILP-multicamera.1.tsv
+        read file ./runs/ILP-multicamera.2.tsv
+        read file ./runs/ILP-multicamera.0.tsv
+        read group multicamera-1instance-always-MRB
+        read file ./runs/multicamera-1instance-always-MRB.4.tsv
+        read file ./runs/multicamera-1instance-always-MRB.1.tsv
+        read file ./runs/multicamera-1instance-always-MRB.3.tsv
+        read file ./runs/multicamera-1instance-always-MRB.2.tsv
+        read file ./runs/multicamera-1instance-always-MRB.0.tsv
+        read group ILP-Binding-multicamera-1instance-always-MRB
+        read file ./runs/ILP-Binding-multicamera-1instance-always-MRB.1.tsv
+        read file ./runs/ILP-Binding-multicamera-1instance-always-MRB.3.tsv
+        read file ./runs/ILP-Binding-multicamera-1instance-always-MRB.0.tsv
+        read file ./runs/ILP-Binding-multicamera-1instance-always-MRB.2.tsv
+        read file ./runs/ILP-Binding-multicamera-1instance-always-MRB.4.tsv
+        read group multicamera-1instance-explore-MRB
+        read file ./runs/multicamera-1instance-explore-MRB.2.tsv
+        read file ./runs/multicamera-1instance-explore-MRB.1.tsv
+        read file ./runs/multicamera-1instance-explore-MRB.4.tsv
+        read file ./runs/multicamera-1instance-explore-MRB.3.tsv
+        read file ./runs/multicamera-1instance-explore-MRB.0.tsv
+        read group multicamera-1instance
+        read file ./runs/multicamera-1instance.0.tsv
+        read file ./runs/multicamera-1instance.1.tsv
+        read file ./runs/multicamera-1instance.4.tsv
+        read file ./runs/multicamera-1instance.3.tsv
+        read file ./runs/multicamera-1instance.2.tsv
+        read group BindingsDSE-multicamera-1instance
+        read file ./runs/BindingsDSE-multicamera-1instance.0.tsv
+        read file ./runs/BindingsDSE-multicamera-1instance.3.tsv
+        read file ./runs/BindingsDSE-multicamera-1instance.2.tsv
+        read file ./runs/BindingsDSE-multicamera-1instance.4.tsv
+        read file ./runs/BindingsDSE-multicamera-1instance.1.tsv
+        read group BindingsDSE-multicamera-1instance-always-MRB
+        read file ./runs/BindingsDSE-multicamera-1instance-always-MRB.2.tsv
+        read file ./runs/BindingsDSE-multicamera-1instance-always-MRB.3.tsv
+        read file ./runs/BindingsDSE-multicamera-1instance-always-MRB.0.tsv
+        read file ./runs/BindingsDSE-multicamera-1instance-always-MRB.1.tsv
+        read file ./runs/BindingsDSE-multicamera-1instance-always-MRB.4.tsv
+        read group ILP-Binding-multicamera-1instance
+        read file ./runs/ILP-Binding-multicamera-1instance.3.tsv
+        read file ./runs/ILP-Binding-multicamera-1instance.2.tsv
+        read file ./runs/ILP-Binding-multicamera-1instance.4.tsv
+        read file ./runs/ILP-Binding-multicamera-1instance.1.tsv
+        read file ./runs/ILP-Binding-multicamera-1instance.0.tsv
+        read group BindingsDSE-multicamera-1instance-explore-MRB
+        read file ./runs/BindingsDSE-multicamera-1instance-explore-MRB.4.tsv
+        read file ./runs/BindingsDSE-multicamera-1instance-explore-MRB.2.tsv
+        read file ./runs/BindingsDSE-multicamera-1instance-explore-MRB.1.tsv
+        read file ./runs/BindingsDSE-multicamera-1instance-explore-MRB.3.tsv
+        read file ./runs/BindingsDSE-multicamera-1instance-explore-MRB.0.tsv
+        read group ILP-multicamera-explore-MRB
+        read file ./runs/ILP-multicamera-explore-MRB.4.tsv
+        read file ./runs/ILP-multicamera-explore-MRB.3.tsv
+        read file ./runs/ILP-multicamera-explore-MRB.1.tsv
+        read file ./runs/ILP-multicamera-explore-MRB.2.tsv
+        read file ./runs/ILP-multicamera-explore-MRB.0.tsv
+        write references to ./results
+        reference set size 47
+        hypervolume reference 1.2062596226239601
+        determine indicators for ILP-multicamera-always-MRB.2.tsv
+        determine indicators for ILP-Binding-multicamera-1instance-explore-MRB.4.tsv
+        determine indicators for ILP-multicamera-always-MRB.4.tsv
+        determine indicators for ILP-multicamera.4.tsv
+        determine indicators for multicamera-1instance-always-MRB.4.tsv
+        determine indicators for ILP-Binding-multicamera-1instance-always-MRB.1.tsv
+        determine indicators for multicamera-1instance-explore-MRB.2.tsv
+        determine indicators for ILP-Binding-multicamera-1instance-always-MRB.3.tsv
+        determine indicators for multicamera-1instance-explore-MRB.1.tsv
+        determine indicators for ILP-Binding-multicamera-1instance-always-MRB.0.tsv
+        determine indicators for multicamera-1instance.0.tsv
+        determine indicators for multicamera-1instance-explore-MRB.4.tsv
+        determine indicators for ILP-multicamera-always-MRB.1.tsv
+        determine indicators for multicamera-1instance-explore-MRB.3.tsv
+        determine indicators for BindingsDSE-multicamera-1instance.0.tsv
+        determine indicators for BindingsDSE-multicamera-1instance.3.tsv
+        determine indicators for ILP-Binding-multicamera-1instance-explore-MRB.1.tsv
+        determine indicators for BindingsDSE-multicamera-1instance.2.tsv
+        determine indicators for BindingsDSE-multicamera-1instance-always-MRB.2.tsv
+        determine indicators for BindingsDSE-multicamera-1instance-always-MRB.3.tsv
+        determine indicators for BindingsDSE-multicamera-1instance-always-MRB.0.tsv
+        determine indicators for ILP-Binding-multicamera-1instance.3.tsv
+        determine indicators for BindingsDSE-multicamera-1instance-explore-MRB.4.tsv
+        determine indicators for ILP-Binding-multicamera-1instance-explore-MRB.3.tsv
+        determine indicators for ILP-Binding-multicamera-1instance-explore-MRB.0.tsv
+        determine indicators for BindingsDSE-multicamera-1instance.4.tsv
+        determine indicators for multicamera-1instance-always-MRB.1.tsv
+        determine indicators for ILP-Binding-multicamera-1instance.2.tsv
+        determine indicators for ILP-multicamera.3.tsv
+        determine indicators for ILP-multicamera.1.tsv
+        determine indicators for ILP-multicamera-always-MRB.3.tsv
+        determine indicators for ILP-Binding-multicamera-1instance.4.tsv
+        determine indicators for ILP-Binding-multicamera-1instance.1.tsv
+        determine indicators for BindingsDSE-multicamera-1instance-explore-MRB.2.tsv
+        determine indicators for ILP-Binding-multicamera-1instance-always-MRB.2.tsv
+        determine indicators for multicamera-1instance.1.tsv
+        determine indicators for multicamera-1instance.4.tsv
+        determine indicators for multicamera-1instance-always-MRB.3.tsv
+        determine indicators for ILP-Binding-multicamera-1instance-explore-MRB.2.tsv
+        determine indicators for ILP-Binding-multicamera-1instance.0.tsv
+        determine indicators for ILP-multicamera.2.tsv
+        determine indicators for BindingsDSE-multicamera-1instance.1.tsv
+        determine indicators for ILP-multicamera-explore-MRB.4.tsv
+        determine indicators for ILP-multicamera-explore-MRB.3.tsv
+        determine indicators for multicamera-1instance.3.tsv
+        determine indicators for multicamera-1instance.2.tsv
+        determine indicators for ILP-multicamera-explore-MRB.1.tsv
+        determine indicators for BindingsDSE-multicamera-1instance-explore-MRB.1.tsv
+        determine indicators for ILP-multicamera.0.tsv
+        determine indicators for BindingsDSE-multicamera-1instance-explore-MRB.3.tsv
+        determine indicators for multicamera-1instance-explore-MRB.0.tsv
+        determine indicators for ILP-multicamera-explore-MRB.2.tsv
+        determine indicators for ILP-multicamera-explore-MRB.0.tsv
+        determine indicators for BindingsDSE-multicamera-1instance-always-MRB.1.tsv
+        determine indicators for multicamera-1instance-always-MRB.2.tsv
+        determine indicators for ILP-Binding-multicamera-1instance-always-MRB.4.tsv
+        determine indicators for multicamera-1instance-always-MRB.0.tsv
+        determine indicators for BindingsDSE-multicamera-1instance-explore-MRB.0.tsv
+        determine indicators for BindingsDSE-multicamera-1instance-always-MRB.4.tsv
+        determine indicators for ILP-multicamera-always-MRB.0.tsv
+        determine stats
+        determine coverage BindingsDSE-multicamera-1instance BindingsDSE-multicamera-1instance-always-MRB
+        determine coverage BindingsDSE-multicamera-1instance BindingsDSE-multicamera-1instance-explore-MRB
+        determine coverage BindingsDSE-multicamera-1instance ILP-Binding-multicamera-1instance
+        determine coverage BindingsDSE-multicamera-1instance ILP-Binding-multicamera-1instance-always-MRB
+        determine coverage BindingsDSE-multicamera-1instance ILP-Binding-multicamera-1instance-explore-MRB
+        determine coverage BindingsDSE-multicamera-1instance ILP-multicamera
+        determine coverage BindingsDSE-multicamera-1instance ILP-multicamera-always-MRB
+        determine coverage BindingsDSE-multicamera-1instance ILP-multicamera-explore-MRB
+        determine coverage BindingsDSE-multicamera-1instance multicamera-1instance
+        determine coverage BindingsDSE-multicamera-1instance multicamera-1instance-always-MRB
+        determine coverage BindingsDSE-multicamera-1instance multicamera-1instance-explore-MRB
+        determine coverage BindingsDSE-multicamera-1instance-always-MRB BindingsDSE-multicamera-1instance
+        determine coverage BindingsDSE-multicamera-1instance-always-MRB BindingsDSE-multicamera-1instance-explore-MRB
+        determine coverage BindingsDSE-multicamera-1instance-always-MRB ILP-Binding-multicamera-1instance
+        determine coverage BindingsDSE-multicamera-1instance-always-MRB ILP-Binding-multicamera-1instance-always-MRB
+        determine coverage BindingsDSE-multicamera-1instance-always-MRB ILP-Binding-multicamera-1instance-explore-MRB
+        determine coverage BindingsDSE-multicamera-1instance-always-MRB ILP-multicamera
+        determine coverage BindingsDSE-multicamera-1instance-always-MRB ILP-multicamera-always-MRB
+        determine coverage BindingsDSE-multicamera-1instance-always-MRB ILP-multicamera-explore-MRB
+        determine coverage BindingsDSE-multicamera-1instance-always-MRB multicamera-1instance
+        determine coverage BindingsDSE-multicamera-1instance-always-MRB multicamera-1instance-always-MRB
+        determine coverage BindingsDSE-multicamera-1instance-always-MRB multicamera-1instance-explore-MRB
+        determine coverage BindingsDSE-multicamera-1instance-explore-MRB BindingsDSE-multicamera-1instance
+        determine coverage BindingsDSE-multicamera-1instance-explore-MRB BindingsDSE-multicamera-1instance-always-MRB
+        determine coverage BindingsDSE-multicamera-1instance-explore-MRB ILP-Binding-multicamera-1instance
+        determine coverage BindingsDSE-multicamera-1instance-explore-MRB ILP-Binding-multicamera-1instance-always-MRB
+        determine coverage BindingsDSE-multicamera-1instance-explore-MRB ILP-Binding-multicamera-1instance-explore-MRB
+        determine coverage BindingsDSE-multicamera-1instance-explore-MRB ILP-multicamera
+        determine coverage BindingsDSE-multicamera-1instance-explore-MRB ILP-multicamera-always-MRB
+        determine coverage BindingsDSE-multicamera-1instance-explore-MRB ILP-multicamera-explore-MRB
+        determine coverage BindingsDSE-multicamera-1instance-explore-MRB multicamera-1instance
+        determine coverage BindingsDSE-multicamera-1instance-explore-MRB multicamera-1instance-always-MRB
+        determine coverage BindingsDSE-multicamera-1instance-explore-MRB multicamera-1instance-explore-MRB
+        determine coverage ILP-Binding-multicamera-1instance BindingsDSE-multicamera-1instance
+        determine coverage ILP-Binding-multicamera-1instance BindingsDSE-multicamera-1instance-always-MRB
+        determine coverage ILP-Binding-multicamera-1instance BindingsDSE-multicamera-1instance-explore-MRB
+        determine coverage ILP-Binding-multicamera-1instance ILP-Binding-multicamera-1instance-always-MRB
+        determine coverage ILP-Binding-multicamera-1instance ILP-Binding-multicamera-1instance-explore-MRB
+        determine coverage ILP-Binding-multicamera-1instance ILP-multicamera
+        determine coverage ILP-Binding-multicamera-1instance ILP-multicamera-always-MRB
+        determine coverage ILP-Binding-multicamera-1instance ILP-multicamera-explore-MRB
+        determine coverage ILP-Binding-multicamera-1instance multicamera-1instance
+        determine coverage ILP-Binding-multicamera-1instance multicamera-1instance-always-MRB
+        determine coverage ILP-Binding-multicamera-1instance multicamera-1instance-explore-MRB
+        determine coverage ILP-Binding-multicamera-1instance-always-MRB BindingsDSE-multicamera-1instance
+        determine coverage ILP-Binding-multicamera-1instance-always-MRB BindingsDSE-multicamera-1instance-always-MRB
+        determine coverage ILP-Binding-multicamera-1instance-always-MRB BindingsDSE-multicamera-1instance-explore-MRB
+        determine coverage ILP-Binding-multicamera-1instance-always-MRB ILP-Binding-multicamera-1instance
+        determine coverage ILP-Binding-multicamera-1instance-always-MRB ILP-Binding-multicamera-1instance-explore-MRB
+        determine coverage ILP-Binding-multicamera-1instance-always-MRB ILP-multicamera
+        determine coverage ILP-Binding-multicamera-1instance-always-MRB ILP-multicamera-always-MRB
+        determine coverage ILP-Binding-multicamera-1instance-always-MRB ILP-multicamera-explore-MRB
+        determine coverage ILP-Binding-multicamera-1instance-always-MRB multicamera-1instance
+        determine coverage ILP-Binding-multicamera-1instance-always-MRB multicamera-1instance-always-MRB
+        determine coverage ILP-Binding-multicamera-1instance-always-MRB multicamera-1instance-explore-MRB
+        determine coverage ILP-Binding-multicamera-1instance-explore-MRB BindingsDSE-multicamera-1instance
+        determine coverage ILP-Binding-multicamera-1instance-explore-MRB BindingsDSE-multicamera-1instance-always-MRB
+        determine coverage ILP-Binding-multicamera-1instance-explore-MRB BindingsDSE-multicamera-1instance-explore-MRB
+        determine coverage ILP-Binding-multicamera-1instance-explore-MRB ILP-Binding-multicamera-1instance
+        determine coverage ILP-Binding-multicamera-1instance-explore-MRB ILP-Binding-multicamera-1instance-always-MRB
+        determine coverage ILP-Binding-multicamera-1instance-explore-MRB ILP-multicamera
+        determine coverage ILP-Binding-multicamera-1instance-explore-MRB ILP-multicamera-always-MRB
+        determine coverage ILP-Binding-multicamera-1instance-explore-MRB ILP-multicamera-explore-MRB
+        determine coverage ILP-Binding-multicamera-1instance-explore-MRB multicamera-1instance
+        determine coverage ILP-Binding-multicamera-1instance-explore-MRB multicamera-1instance-always-MRB
+        determine coverage ILP-Binding-multicamera-1instance-explore-MRB multicamera-1instance-explore-MRB
+        determine coverage ILP-multicamera BindingsDSE-multicamera-1instance
+        determine coverage ILP-multicamera BindingsDSE-multicamera-1instance-always-MRB
+        determine coverage ILP-multicamera BindingsDSE-multicamera-1instance-explore-MRB
+        determine coverage ILP-multicamera ILP-Binding-multicamera-1instance
+        determine coverage ILP-multicamera ILP-Binding-multicamera-1instance-always-MRB
+        determine coverage ILP-multicamera ILP-Binding-multicamera-1instance-explore-MRB
+        determine coverage ILP-multicamera ILP-multicamera-always-MRB
+        determine coverage ILP-multicamera ILP-multicamera-explore-MRB
+        determine coverage ILP-multicamera multicamera-1instance
+        determine coverage ILP-multicamera multicamera-1instance-always-MRB
+        determine coverage ILP-multicamera multicamera-1instance-explore-MRB
+        determine coverage ILP-multicamera-always-MRB BindingsDSE-multicamera-1instance
+        determine coverage ILP-multicamera-always-MRB BindingsDSE-multicamera-1instance-always-MRB
+        determine coverage ILP-multicamera-always-MRB BindingsDSE-multicamera-1instance-explore-MRB
+        determine coverage ILP-multicamera-always-MRB ILP-Binding-multicamera-1instance
+        determine coverage ILP-multicamera-always-MRB ILP-Binding-multicamera-1instance-always-MRB
+        determine coverage ILP-multicamera-always-MRB ILP-Binding-multicamera-1instance-explore-MRB
+        determine coverage ILP-multicamera-always-MRB ILP-multicamera
+        determine coverage ILP-multicamera-always-MRB ILP-multicamera-explore-MRB
+        determine coverage ILP-multicamera-always-MRB multicamera-1instance
+        determine coverage ILP-multicamera-always-MRB multicamera-1instance-always-MRB
+        determine coverage ILP-multicamera-always-MRB multicamera-1instance-explore-MRB
+        determine coverage ILP-multicamera-explore-MRB BindingsDSE-multicamera-1instance
+        determine coverage ILP-multicamera-explore-MRB BindingsDSE-multicamera-1instance-always-MRB
+        determine coverage ILP-multicamera-explore-MRB BindingsDSE-multicamera-1instance-explore-MRB
+        determine coverage ILP-multicamera-explore-MRB ILP-Binding-multicamera-1instance
+        determine coverage ILP-multicamera-explore-MRB ILP-Binding-multicamera-1instance-always-MRB
+        determine coverage ILP-multicamera-explore-MRB ILP-Binding-multicamera-1instance-explore-MRB
+        determine coverage ILP-multicamera-explore-MRB ILP-multicamera
+        determine coverage ILP-multicamera-explore-MRB ILP-multicamera-always-MRB
+        determine coverage ILP-multicamera-explore-MRB multicamera-1instance
+        determine coverage ILP-multicamera-explore-MRB multicamera-1instance-always-MRB
+        determine coverage ILP-multicamera-explore-MRB multicamera-1instance-explore-MRB
+        determine coverage multicamera-1instance BindingsDSE-multicamera-1instance
+        determine coverage multicamera-1instance BindingsDSE-multicamera-1instance-always-MRB
+        determine coverage multicamera-1instance BindingsDSE-multicamera-1instance-explore-MRB
+        determine coverage multicamera-1instance ILP-Binding-multicamera-1instance
+        determine coverage multicamera-1instance ILP-Binding-multicamera-1instance-always-MRB
+        determine coverage multicamera-1instance ILP-Binding-multicamera-1instance-explore-MRB
+        determine coverage multicamera-1instance ILP-multicamera
+        determine coverage multicamera-1instance ILP-multicamera-always-MRB
+        determine coverage multicamera-1instance ILP-multicamera-explore-MRB
+        determine coverage multicamera-1instance multicamera-1instance-always-MRB
+        determine coverage multicamera-1instance multicamera-1instance-explore-MRB
+        determine coverage multicamera-1instance-always-MRB BindingsDSE-multicamera-1instance
+        determine coverage multicamera-1instance-always-MRB BindingsDSE-multicamera-1instance-always-MRB
+        determine coverage multicamera-1instance-always-MRB BindingsDSE-multicamera-1instance-explore-MRB
+        determine coverage multicamera-1instance-always-MRB ILP-Binding-multicamera-1instance
+        determine coverage multicamera-1instance-always-MRB ILP-Binding-multicamera-1instance-always-MRB
+        determine coverage multicamera-1instance-always-MRB ILP-Binding-multicamera-1instance-explore-MRB
+        determine coverage multicamera-1instance-always-MRB ILP-multicamera
+        determine coverage multicamera-1instance-always-MRB ILP-multicamera-always-MRB
+        determine coverage multicamera-1instance-always-MRB ILP-multicamera-explore-MRB
+        determine coverage multicamera-1instance-always-MRB multicamera-1instance
+        determine coverage multicamera-1instance-always-MRB multicamera-1instance-explore-MRB
+        determine coverage multicamera-1instance-explore-MRB BindingsDSE-multicamera-1instance
+        determine coverage multicamera-1instance-explore-MRB BindingsDSE-multicamera-1instance-always-MRB
+        determine coverage multicamera-1instance-explore-MRB BindingsDSE-multicamera-1instance-explore-MRB
+        determine coverage multicamera-1instance-explore-MRB ILP-Binding-multicamera-1instance
+        determine coverage multicamera-1instance-explore-MRB ILP-Binding-multicamera-1instance-always-MRB
+        determine coverage multicamera-1instance-explore-MRB ILP-Binding-multicamera-1instance-explore-MRB
+        determine coverage multicamera-1instance-explore-MRB ILP-multicamera
+        determine coverage multicamera-1instance-explore-MRB ILP-multicamera-always-MRB
+        determine coverage multicamera-1instance-explore-MRB ILP-multicamera-explore-MRB
+        determine coverage multicamera-1instance-explore-MRB multicamera-1instance
+        determine coverage multicamera-1instance-explore-MRB multicamera-1instance-always-MRB
+results successful
+

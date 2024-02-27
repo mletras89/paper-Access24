@@ -1,0 +1,307 @@
+\section{Definition of the Design Space}\label{sec:design-space}
+
+This section introduces the \emph{design space} of selective \ac{MRB} replacements, formalizes the concept of actor and channel bindings, and illustrates the principles of actor and communication scheduling.
+
+\subsection{Selective \ac{MRB} Replacement}\label{sec:mrb-substitution}
+
+\begin{figure*}[t!]
+  \centering
+  \scalebox{1.0}{\input{figs/schedMRBQP3-fig.tex}}
+  \caption{\label{fig:schedMRBQP3}Example of a schedule with period $\Period=8$ time steps (right) for the transformed application graph $\mrbgraph$ from~\cref{fig:mergingChannel} where actors $\actor_1$ and $\actor_5$ are bound to core $\core_3$, actor $\actor_3$ and channel $\channel_4$ are bound to core $\core_1$ and its core-local memory $\memory_{\core_1}$, as well as actor $\actor_4$ and channel $\channel_5$ are bound to core $\core_2$ and its core-local memory $\memory_{\core_2}$.
+    For better visualization, we use $\GenMRB$ to refer to the \ac{MRB} $\channel_{\{1,2,3\}}$, which is bound to the core-local memory $\memory_{\core_3}$ of core $\core_3$ (left).
+    The light red boxes in the Gantt chart shown to the right denote actor executions, while the light green boxes denote read operations, e.g., the light green box containing $(\channel_4, \actor_5)$ denotes a read of a token contained in channel $\channel_4$ by the actor $\actor_5$.
+    The data dependencies of the application graph $\mrbgraph$ are depicted by the solid and dotted dashed directed edges in the Gantt chart.
+    For example, the solid directed edge from actor $\actor_1$ over the read communication $(\GenMRB,\actor_4)$ to actor $\actor_4$ represents the data dependency between actors $\actor_1$ and $\actor_4$ communicated via the \ac{MRB} $\GenMRB$.
+    The Gantt chart does not depict the corresponding write $(\actor_1,\GenMRB)$ as the \ac{MRB} $\GenMRB$ is bound to the core-local memory $\memory_{\core_3}$ of the core $\core_3$, where actor $\actor_1$ is bound to.
+    Thus, the write communication is assumed to be part of the execution of actor $\actor_1$ itself.}
+\end{figure*}
+
+As discussed in~\cref{sec:multi-cast-actors}, each multi-cast actor represents an opportunity for memory footprint reduction by replacing it and its adjacent channels with an \ac{MRB}, as shown in~\cref{fig:fifoRealizations}.
+However, replacing a multi-cast actor with an \ac{MRB} may also lead to an increase in the \emph{execution period}~\cite{lft_2023-MRBs}, which is defined as the time interval between two successive iterations of execution of a given application graph.
+Hence, which multi-cast actors are replaced by \acp{MRB} needs to be explored to trade between period and memory footprint, both to be minimized.
+For this purpose, we define a multi-cast actor \emph{replacement} function $\useMRB: \SetActorsMulticast \rightarrow \{ 0, 1 \}$ to determine for each multi-cast actor $\actorMulticast \in \SetActorsMulticast$ if it should be replaced by an \ac{MRB} ($\useMRB(\actorMulticast) = 1$) or kept ($\useMRB(\actorMulticast) = 0$).
+\par
+Formally, the replacement of selected multi-cast actors with \acp{MRB} for a given application graph $\pgraph$ (e.g., as illustrated in~\cref{fig:TokenBased}) can be realized by a graph transformation as detailed in~\cref{alg:merging}, leading to a transformed application graph $\mrbgraph$ (e.g., as shown in~\cref{fig:mergingChannel}), where the selected multi-cast actors and the channels connected to them have been replaced by their corresponding \acp{MRB}.
+\par
+\revised{The complexity of the selective \ac{MRB} replacement presented in~\cref{alg:merging} depends on how the graph topology is stored.
+Assuming an implementation storing for each vertex its adjacency in a hash set, enabling edge addition and removal in an average time complexity of $O(1)$, the complexity of~\cref{alg:merging} is $O(|\SetActors| + |\SetChannels|)$, where $|\SetActors|$ is the upper bound of the number of replaced multi-cast actors and $|\SetChannels|$ is an upper bound of the number of removed channels and edges (respectively $2\cdot|\SetChannels|$).}
+%\revised{Finally, the complexity of the selective \ac{MRB} replacement presented in \cref{alg:merging} depends on how the graph topology is stored.
+%For our analysis, we assume that for each vertex, the set of adjacent vertices is given by an adjacency list of this vertex.
+%Hence, the set of edges $\SetPGEdges$ does not need to be searched for this information, but the adjacency list of a vertex can be consulted in $O(1)$, e.g., to obtain $\SetChannels_\textrm{del}$ in \cref{alg:merging:search} and the edges $(\actor,\channel)$ and $(\channel,\actor)$ for a given channel $\channel \in \SetChannels_\textrm{del}$ in \cref{alg:merging:loop1,alg:merging:loop3}.
+%Remember that for each channel, there exist exactly two adjacent actors.
+%Moreover, we assume double-linked lists so that insertion and deletion can be performed in $O(1)$ (see \cref{alg:merging:loop2,alg:merging:loop4,alg:merging:loop5,alg:merging:loop6}).
+%With these assumptions, the complexity of \cref{alg:merging} is $O(|\SetActorsMulticast| + |\SetChannels|)$.
+%The $|\SetActorsMulticast|$ part comes from the outer loop in \cref{alg:merging:for}.
+%The $|\SetChannels|$ comes from the channel replacements.
+%Each replacement (see \cref{alg:merging:loop1,alg:merging:loop2,alg:merging:loop3,alg:merging:loop4,alg:merging:loop6}) can be performed in $O(1)$.
+%Thus, at most $|\SetChannels|$ replacements can be performed.}
+%\revised{Finally, the complexity of the selective \ac{MRB} replacement presented in \cref{alg:merging} is $O(|\SetActorsMulticast| + |\SetChannels|)$.
+%The complexity of the presented replacement is dominated by the for loop in \cref{alg:merging:for}, which has to check all the multicast actors $\SetActorsMulticast$ and by the search of channels $\SetChannels_\textrm{del}$ connected at the input and outputs of the each multicast actor $\actorMulticast$  to replace (see \cref{alg:merging:search}).}
+\begin{algorithm}[h!]
+  \footnotesize
+  \caption{Selective \acs{MRB} Replacement}\label{alg:merging}
+  \SetKwProg{Fn}{Function}{}{}
+  \SetKwFunction{FSubstituteMRBs}{substituteMRBs}
+  \SetKwInOut{Input}{Input}
+  \SetKwInOut{Output}{Output}
+  \Fn{\FSubstituteMRBs{$\pgraph, \useMRB$}}{
+    \Input{Application graph $\pgraph$ and function $\useMRB$}
+    \Output{Transformed application graph $\mrbgraph$}
+    \BlankLine
+    $\mrbgraph \leftarrow \pgraph$\tcp*[f]{\footnotesize Let $\mrbgraph$ be a copy of $\pgraph$}\\
+    \tcc{\footnotesize Only replace $\actorMulticast$ when $\useMRB(\actorMulticast) = 1$}
+    \ForEach{\normalfont $\actorMulticast \in \SetActorsMulticast$ \textit{where} $\useMRB(\actorMulticast) = 1$}{ \label{alg:merging:for}
+      \tcc{\footnotesize Let $\SetChannels_\textrm{del}$ be the set of all channels that are adjacent to $\actorMulticast$}
+      $\SetChannels_\textrm{del} \leftarrow \{ \channel \in \mrbgraph.\SetChannels \mid (\channel, \actorMulticast) \in \mrbgraph.\SetPGEdges \vee (\actorMulticast, \channel) \in \mrbgraph.\SetPGEdges \}$\label{alg:merging:search} \\
+      \tcc{\footnotesize New \ac{MRB} channel $\GenMRB$}
+      $\GenMRB \leftarrow \text{createMRB}(\SetChannels_\textrm{del})$\\
+      \tcc{\footnotesize Add an input edge to $\GenMRB$, replacing the ones for $\actorMulticast$}
+      \ForEach{\normalfont $(\actor, \channel) \in \mrbgraph.\SetPGEdges$ \textit{where} $\channel \in \SetChannels_\textrm{del} \wedge \actor \neq \actorMulticast$}{\label{alg:merging:loop1}
+        $\mrbgraph.\SetPGEdges \leftarrow \{(\actor, \GenMRB)\} \cup \mrbgraph.\SetPGEdges \setminus \{(\actor, \channel), (\channel, \actorMulticast)\}$\label{alg:merging:loop2}
+%       $\Delay(\GenMRB) \leftarrow \Delay(\channel)$ \tcp*[f]{\footnotesize Set initial tokens for \ac{MRB}}\\
+%       $\Size(\GenMRB) \leftarrow \Size(\channel)$   \tcp*[f]{\footnotesize Set token size of \ac{MRB}}\\
+      }
+      \tcc{\footnotesize Add output edges from $\GenMRB$, replacing the ones for $\actorMulticast$} 
+      \ForEach{\normalfont $(\channel, \actor) \in \mrbgraph.\SetPGEdges$ \textit{where} $\channel \in \SetChannels_\textrm{del} \wedge \actor \neq \actorMulticast$}{\label{alg:merging:loop3}
+        $\mrbgraph.\SetPGEdges \leftarrow \{(\GenMRB, \actor)\} \cup \mrbgraph.\SetPGEdges \setminus \{(\actorMulticast, \channel), (\channel, \actor)\}$ \label{alg:merging:loop4}
+%       $\Capacity(\GenMRB) \leftarrow \Capacity(\channel') + \Capacity(\channel'')$ \tcp*[f]{\footnotesize Set capacity of \ac{MRB}} \label{alg2:adjustCapacity}\\
+      }
+     $\mrbgraph.\SetActors \leftarrow \mrbgraph.\SetActors \setminus \{\actorMulticast\}$\tcp*[f]{\footnotesize Remove $\actorMulticast$} \label{alg:merging:loop5} \\
+     $\mrbgraph.\SetChannels \leftarrow \{\GenMRB\} \cup \mrbgraph.\SetChannels \setminus \SetChannels_\textrm{del}$\tcp*[f]{\footnotesize Replace $\SetChannels_\textrm{del}$ by $\GenMRB$} \label{alg:merging:loop6} \\
+    }
+    \Return $\mrbgraph$
+  }
+\end{algorithm}
+\begin{algorithm}[t!]
+  \footnotesize
+  \caption{Determine Channel Bindings $\SetBindingsChannels$}\label{alg:determine-channel-bindings}
+  \SetKwProg{Fn}{Function}{}{}
+  \SetKwFunction{FChannelBindings}{determineChannelBindings}
+  \SetKwInOut{Input}{Input}
+  \SetKwInOut{Output}{Output}
+% \SetKwRepeat{Do}{do}{while}
+% \SetKwFunction{FHelp}{fireable}
+% \SetKwFunction{FAvailable}{AvailableCoresPerTile}
+% \SetKwFor{Case}{case}{}{end case}%
+  \SetKw{Break}{break}
+  \Fn{\FChannelBindings{$\ChannelDecisions, \Capacity, \SetBindingsActors$}}{
+    \Input{Channel decision function $\ChannelDecisions$, channel capacity function $\Capacity$, and the set of actor bindings $\SetBindingsActors$}
+    \Output{The set of channel bindings $\SetBindingsChannels$}
+    \BlankLine
+    $\memoryUsage{\memory} \leftarrow 0\enspace\forall \memory \in \SetMemories$\tcp*[f]{\footnotesize Start memory usage $\memoryUsage{\memory}$ from 0}\\
+    $\SetBindingsChannels \leftarrow \emptyset$\tcp*[f]{\footnotesize Start with empty bindings $\SetBindingsChannels$}\\
+    \tcp{\footnotesize Derive binding for each channel $\channel \in \SetChannels$}
+    \ForEach{$\channel \in \SetChannels$}{
+      \tcc{\footnotesize Derive $\actor_{prod}$, $\core_{prod}$, $\tile_{prod}$, $\actor_{cons}$, $\core_{cons}$, and $\tile_{cons}$ for channel $\channel$}
+      $\actor_{prod} \in \SetActors$ such that $(\actor_{prod},\channel) \in \SetPGEdges$\tcp*[f]{\footnotesize Derive $\actor_{prod}$}\\
+      $\core_{prod} \in \SetCores$ such that $(\actor_{prod},\core_{prod}) \in \SetBindingsActors$\tcp*[f]{\footnotesize Derive $\core_{prod}$}\\
+      $\tile_{prod} \in \SetTiles$ such that $\core_{prod} \in \tile_{prod}$\tcp*[f]{\footnotesize Derive $\tile_{prod}$}\\
+      $\actor_{cons} \in \SetActors$ such that $(\channel, \actor_{cons}) \in \SetPGEdges$\tcp*[f]{\footnotesize Derive $\actor_{cons}$}\\
+      $\core_{cons} \in \SetCores$ such that $(\actor_{cons},\core_{cons}) \in \SetBindingsActors$\tcp*[f]{\footnotesize Derive $\core_{cons}$}\\
+      $\tile_{cons} \in \SetTiles$ such that $\core_{cons} \in \tile_{cons}$\tcp*[f]{\footnotesize Derive $\tile_{cons}$}\\
+      \Switch{$\ChannelDecisions(\channel)$}{
+        \Case{\texttt{PROD}}{
+          \If{$\memoryUsage{\memory_{\core_{prod}}} + \Capacity(\channel) \cdot \Size(\channel) \leq \MemoryCapacity{\memory_{\core_{prod}}}$}{
+            \tcp{\footnotesize Bind $\channel$ to $\memory_{\core_{prod}}$}
+            $\SetBindingsChannels \leftarrow \SetBindingsChannels \cup \{ (\channel, \memory_{\core_{prod}}) \}$\\
+            $\memoryUsage{\memory_{\core_{prod}}} \leftarrow \memoryUsage{\memory_{\core_{prod}}} + \Capacity(\channel) \cdot \Size(\channel)$\\
+            \Break
+          }
+          \tcp{\footnotesize $\memory_{\core_{prod}}$ too small, try $\memory_{\tile_{prod}}$ next}
+        }
+        \Case{\texttt{TILE-PROD}}{
+          \If{$\memoryUsage{\memory_{\tile_{prod}}} + \Capacity(\channel) \cdot \Size(\channel) \leq \MemoryCapacity{\memory_{\tile_{prod}}}$}{
+            \tcp{\footnotesize Bind $\channel$ to $\memory_{\tile_{prod}}$}
+            $\SetBindingsChannels \leftarrow \SetBindingsChannels \cup \{ (\channel, \memory_{\tile_{prod}}) \}$\\
+            $\memoryUsage{\memory_{\tile_{prod}}} \leftarrow \memoryUsage{\memory_{\tile_{prod}}} + \Capacity(\channel) \cdot \Size(\channel)$\\
+            \Break
+          }
+          \tcp{\footnotesize $\memory_{\tile_{prod}}$ too small, bind to $\GlobalMemory$}
+          $\SetBindingsChannels \leftarrow \SetBindingsChannels \cup \{ (\channel, \GlobalMemory) \}$\\
+          \Break
+        }
+        \Case{\texttt{CONS}}{
+          \If{$\memoryUsage{\memory_{\core_{cons}}} + \Capacity(\channel) \cdot \Size(\channel) \leq \MemoryCapacity{\memory_{\core_{cons}}}$}{
+            \tcp{\footnotesize Bind $\channel$ to $\memory_{\core_{cons}}$}
+            $\SetBindingsChannels \leftarrow \SetBindingsChannels \cup \{ (\channel, \memory_{\core_{cons}}) \}$\\
+            $\memoryUsage{\memory_{\core_{cons}}} \leftarrow \memoryUsage{\memory_{\core_{cons}}} + \Capacity(\channel) \cdot \Size(\channel)$\\
+            \Break
+          }
+          \tcp{\footnotesize $\memory_{\core_{cons}}$ too small, try $\memory_{\tile_{cons}}$ next}
+        }
+        \Case{\texttt{TILE-CONS}}{
+          \If{$\memoryUsage{\memory_{\tile_{cons}}} + \Capacity(\channel) \cdot \Size(\channel) \leq \MemoryCapacity{\memory_{\tile_{cons}}}$}{
+            \tcp{\footnotesize Bind $\channel$ to $\memory_{\tile_{cons}}$}
+            $\SetBindingsChannels \leftarrow \SetBindingsChannels \cup \{ (\channel, \memory_{\tile_{cons}}) \}$\\
+            $\memoryUsage{\memory_{\tile_{cons}}} \leftarrow \memoryUsage{\memory_{\tile_{cons}}} + \Capacity(\channel) \cdot \Size(\channel)$\\
+            \Break
+          }
+          \tcp{\footnotesize $\memory_{\tile_{cons}}$ too small, bind to $\GlobalMemory$}
+        }
+        \Case{\texttt{GLOBAL}}{
+          \tcp{\footnotesize Bind $\channel$ to $\GlobalMemory$}
+          $\SetBindingsChannels \leftarrow \SetBindingsChannels \cup \{ (\channel, \GlobalMemory) \}$\\
+        }
+      }
+    }
+    \Return $\SetBindingsChannels$
+  }
+\end{algorithm}
+
+\subsection{Actor and Channel Bindings} \label{sec:ActorChannelBindings}
+
+Next, determining an implementation of a transformed application graph $\mrbgraph$ on an architecture requires a binding (i) of each actor to a processor, which is described by a set $\SetBindingsActors \subseteq \SetMappingsActors$ called \emph{actor bindings}, and (ii) of each channel to a memory, which is described by a set $\SetBindingsChannels \subseteq \SetMappingsChannels$ called \emph{channel bindings}.
+Moreover, each actor and channel must be bound to exactly one core (see~\cref{eq:actorBinding}), respectively, memory (see~\cref{eq:channelBinding}).
+Finally, the channels bound to a memory $\memory \in \SetMemories$ must not exceed its capacity (see~\cref{eq:memoryConstraint}).
+A set of \emph{feasible bindings} $\SetBindings = \SetBindingsActors \cup \SetBindingsChannels$ must satisfy \crefrange{eq:actorBinding}{eq:memoryConstraint}.
+\par
+\begin{align}
+  \forall \actor \in \SetActors     &:& | \SetBindingsActors \cap (\{\actor\} \times \SetCores)|& = 1&  \label{eq:actorBinding}\\
+  \forall \channel \in \SetChannels &:& | \SetBindingsChannels \cap (\{\channel\} \times \SetMemories)|& = 1& \label{eq:channelBinding}\\
+  \forall \memory \in \SetMemories  &:& \sum_{(\channel,\memory) \in \SetBindingsChannels} \Capacity(\channel) \cdot \Size(\channel) &\leq \MemoryCapacity{\memory}& \label{eq:memoryConstraint}
+\end{align}
+\par
+The number of cores $\allocation(\coretype)$ allocated of a given type $\coretype$ can then be implicitly derived from the actor binding $\SetBindingsActors$ as \emph{allocation} $\allocation$.
+\begin{equation}
+  \allocation(\coretype) = |\{ \core \in \SetCores_\coretype \mid \exists (\actor, \core) \in \SetBindingsActors \}|
+\end{equation}
+\par
+For example, the actor and channel bindings shown in \cref{fig:schedMRBQP3} are given by $\SetBindingsActors = \{(\actor_3,\core_1), (\actor_4,\core_2), (\actor_1,\core_3), (\actor_5,\core_3)\}$ and $\SetBindingsChannels = \{(\channel_4,\memory_{\core_1}), (\channel_5,\memory_{\core_2}), (\GenMRB,\memory_{\core_3})\}$, respectively.
+From these, the core allocations $\allocation(\coretype_1) = 2$, $\allocation(\coretype_2) = 1$, and $\allocation(\coretype_3) = 0$ can be derived.
+Moreover, the notation $\SetBindingsActors(\actor)$ and $\SetBindingsChannels(\channel)$ denote the core and memory the actor $\actor$, respectively, channel $\channel$ are bound to, e.g., $\SetBindingsActors(\actor_3) = \core_1$ and $\SetBindingsChannels(\channel_4) = \memory_{\core_1}$.
+\par
+While, in principle, each channel $\channel \in \SetChannels$ can be bound to any memory $\memory \in \SetMemories$, it makes sense to constrain the design space to be explored such that a channel will not be bound to a core-local memory of a core that does not at all access the channel data.
+Similarly, tile-local memories of tiles containing no core accessing the channel data can also be excluded.
+As a result, only five binding alternatives exist for each channel:
+(\texttt{PROD}) the core-local memory $\memory_{\core_{prod}}$ of the core $\core_{prod}$ producing the data,
+(\texttt{TILE-PROD}) the tile-local memory $\memory_{\tile_{prod}}$ of the tile $\tile_{prod}$ containing the core producing the data,
+(\texttt{CONS}) the core-local memory  $\memory_{\core_{cons}}$ of the core $\core_{cons}$ consuming the data,
+(\texttt{TILE-CONS}) the tile-local memory $\memory_{\tile_{cons}}$ of the tile $\tile_{cons}$ containing the core consuming the data, or
+(\texttt{GLOBAL}) the global memory $\GlobalMemory$.
+\par
+In the following, these five options are represented by a \emph{channel decision} function $\ChannelDecisions: \SetChannels \rightarrow \{$\texttt{GLOBAL}, \texttt{TILE-PROD}, \texttt{TILE-CONS}, \texttt{PROD}, \texttt{CONS}$\}$, which shall be explored rather than exploring channel bindings directly.
+Concrete channel bindings $\SetBindingsChannels$ can then be determined via~\cref{alg:determine-channel-bindings} from the channel decisions, channel capacities, and actor bindings in such a way that~\cref{eq:channelBinding,eq:memoryConstraint} are satisfied.
+\Cref{alg:determine-channel-bindings} determines for each channel $\channel \in \SetChannels$ a concrete binding according to the channel decision $\ChannelDecisions(\channel)$ in case memory capacities $\MemoryCapacity{\memory}$ are not exceeded.
+Otherwise, a fallback solution is determined according to the case statements.
+It can be proven that a feasible binding is always found for each channel $\channel \in \SetChannels$ by binding $\channel$ to the global memory $\GlobalMemory$ that is assumed to be large enough to store all the buffer data related to the channels of a given application.
+\revised{Since the channel decision requires checking each channel $\channel \in \SetChannels$, the complexity of~\cref{alg:determine-channel-bindings} is $O(|\SetChannels|)$, thus linear in the number of channels $|\SetChannels|$ of a given application.}
+\par
+\Cref{alg:determine-channel-bindings} derives the channel bindings. 
+For the running example in~\cref{fig:schedMRBQP3}, we obtain $\SetBindingsChannels = \{(\channel_4,\memory_{\core_1}),$ $(\channel_5,\memory_{\core_2}),$ $(\GenMRB,\memory_{\core_3})\}$ from the channel decisions $\ChannelDecisions(\channel_4) =$ $\ChannelDecisions(\channel_5) =$ $\ChannelDecisions(\GenMRB) = \texttt{PROD}$ and the actor bindings $\SetBindingsActors = \{(\actor_3,\core_1),$ $(\actor_4,\core_2),$ $(\actor_1,\core_3),$ $(\actor_5,\core_3)\}$.
+\Cref{alg:determine-channel-bindings} thereby prefers to bind channels to core-local memories.
+If the core-local memory ($\memory_{\core_3}$ in the running example) did not have a sufficient capacity to accommodate the \ac{MRB} channel $\GenMRB$, \cref{alg:determine-channel-bindings} would bind $\GenMRB$ to the tile-local memory $\memory_{\tile_1}$, and if even $\memory_{\tile_1}$ would also have an insufficient capacity, the channel $\GenMRB$ would finally be bound to the global memory $\GlobalMemory$.
+
+\subsection{Periodic Scheduling of Actors and Communication}
+In the following, we  consider the optimization and generation of static periodic schedules with an assumed uninterrupted execution of actors and communications.
+We also assume that each actor executes on the same core for each iteration of the dataflow graph.
+As it is assumed that the underlying \ac{DFG} of a given application graph $\mrbgraph$ is a marked graph~\cite{chep_1971-marked-graphs}, for each actor $\actor \in \mrbgraph.\SetActors$, read $(\channel,\actor) \in \mrbgraph.\SetPGEdges$, as well as write $(\actor,\channel) \in\mrbgraph.\SetPGEdges$ operation, we need to determine exactly one \emph{start time} $\startTime_\actor$, $\startTime_{(\channel,\actor)}$, and $\startTime_{(\actor,\channel)}$, respectively, which repeats with the period $\Period$.
+Thus, the actors and edges of the application graph $\mrbgraph$ together define the set of tasks to be scheduled, i.e., $\task \in \SetTasks = \mrbgraph.\SetActors \cup \mrbgraph.\SetPGEdges$.
+
+For example, consider the schedule with a period of $\Period = 7$ depicted in~\cref{fig:schedOptPeriod} with actor start times as follows: $\startTime_{\actor_1} = 0$, $\startTime_{\actor_2} = 1$, $\startTime_{\actor_3} = 3$, $\startTime_{\actor_4} = 4$, and $\startTime_{\actor_5} = 13$.
+Note that the start time of actor $\actor_5$ is greater than the period.
+Therefore, the firing of actor $\actor_5$ depicted in the schedule at time step $6$ belongs to the previous iteration.
+Naturally, start times also need to be determined for the read and write operations, e.g., $\startTime_{(\actor_2,\channel_2)} = 2$, $\startTime_{(\actor_2,\channel_3)} = 3$, $\startTime_{(\channel_4,\actor_5)} = 11$, and $\startTime_{(\channel_5,\actor_5)} = 12$ for the write and read operations shown in the schedule.
+The read and write operations with assumed zero communication time (i.e., read and write operations not involving any interconnect resource), which are not depicted in the schedule, have the following start times: $\startTime_{(\actor_1,\channel_1)} = \startTime_{(\channel_1,\actor_2)} = 1$ (i.e., after actor $\actor_1$ has finished and before actor $\actor_2$ starts), $\startTime_{(\channel_2,\actor_3)} = 3$ (i.e., before actor $\actor_3$ starts), $\startTime_{(\channel_3,\actor_4)} = 4$ (i.e., before actor $\actor_4$ starts), $\startTime_{(\actor_3,\channel_4)} = 10$ (i.e., after actor $\actor_3$ finishes), and $\startTime_{(\actor_4,\channel_5)} = 11$ (i.e., after actor $\actor_4$ finishes).
+
+Furthermore, for each actor $\actor$, its execution time is denoted by $\execTime_\actor$, derivable from the actor bindings $\SetBindingsActors$ as follows:
+\begin{align}
+  \execTime_\actor     = & \execTime(\actor, \coretype) \textrm{ where } \coretype \in \SetCoreTypes \textrm{ such that } \SetBindingsActors(\actor) \in \SetCores_\coretype
+\end{align}
+\par
+For example, the actor execution times $\execTime_{\actor_1} = \execTime_{\actor_2} = \execTime_{\actor_5} = 1$ and $\execTime_{\actor_3} = \execTime_{\actor_4} = 7$ correspond to those depicted in the schedule shown in~\cref{fig:schedOptPeriod}.
+
+The time required for one token to be read from, respectively, written to channel $\channel$ by actor $\actor$ is denoted by $\execTime_{(\channel, \actor)}$ and $\execTime_{(\actor, \channel)}$.
+In the following, these times are derived from the token size $\Size(\channel)$ and the interconnect bandwidth $\Bandwidth{\interconnect}$ of the interconnect $\interconnect$ with the minimal bandwidth that is traversed by the communication:
+\begin{equation}
+  \execTime_{(\channel,\actor)} = \execTime_{(\actor,\channel)} = \Size(\channel) / \min_{\interconnect \in \Routing(\SetBindingsActors(\actor), \SetBindingsChannels(\channel)) \cap \SetInterconnects} \Bandwidth{\interconnect}
+\end{equation}
+\begin{figure*}[t!]
+  \centering
+  \scalebox{1.0}{\input{figs/schedOptPeriod-fig.tex}}
+  \caption{\label{fig:schedOptPeriod}Schedule with a period of $\Period = 7$ (shown to the right) for the application graph $\pgraph$ from~\cref{fig:TokenBased}.
+    Actor $\actor_3$ is bound to core $\core_1$, actor $\actor_4$ is bound to core $\core_2$, and actors $\actor_1$, $\actor_2$, and $\actor_5$ are bound to core $\core_3$.
+    Channels $\channel_2$ and $\channel_4$ are bound to the core-local memory $\memory_{\core_1}$, channels $\channel_3$ and $\channel_5$ are bound to core-local memory $\memory_{\core_2}$, and channel $\channel_1$ is bound to core-local memory $\memory_{\core_3}$ (shown to the left).
+    The light red boxes and the light violet box (for the multi-cast actor $\actor_2$) in the Gantt chart shown to the right denote actor executions, the green boxes represent write operations, and the light green boxes indicate read operations.
+    To exemplify, the green box containing $(\actor_2, \channel_2)$ represents a write of a token to channel $\channel_2$ by the actor $\actor_2$, and the light green box containing $(\channel_4, \actor_5)$ indicates a read of a token contained in channel $\channel_4$ by the actor $\actor_5$.
+    Similarly to~\cref{fig:schedMRBQP3}, the data dependencies of the application graph $\pgraph$ are depicted by the solid and dotted dashed directed edges in the Gantt chart.
+    The read and write from and to channel $\channel_1$ are not shown in the Gantt chart as both the write $(\actor_1,\channel_1)$ of actor $\actor_1$ to channel $\channel_1$ and the read $(\channel_1,\actor_2)$ of actor $\actor_2$ from channel $\channel_1$ access the core-local memory $\memory_{\core_3}$ of the core $\core_3$ that executes both actors $\actor_1$ and $\actor_2$.
+    Thus, the corresponding write and read communication times are zero, i.e., $\execTime_{(\actor_1,\channel_1)} = \execTime_{(\channel_1,\actor_2)} = 0$, as the communication is assumed to be part of the execution of the actors themselves.
+    The same situation holds for the read from channel $\channel_2$ and write to channel $\channel_4$ by actor $\actor_3$ as well as the read from channel $\channel_3$ and write to channel $\channel_5$ by actor $\actor_4$, i.e., $\execTime_{(\channel_2,\actor_3)} = \execTime_{(\actor_3,\channel_4)} = \execTime_{(\channel_3,\actor_4)} = \execTime_{(\actor_4,\channel_5)} = 0$.}
+\end{figure*}
+As a consequence, read and write operations that do not traverse at least one interconnect resource have zero communication time, e.g., $\execTime_{(\actor_1,\channel_1)} = \execTime_{(\channel_1,\actor_2)} = \execTime_{(\channel_2,\actor_3)} = \execTime_{(\actor_3,\channel_4)} = \execTime_{(\channel_3,\actor_4)} = \execTime_{(\actor_4,\channel_5)} = 0$ for the actor and channel bindings given in~\cref{fig:schedOptPeriod}.
+Such communication operations directly access a core-local memory $\memory_{\core_i}$ from the corresponding core $\core_i$.
+In this case, the communication is assumed to be part of the execution of the actor performing the read or write operation.
+In other cases, the traversed interconnect resource $\interconnect$ with an assumed minimal bandwidth $\Bandwidth{\interconnect}$ leads to a non-zero communication time.
+In the example above, $\execTime_{(\actor_2,\channel_2)} = \execTime_{(\actor_2,\channel_3)} = \execTime_{(\channel_4,\actor_5)} =  \execTime_{(\channel_5,\actor_5)} = 1$, as visualized in the schedule in~\cref{fig:schedOptPeriod}.
+
+Finally, let $\SetActors_\resource$ and $\SetTasks_\resource$ denote the set of actors, respectively, tasks mapped to a resource $\resource$.
+Formally, $\SetActors_\resource$ can be derived from the set of actor bindings $\SetBindingsActors$ as follows:
+\begin{align}
+  \SetActors_\resource = &\{ \actor \in \mrbgraph.\SetActors \mid \resource = \SetBindingsActors(\actor) \}
+\end{align}
+For a fully formal definition of $\SetTasks_\resource$, we extend the domain of the routing function $\Routing$ to also contain all edges $\edge \in \mrbgraph.\SetPGEdges$ of the application graph $\mrbgraph$.
+Given the bindings $\SetBindingsActors$ and $\SetBindingsChannels$, let the set of resources involved by a write operation $\edge = (\actor, \channel)$ or read operation $\edge = (\channel, \actor)$  be denoted by $\Routing(\actor, \channel) = \Routing(\SetBindingsActors(\actor), \SetBindingsChannels(\channel))$, respectively, $\Routing(\channel, \actor) = \Routing(\SetBindingsActors(\actor), \SetBindingsChannels(\channel))$.
+With this extension, $\SetTasks_\resource$ is given by:
+\begin{align}
+  \SetTasks_\resource  = &\{ \edge \in \mrbgraph.\SetPGEdges \mid \resource \in \Routing(\edge) \} \cup \SetActors_\resource
+\end{align}
+\par
+%\vspace{-1mm}
+For example, the set of all actors bound to core $\core_3$, as shown in~\cref{fig:schedOptPeriod}, is given by $\SetActors_{\core_3} = \{ \actor_1, \actor_2, \actor_5 \}$.
+Including read and write operations executed by core $\core_3$ results in the set $\SetTasks_{\core_3} = \SetActors_{\core_3} \cup \{ (\actor_1,\channel_1), (\channel_1,\actor_2), (\actor_2,\channel_2), (\actor_2,\channel_3), (\channel_4,\actor_5), (\channel_5,\actor_5) \}$.
+Note that the write $(\actor_1,\channel_1)$ and the read $(\channel_1,\actor_2)$ are not shown in the schedule depicted in~\cref{fig:schedOptPeriod}, as these are assumed to have zero communication times.
+Moreover, read and write operations are, in general, bound to multiple resources, as they are bound to the core where the data is produced or consumed as well as all traversed interconnect resources, e.g., the read and write operations $(\actor_2,\channel_2)$, $(\actor_2,\channel_3)$, $(\channel_4,\actor_5)$, and $(\channel_5,\actor_5)$ are not only executed by core $\core_3$ but are also traversing the interconnect $\crossbar{1}$, i.e., $\SetTasks_\crossbar{1} = \{ (\actor_2,\channel_2), (\actor_2,\channel_3), (\channel_4,\actor_5), (\channel_5,\actor_5) \}$.
+
+\subsection{Trade-offs between the Minimization of Memory Footprint and the Achievable Period}\label{sec:MFvsPeriod}
+
+Replacing a multi-cast actor and its adjacent channels with an \ac{MRB} has as its primary purpose the reduction of the memory footprint (see~\cref{fig:fifoRealizations}).
+Moreover, this transformation removes both the need to execute the multi-cast actor and its communication.
+Nonetheless, there are cases where an \ac{MRB} replacement is detrimental to (i.e., it increases) the execution period $\Period$.
+To illustrate this, \cref{fig:schedMRBQP3,fig:schedOptPeriod} present two periodic schedules obtained from the specification shown in~\cref{fig:specification}.
+One can see that the schedule shown in~\cref{fig:schedMRBQP3} utilizing an \ac{MRB} has a longer period, i.e., $\Period = 8$, than the schedule with period $\Period = 7$ depicted in~\cref{fig:schedOptPeriod}, where the multi-cast actor $\actor_2$ has been retained.
+The timings in \cref{fig:schedMRBQP3,fig:schedOptPeriod} are chosen for illustrative purposes to demonstrate the impact of \acp{MRB} and the existing trade-off in the specification.
+In both schedules, the same actor-to-core binding is assumed for actors $\actor_1, \actor_3, \actor_4$, and $\actor_5$, i.e., actors $\actor_1$ and $\actor_5$ are bound to core $\core_3$, actor $\actor_3$ is bound to core $\core_1$, and actor $\actor_4$ is bound to core $\core_2$.
+Moreover, channels $\channel_4$ and $\channel_5$ are bound to the core-local memories $\memory_{\core_1}$ and $\memory_{\core_2}$, respectively.
+
+As mentioned previously, the illustrated schedules are distinguished whether they employ an \ac{MRB} or retain the multi-cast actor $\actor_2$.
+To exemplify, in~\cref{fig:schedMRBQP3}, the \ac{MRB} $\GenMRB$ mapped to the core-local memory $\memory_{\core_3}$ replaces the multi-cast actor $\actor_2$ and its connected channels $\channel_1$, $\channel_2$, and $\channel_3$.
+Thus, both actors $\actor_3$ and $\actor_4$ have to read from memory $\memory_{\core_3}$ (i.e., the reads $(\GenMRB,\actor_3)$ and $(\GenMRB,\actor_4)$), resulting in an additional delay of 1 time unit, increasing the period to $\Period = 8$.
+Moreover, binding the \ac{MRB} $\GenMRB$ to either core-local memory $\memory_{\core_1}$ or core-local memory $\memory_{\core_2}$ does not improve the situation as, respectively, actor $\actor_4$ or actor $\actor_3$ has to perform a read, delaying its execution by 1 time unit.
+For the example, the only way to obtain a schedule with a period of $\Period = 7$ is to have copies of the output data of actor $\actor_1$ in both core-local memories $\memory_{\core_1}$ and $\memory_{\core_2}$ (e.g., as shown in~\cref{fig:schedOptPeriod}), but this is the exact situation that is prevented when employing an \ac{MRB}, as \acp{MRB} are used to avoid any data duplication.
+Hence, no schedule with a period of $\Period = 7$ exists when an \ac{MRB} replaces the multi-cast actor $\actor_2$.
+
+In contrast, the schedule depicted in~\cref{fig:schedOptPeriod} retains the multi-cast actor $\actor_2$ (bound to core $\core_3$) and its connected channels $\channel_1$, $\channel_2$, and $\channel_3$.
+Channel $\channel_1$ is bound to core-local memory $\memory_{\core_3}$, while channels $\channel_2$ and $\channel_3$ are bound to core-local memories $\memory_{\core_1}$ and $\memory_{\core_2}$, respectively.
+Thus, the input data needed to fire actors $\actor_3$ and $\actor_4$ are already contained in the core-local memories (i.e., $\memory_{\core_1}$ and $\memory_{\core_2}$) of the cores the actors are bound to (i.e., $\core_1$ and $\core_2$).
+Moreover, their output channels ($\channel_4$ and $\channel_5$) are also bound to these core-local memories.
+Thus, the core $\core_1$ can execute actor $\actor_3$ without any read or write overhead.
+The same holds for core $\core_2$ and its bound actor $\actor_4$.
+Instead, the communication overhead to move the input and output data of actors $\actor_3$ and $\actor_4$ to and from the core-local memories $\memory_{\core_1}$ and $\memory_{\core_2}$ is spent by core $\core_3$, which was previously under-utilized in the schedule depicted in~\cref{fig:schedMRBQP3}.
+Core $\core_3$ executes the multi-cast actor $\actor_2$, which provides the input data of actors $\actor_3$ and $\actor_4$ via the writes $(\actor_2,\channel_2)$ and $(\actor_2,\channel_3)$, and the actor $\actor_5$ (also bound to core $\core_3$) is fetching the output data of actors $\actor_3$ and $\actor_4$ via the reads $(\channel_4,\actor_5)$ and $(\channel_5,\actor_5)$.
+This enables a schedule of period $\Period = 7$, as the cores $\core_1$ and $\core_2$ are no longer burdened with any communication overhead.
+
+Moreover, this also demonstrates that the channel decisions must be explored to obtain this optimal period of $\Period = 7$.
+Otherwise, in case of a fixed channel decision, the actors $\actor_3$ and $\actor_4$ would need to execute a communication operation, e.g., a read operation when the data stays at the producer (\texttt{PROD}) or a write operation when the data has to be moved to the consumer (\texttt{CONS}).
+Only with the channel decisions $\ChannelDecisions(\channel_2) = \ChannelDecisions(\channel_3) = \texttt{CONS}$ and $\ChannelDecisions(\channel_4) = \ChannelDecisions(\channel_5) = \texttt{PROD}$ is a schedule with a period of $\Period = 7$ possible.
+
+\begin{figure*}[ht!]
+  \centering
+  \resizebox{\textwidth}{!}{
+    \begin{tikzpicture}
+	\DesignFlow
+    \end{tikzpicture}}
+  \caption{\label{fig:opt4jOptimizationLoop}Overview of our hybrid DSE approach using \acp{MOEA}.
+    The instance \emph{creator} generates random \emph{genotypes} for an \emph{initial population} that forms the starting point of the iterative optimization process.
+    A genotype $\Genotype$ is the genetic representation of a solution candidate. % i.e., $\Genotype$. %$\GenotypeILP$ or $\GenotypeHeuristic$ in our case.
+    For each (new) solution candidate, \emph{update} executes a user-defined decoder and then applies  evaluator functions on this candidate, i.e., either \texttt{decodeViaILP} or \texttt{decodeViaHeuristic}, depending on whether the \acs{ILP}-based or heuristic-based approach is used.
+    The decoder transforms the genotype into the \emph{phenotype} representing the solution candidate's characteristics of interest, e.g., the period $\Period$, the bindings $\SetBindings$, and the channel capacities $\Capacity$.
+    Based on the phenotype, the evaluators determine the quality of the solution candidate under evaluation with respect to the design \emph{objectives}, e.g., period $\Period$, memory footprint $\MemoryFootprint$, and core cost $\CoreCost$.
+    From the resulting population, the \emph{selector} chooses \emph{parents} with superior solution quality.
+    Finally, the recombinator generate \emph{offsprings} by recombining and mutating the genotype of the selected parents.
+    Our approach has been realized using the \ac{DSE} framework \emph{OpenDSE}~\cite{opendse} and its underlying \acs{MOEA}-based optimization framework {\sc Opt4J}~\cite{opt4j}.}
+\end{figure*}
+
+In summary, replacing every multi-cast actor with an \ac{MRB} enables minimal memory footprint implementations, but this may create an impact on the minimal achievable period.
+Thus, minimal period implementations require both optimization of the actor and channel bindings as well as a selective decision for each multi-cast actor on whether or not to perform \ac{MRB} replacement.
+In the following, we present our design space exploration approach to minimize the execution period, memory footprint, and core cost.
+%Our proposed \ac{DSE} explores a selective replacement of multi-cast actors by \acp{MRB} together with the bindings of actors and channels.

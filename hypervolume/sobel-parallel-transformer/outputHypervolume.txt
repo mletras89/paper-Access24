@@ -1,0 +1,276 @@
+start results
+	read all input files in ./runs
+	read group ILP-Binding-sobel-parallel4
+	read file ./runs/ILP-Binding-sobel-parallel4.1.tsv
+STR MemFootprint[MIN]
+STR ResourcesCost[MIN]
+STR Thp[MAX]
+
+	read file ./runs/ILP-Binding-sobel-parallel4.2.tsv
+	read file ./runs/ILP-Binding-sobel-parallel4.4.tsv
+	read file ./runs/ILP-Binding-sobel-parallel4.0.tsv
+	read file ./runs/ILP-Binding-sobel-parallel4.3.tsv
+	read group sobel-parallel4
+	read file ./runs/sobel-parallel4.1.tsv
+	read file ./runs/sobel-parallel4.3.tsv
+	read file ./runs/sobel-parallel4.2.tsv
+	read file ./runs/sobel-parallel4.0.tsv
+	read file ./runs/sobel-parallel4.4.tsv
+	read group sobel-parallel4-always-MRB
+	read file ./runs/sobel-parallel4-always-MRB.4.tsv
+	read file ./runs/sobel-parallel4-always-MRB.2.tsv
+	read file ./runs/sobel-parallel4-always-MRB.0.tsv
+	read file ./runs/sobel-parallel4-always-MRB.1.tsv
+	read file ./runs/sobel-parallel4-always-MRB.3.tsv
+	read group BindingsDSE-sobel-parallel4-always-MRB
+	read file ./runs/BindingsDSE-sobel-parallel4-always-MRB.2.tsv
+	read file ./runs/BindingsDSE-sobel-parallel4-always-MRB.0.tsv
+	read file ./runs/BindingsDSE-sobel-parallel4-always-MRB.3.tsv
+	read file ./runs/BindingsDSE-sobel-parallel4-always-MRB.1.tsv
+	read file ./runs/BindingsDSE-sobel-parallel4-always-MRB.4.tsv
+	read group ILP-Binding-sobel-parallel4-explore-MRB
+	read file ./runs/ILP-Binding-sobel-parallel4-explore-MRB.4.tsv
+	read file ./runs/ILP-Binding-sobel-parallel4-explore-MRB.0.tsv
+	read file ./runs/ILP-Binding-sobel-parallel4-explore-MRB.1.tsv
+	read file ./runs/ILP-Binding-sobel-parallel4-explore-MRB.3.tsv
+	read file ./runs/ILP-Binding-sobel-parallel4-explore-MRB.2.tsv
+	read group ILP-Binding-sobel-parallel4-always-MRB
+	read file ./runs/ILP-Binding-sobel-parallel4-always-MRB.3.tsv
+	read file ./runs/ILP-Binding-sobel-parallel4-always-MRB.4.tsv
+	read file ./runs/ILP-Binding-sobel-parallel4-always-MRB.2.tsv
+	read file ./runs/ILP-Binding-sobel-parallel4-always-MRB.0.tsv
+	read file ./runs/ILP-Binding-sobel-parallel4-always-MRB.1.tsv
+	read group ILP-sobel-parallel4
+	read file ./runs/ILP-sobel-parallel4.3.tsv
+	read file ./runs/ILP-sobel-parallel4.2.tsv
+	read file ./runs/ILP-sobel-parallel4.0.tsv
+	read file ./runs/ILP-sobel-parallel4.4.tsv
+	read file ./runs/ILP-sobel-parallel4.1.tsv
+	read group ILP-sobel-parallel4-always-MRB
+	read file ./runs/ILP-sobel-parallel4-always-MRB.3.tsv
+	read file ./runs/ILP-sobel-parallel4-always-MRB.4.tsv
+	read file ./runs/ILP-sobel-parallel4-always-MRB.2.tsv
+	read file ./runs/ILP-sobel-parallel4-always-MRB.1.tsv
+	read file ./runs/ILP-sobel-parallel4-always-MRB.0.tsv
+	read group BindingsDSE-sobel-parallel4-explore-MRB
+	read file ./runs/BindingsDSE-sobel-parallel4-explore-MRB.4.tsv
+	read file ./runs/BindingsDSE-sobel-parallel4-explore-MRB.3.tsv
+	read file ./runs/BindingsDSE-sobel-parallel4-explore-MRB.2.tsv
+	read file ./runs/BindingsDSE-sobel-parallel4-explore-MRB.1.tsv
+	read file ./runs/BindingsDSE-sobel-parallel4-explore-MRB.0.tsv
+	read group sobel-parallel4-explore-MRB
+	read file ./runs/sobel-parallel4-explore-MRB.1.tsv
+	read file ./runs/sobel-parallel4-explore-MRB.0.tsv
+	read file ./runs/sobel-parallel4-explore-MRB.4.tsv
+	read file ./runs/sobel-parallel4-explore-MRB.3.tsv
+	read file ./runs/sobel-parallel4-explore-MRB.2.tsv
+	read group ILP-sobel-parallel4-explore-MRB
+	read file ./runs/ILP-sobel-parallel4-explore-MRB.4.tsv
+	read file ./runs/ILP-sobel-parallel4-explore-MRB.2.tsv
+	read file ./runs/ILP-sobel-parallel4-explore-MRB.1.tsv
+	read file ./runs/ILP-sobel-parallel4-explore-MRB.3.tsv
+	read file ./runs/ILP-sobel-parallel4-explore-MRB.0.tsv
+	read group BindingsDSE-sobel-parallel4
+	read file ./runs/BindingsDSE-sobel-parallel4.3.tsv
+	read file ./runs/BindingsDSE-sobel-parallel4.2.tsv
+	read file ./runs/BindingsDSE-sobel-parallel4.1.tsv
+	read file ./runs/BindingsDSE-sobel-parallel4.0.tsv
+	read file ./runs/BindingsDSE-sobel-parallel4.4.tsv
+	write references to ./results
+	reference set size 17
+	hypervolume reference 1.2475896474970125
+	determine indicators for ILP-Binding-sobel-parallel4.1.tsv
+	determine indicators for sobel-parallel4.1.tsv
+	determine indicators for sobel-parallel4-always-MRB.4.tsv
+	determine indicators for BindingsDSE-sobel-parallel4-always-MRB.2.tsv
+	determine indicators for ILP-Binding-sobel-parallel4-explore-MRB.4.tsv
+	determine indicators for ILP-Binding-sobel-parallel4-always-MRB.3.tsv
+	determine indicators for sobel-parallel4.3.tsv
+	determine indicators for ILP-sobel-parallel4.3.tsv
+	determine indicators for ILP-sobel-parallel4-always-MRB.3.tsv
+	determine indicators for BindingsDSE-sobel-parallel4-explore-MRB.4.tsv
+	determine indicators for ILP-Binding-sobel-parallel4-always-MRB.4.tsv
+	determine indicators for ILP-Binding-sobel-parallel4.2.tsv
+	determine indicators for sobel-parallel4-explore-MRB.1.tsv
+	determine indicators for ILP-Binding-sobel-parallel4-always-MRB.2.tsv
+	determine indicators for BindingsDSE-sobel-parallel4-explore-MRB.3.tsv
+	determine indicators for sobel-parallel4-always-MRB.2.tsv
+	determine indicators for ILP-Binding-sobel-parallel4.4.tsv
+	determine indicators for ILP-sobel-parallel4-explore-MRB.4.tsv
+	determine indicators for ILP-sobel-parallel4.2.tsv
+	determine indicators for sobel-parallel4.2.tsv
+	determine indicators for BindingsDSE-sobel-parallel4-always-MRB.0.tsv
+	determine indicators for sobel-parallel4.0.tsv
+	determine indicators for ILP-Binding-sobel-parallel4-explore-MRB.0.tsv
+	determine indicators for ILP-Binding-sobel-parallel4.0.tsv
+	determine indicators for sobel-parallel4-explore-MRB.0.tsv
+	determine indicators for BindingsDSE-sobel-parallel4.3.tsv
+	determine indicators for ILP-sobel-parallel4-always-MRB.4.tsv
+	determine indicators for BindingsDSE-sobel-parallel4-explore-MRB.2.tsv
+	determine indicators for ILP-Binding-sobel-parallel4-always-MRB.0.tsv
+	determine indicators for sobel-parallel4-always-MRB.0.tsv
+	determine indicators for ILP-sobel-parallel4-explore-MRB.2.tsv
+	determine indicators for BindingsDSE-sobel-parallel4.2.tsv
+	determine indicators for ILP-sobel-parallel4.0.tsv
+	determine indicators for sobel-parallel4-explore-MRB.4.tsv
+	determine indicators for BindingsDSE-sobel-parallel4.1.tsv
+	determine indicators for ILP-Binding-sobel-parallel4-always-MRB.1.tsv
+	determine indicators for BindingsDSE-sobel-parallel4.0.tsv
+	determine indicators for sobel-parallel4-always-MRB.1.tsv
+	determine indicators for ILP-Binding-sobel-parallel4-explore-MRB.1.tsv
+	determine indicators for sobel-parallel4-always-MRB.3.tsv
+	determine indicators for ILP-sobel-parallel4-always-MRB.2.tsv
+	determine indicators for ILP-Binding-sobel-parallel4-explore-MRB.3.tsv
+	determine indicators for BindingsDSE-sobel-parallel4-always-MRB.3.tsv
+	determine indicators for BindingsDSE-sobel-parallel4-explore-MRB.1.tsv
+	determine indicators for sobel-parallel4-explore-MRB.3.tsv
+	determine indicators for BindingsDSE-sobel-parallel4-explore-MRB.0.tsv
+	determine indicators for BindingsDSE-sobel-parallel4-always-MRB.1.tsv
+	determine indicators for BindingsDSE-sobel-parallel4-always-MRB.4.tsv
+	determine indicators for ILP-sobel-parallel4-always-MRB.1.tsv
+	determine indicators for ILP-sobel-parallel4-explore-MRB.1.tsv
+	determine indicators for sobel-parallel4-explore-MRB.2.tsv
+	determine indicators for BindingsDSE-sobel-parallel4.4.tsv
+	determine indicators for ILP-Binding-sobel-parallel4.3.tsv
+	determine indicators for ILP-sobel-parallel4-explore-MRB.3.tsv
+	determine indicators for ILP-sobel-parallel4.4.tsv
+	determine indicators for ILP-sobel-parallel4.1.tsv
+	determine indicators for sobel-parallel4.4.tsv
+	determine indicators for ILP-Binding-sobel-parallel4-explore-MRB.2.tsv
+	determine indicators for ILP-sobel-parallel4-explore-MRB.0.tsv
+	determine indicators for ILP-sobel-parallel4-always-MRB.0.tsv
+	determine stats
+	determine coverage BindingsDSE-sobel-parallel4 BindingsDSE-sobel-parallel4-always-MRB
+	determine coverage BindingsDSE-sobel-parallel4 BindingsDSE-sobel-parallel4-explore-MRB
+	determine coverage BindingsDSE-sobel-parallel4 ILP-Binding-sobel-parallel4
+	determine coverage BindingsDSE-sobel-parallel4 ILP-Binding-sobel-parallel4-always-MRB
+	determine coverage BindingsDSE-sobel-parallel4 ILP-Binding-sobel-parallel4-explore-MRB
+	determine coverage BindingsDSE-sobel-parallel4 ILP-sobel-parallel4
+	determine coverage BindingsDSE-sobel-parallel4 ILP-sobel-parallel4-always-MRB
+	determine coverage BindingsDSE-sobel-parallel4 ILP-sobel-parallel4-explore-MRB
+	determine coverage BindingsDSE-sobel-parallel4 sobel-parallel4
+	determine coverage BindingsDSE-sobel-parallel4 sobel-parallel4-always-MRB
+	determine coverage BindingsDSE-sobel-parallel4 sobel-parallel4-explore-MRB
+	determine coverage BindingsDSE-sobel-parallel4-always-MRB BindingsDSE-sobel-parallel4
+	determine coverage BindingsDSE-sobel-parallel4-always-MRB BindingsDSE-sobel-parallel4-explore-MRB
+	determine coverage BindingsDSE-sobel-parallel4-always-MRB ILP-Binding-sobel-parallel4
+	determine coverage BindingsDSE-sobel-parallel4-always-MRB ILP-Binding-sobel-parallel4-always-MRB
+	determine coverage BindingsDSE-sobel-parallel4-always-MRB ILP-Binding-sobel-parallel4-explore-MRB
+	determine coverage BindingsDSE-sobel-parallel4-always-MRB ILP-sobel-parallel4
+	determine coverage BindingsDSE-sobel-parallel4-always-MRB ILP-sobel-parallel4-always-MRB
+	determine coverage BindingsDSE-sobel-parallel4-always-MRB ILP-sobel-parallel4-explore-MRB
+	determine coverage BindingsDSE-sobel-parallel4-always-MRB sobel-parallel4
+	determine coverage BindingsDSE-sobel-parallel4-always-MRB sobel-parallel4-always-MRB
+	determine coverage BindingsDSE-sobel-parallel4-always-MRB sobel-parallel4-explore-MRB
+	determine coverage BindingsDSE-sobel-parallel4-explore-MRB BindingsDSE-sobel-parallel4
+	determine coverage BindingsDSE-sobel-parallel4-explore-MRB BindingsDSE-sobel-parallel4-always-MRB
+	determine coverage BindingsDSE-sobel-parallel4-explore-MRB ILP-Binding-sobel-parallel4
+	determine coverage BindingsDSE-sobel-parallel4-explore-MRB ILP-Binding-sobel-parallel4-always-MRB
+	determine coverage BindingsDSE-sobel-parallel4-explore-MRB ILP-Binding-sobel-parallel4-explore-MRB
+	determine coverage BindingsDSE-sobel-parallel4-explore-MRB ILP-sobel-parallel4
+	determine coverage BindingsDSE-sobel-parallel4-explore-MRB ILP-sobel-parallel4-always-MRB
+	determine coverage BindingsDSE-sobel-parallel4-explore-MRB ILP-sobel-parallel4-explore-MRB
+	determine coverage BindingsDSE-sobel-parallel4-explore-MRB sobel-parallel4
+	determine coverage BindingsDSE-sobel-parallel4-explore-MRB sobel-parallel4-always-MRB
+	determine coverage BindingsDSE-sobel-parallel4-explore-MRB sobel-parallel4-explore-MRB
+	determine coverage ILP-Binding-sobel-parallel4 BindingsDSE-sobel-parallel4
+	determine coverage ILP-Binding-sobel-parallel4 BindingsDSE-sobel-parallel4-always-MRB
+	determine coverage ILP-Binding-sobel-parallel4 BindingsDSE-sobel-parallel4-explore-MRB
+	determine coverage ILP-Binding-sobel-parallel4 ILP-Binding-sobel-parallel4-always-MRB
+	determine coverage ILP-Binding-sobel-parallel4 ILP-Binding-sobel-parallel4-explore-MRB
+	determine coverage ILP-Binding-sobel-parallel4 ILP-sobel-parallel4
+	determine coverage ILP-Binding-sobel-parallel4 ILP-sobel-parallel4-always-MRB
+	determine coverage ILP-Binding-sobel-parallel4 ILP-sobel-parallel4-explore-MRB
+	determine coverage ILP-Binding-sobel-parallel4 sobel-parallel4
+	determine coverage ILP-Binding-sobel-parallel4 sobel-parallel4-always-MRB
+	determine coverage ILP-Binding-sobel-parallel4 sobel-parallel4-explore-MRB
+	determine coverage ILP-Binding-sobel-parallel4-always-MRB BindingsDSE-sobel-parallel4
+	determine coverage ILP-Binding-sobel-parallel4-always-MRB BindingsDSE-sobel-parallel4-always-MRB
+	determine coverage ILP-Binding-sobel-parallel4-always-MRB BindingsDSE-sobel-parallel4-explore-MRB
+	determine coverage ILP-Binding-sobel-parallel4-always-MRB ILP-Binding-sobel-parallel4
+	determine coverage ILP-Binding-sobel-parallel4-always-MRB ILP-Binding-sobel-parallel4-explore-MRB
+	determine coverage ILP-Binding-sobel-parallel4-always-MRB ILP-sobel-parallel4
+	determine coverage ILP-Binding-sobel-parallel4-always-MRB ILP-sobel-parallel4-always-MRB
+	determine coverage ILP-Binding-sobel-parallel4-always-MRB ILP-sobel-parallel4-explore-MRB
+	determine coverage ILP-Binding-sobel-parallel4-always-MRB sobel-parallel4
+	determine coverage ILP-Binding-sobel-parallel4-always-MRB sobel-parallel4-always-MRB
+	determine coverage ILP-Binding-sobel-parallel4-always-MRB sobel-parallel4-explore-MRB
+	determine coverage ILP-Binding-sobel-parallel4-explore-MRB BindingsDSE-sobel-parallel4
+	determine coverage ILP-Binding-sobel-parallel4-explore-MRB BindingsDSE-sobel-parallel4-always-MRB
+	determine coverage ILP-Binding-sobel-parallel4-explore-MRB BindingsDSE-sobel-parallel4-explore-MRB
+	determine coverage ILP-Binding-sobel-parallel4-explore-MRB ILP-Binding-sobel-parallel4
+	determine coverage ILP-Binding-sobel-parallel4-explore-MRB ILP-Binding-sobel-parallel4-always-MRB
+	determine coverage ILP-Binding-sobel-parallel4-explore-MRB ILP-sobel-parallel4
+	determine coverage ILP-Binding-sobel-parallel4-explore-MRB ILP-sobel-parallel4-always-MRB
+	determine coverage ILP-Binding-sobel-parallel4-explore-MRB ILP-sobel-parallel4-explore-MRB
+	determine coverage ILP-Binding-sobel-parallel4-explore-MRB sobel-parallel4
+	determine coverage ILP-Binding-sobel-parallel4-explore-MRB sobel-parallel4-always-MRB
+	determine coverage ILP-Binding-sobel-parallel4-explore-MRB sobel-parallel4-explore-MRB
+	determine coverage ILP-sobel-parallel4 BindingsDSE-sobel-parallel4
+	determine coverage ILP-sobel-parallel4 BindingsDSE-sobel-parallel4-always-MRB
+	determine coverage ILP-sobel-parallel4 BindingsDSE-sobel-parallel4-explore-MRB
+	determine coverage ILP-sobel-parallel4 ILP-Binding-sobel-parallel4
+	determine coverage ILP-sobel-parallel4 ILP-Binding-sobel-parallel4-always-MRB
+	determine coverage ILP-sobel-parallel4 ILP-Binding-sobel-parallel4-explore-MRB
+	determine coverage ILP-sobel-parallel4 ILP-sobel-parallel4-always-MRB
+	determine coverage ILP-sobel-parallel4 ILP-sobel-parallel4-explore-MRB
+	determine coverage ILP-sobel-parallel4 sobel-parallel4
+	determine coverage ILP-sobel-parallel4 sobel-parallel4-always-MRB
+	determine coverage ILP-sobel-parallel4 sobel-parallel4-explore-MRB
+	determine coverage ILP-sobel-parallel4-always-MRB BindingsDSE-sobel-parallel4
+	determine coverage ILP-sobel-parallel4-always-MRB BindingsDSE-sobel-parallel4-always-MRB
+	determine coverage ILP-sobel-parallel4-always-MRB BindingsDSE-sobel-parallel4-explore-MRB
+	determine coverage ILP-sobel-parallel4-always-MRB ILP-Binding-sobel-parallel4
+	determine coverage ILP-sobel-parallel4-always-MRB ILP-Binding-sobel-parallel4-always-MRB
+	determine coverage ILP-sobel-parallel4-always-MRB ILP-Binding-sobel-parallel4-explore-MRB
+	determine coverage ILP-sobel-parallel4-always-MRB ILP-sobel-parallel4
+	determine coverage ILP-sobel-parallel4-always-MRB ILP-sobel-parallel4-explore-MRB
+	determine coverage ILP-sobel-parallel4-always-MRB sobel-parallel4
+	determine coverage ILP-sobel-parallel4-always-MRB sobel-parallel4-always-MRB
+	determine coverage ILP-sobel-parallel4-always-MRB sobel-parallel4-explore-MRB
+	determine coverage ILP-sobel-parallel4-explore-MRB BindingsDSE-sobel-parallel4
+	determine coverage ILP-sobel-parallel4-explore-MRB BindingsDSE-sobel-parallel4-always-MRB
+	determine coverage ILP-sobel-parallel4-explore-MRB BindingsDSE-sobel-parallel4-explore-MRB
+	determine coverage ILP-sobel-parallel4-explore-MRB ILP-Binding-sobel-parallel4
+	determine coverage ILP-sobel-parallel4-explore-MRB ILP-Binding-sobel-parallel4-always-MRB
+	determine coverage ILP-sobel-parallel4-explore-MRB ILP-Binding-sobel-parallel4-explore-MRB
+	determine coverage ILP-sobel-parallel4-explore-MRB ILP-sobel-parallel4
+	determine coverage ILP-sobel-parallel4-explore-MRB ILP-sobel-parallel4-always-MRB
+	determine coverage ILP-sobel-parallel4-explore-MRB sobel-parallel4
+	determine coverage ILP-sobel-parallel4-explore-MRB sobel-parallel4-always-MRB
+	determine coverage ILP-sobel-parallel4-explore-MRB sobel-parallel4-explore-MRB
+	determine coverage sobel-parallel4 BindingsDSE-sobel-parallel4
+	determine coverage sobel-parallel4 BindingsDSE-sobel-parallel4-always-MRB
+	determine coverage sobel-parallel4 BindingsDSE-sobel-parallel4-explore-MRB
+	determine coverage sobel-parallel4 ILP-Binding-sobel-parallel4
+	determine coverage sobel-parallel4 ILP-Binding-sobel-parallel4-always-MRB
+	determine coverage sobel-parallel4 ILP-Binding-sobel-parallel4-explore-MRB
+	determine coverage sobel-parallel4 ILP-sobel-parallel4
+	determine coverage sobel-parallel4 ILP-sobel-parallel4-always-MRB
+	determine coverage sobel-parallel4 ILP-sobel-parallel4-explore-MRB
+	determine coverage sobel-parallel4 sobel-parallel4-always-MRB
+	determine coverage sobel-parallel4 sobel-parallel4-explore-MRB
+	determine coverage sobel-parallel4-always-MRB BindingsDSE-sobel-parallel4
+	determine coverage sobel-parallel4-always-MRB BindingsDSE-sobel-parallel4-always-MRB
+	determine coverage sobel-parallel4-always-MRB BindingsDSE-sobel-parallel4-explore-MRB
+	determine coverage sobel-parallel4-always-MRB ILP-Binding-sobel-parallel4
+	determine coverage sobel-parallel4-always-MRB ILP-Binding-sobel-parallel4-always-MRB
+	determine coverage sobel-parallel4-always-MRB ILP-Binding-sobel-parallel4-explore-MRB
+	determine coverage sobel-parallel4-always-MRB ILP-sobel-parallel4
+	determine coverage sobel-parallel4-always-MRB ILP-sobel-parallel4-always-MRB
+	determine coverage sobel-parallel4-always-MRB ILP-sobel-parallel4-explore-MRB
+	determine coverage sobel-parallel4-always-MRB sobel-parallel4
+	determine coverage sobel-parallel4-always-MRB sobel-parallel4-explore-MRB
+	determine coverage sobel-parallel4-explore-MRB BindingsDSE-sobel-parallel4
+	determine coverage sobel-parallel4-explore-MRB BindingsDSE-sobel-parallel4-always-MRB
+	determine coverage sobel-parallel4-explore-MRB BindingsDSE-sobel-parallel4-explore-MRB
+	determine coverage sobel-parallel4-explore-MRB ILP-Binding-sobel-parallel4
+	determine coverage sobel-parallel4-explore-MRB ILP-Binding-sobel-parallel4-always-MRB
+	determine coverage sobel-parallel4-explore-MRB ILP-Binding-sobel-parallel4-explore-MRB
+	determine coverage sobel-parallel4-explore-MRB ILP-sobel-parallel4
+	determine coverage sobel-parallel4-explore-MRB ILP-sobel-parallel4-always-MRB
+	determine coverage sobel-parallel4-explore-MRB ILP-sobel-parallel4-explore-MRB
+	determine coverage sobel-parallel4-explore-MRB sobel-parallel4
+	determine coverage sobel-parallel4-explore-MRB sobel-parallel4-always-MRB
+results successful
+

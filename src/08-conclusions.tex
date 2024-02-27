@@ -1,0 +1,33 @@
+\section{Conclusions}\label{sec:conclusions}
+As a first contribution, this paper introduces the \revised{\ac{MRB} concept} as a memory-efficient implementation of multi-cast actors and their replacement as a graph transformation.
+Rather than replicating produced tokens for all readers, an \ac{MRB} stores only one token, which is alive until the last reader has consumed it.
+\ac{MRB} replacement provides minimal buffer implementations obtained by replacing all multi-cast actors in an application with \acp{MRB}.
+However, replacing multi-cast actors with \acp{MRB} may increase the execution period -- i.e., reduce the throughput -- due to communication contention when accessing shared data.
+\par
+To properly examine these trade-offs, as our second contribution, we propose a multi-objective \revised{\ac{DSE}} approach that selectively decides the replacement of multi-cast actors with \acp{MRB} and explores FIFO and channel mappings to trade memory footprint, core cost, and period of schedules.
+It is shown that the quality of found solutions improves when selectively replacing multi-cast actors with \acp{MRB} within a range of $28\,\%$ to $90\,\%$ in solution quality measured by a hypervolume indicator.
+\par
+Moreover, as our third contribution, we proposed and compared two scheduling approaches that are used to determine a periodic schedule for the actors as well as the read/write accesses to buffers for each explored design point during the DSE:
+First, an \ac{ILP} formulation that delivers the exact minimum period given an application binding.
+This \ac{ILP} formulation performs well in terms of solution times for small to mid-sized applications.
+The second is a fast \ac{CAPS-HMS} heuristic approach that performs particularly well when tackling large applications.
+It has been shown that for the small and mid-sized applications used in the experiments, our proposed \ac{CAPS-HMS} is only slightly inferior by $7\,\%$ in terms of hypervolume compared to the \ac{ILP}.
+But for large applications and the complexity of the target architecture, the \ac{ILP} solution times can become prohibitively long.
+In contrast, the fast \ac{CAPS-HMS} outperforms the \ac{ILP} by $67\,\%$ in hypervolume for our largest test application.
+\revised{The proposed \ac{CAPS-HMS} heuristic-based approach can handle applications with hundreds of actors and communication tasks. 
+For evaluating the multicamera application, \ac{CAPS-HMS} is in the order of milliseconds. 
+Note that the \ac{ILP} formulation used for comparison as a reference does not scale. 
+As such, the solver was not able to find even feasible (rather than optimal) solutions for larger applications within a timeout of three seconds.}
+%\revised{The proposed \ac{CAPS-HMS} heuristic-based approach can handle applications with hundreds of actors and communication tasks. 
+%For evaluating the multicamera application, \ac{CAPS-HMS} is in the order of milliseconds. 
+%However, the presented \ac{ILP} formulation limits our experiments, because for the multicamera application, the \ac{ILP} cannot find optimal implementations rather than feasible with a timeout set to three seconds. 
+%If the number of tasks increases further, the \ac{ILP} cannot find feasible solutions.}
+\par
+\revised{In its current form, the proposed heuristic \ac{CAPS-HMS} is limited in assuming a fixed priority for each task to be scheduled.
+As a remedy and potential future work, the \ac{DSE} might also determine and optimize the priority of each task to find the best priorities.
+This could reduce the gap between scheduling using an exact \ac{ILP} formulation and scheduling using \ac{CAPS-HMS} for small applications and also further improve the quality of found solutions for mid to large-size applications.}
+%\revised{However, a clear limitation of the proposed heuristic \ac{CAPS-HMS} is that it assumes a fixed priority for each task to be scheduled. 
+%As a remedy for future work, the \ac{DSE} might also decide on the priority of each task to find the best priorities. 
+%This could reduce the gap between scheduling using an exact \ac{ILP} formulation and scheduling using \ac{CAPS-HMS} for small applications and further improve the quality of found solutions for mid to large-size applications.}
+\par
+Finally, the presented \ac{DSE} approach is distinguished from the state-of-the-art by considering (i) constraints in the memory size of each on-chip-memory, (ii)  memory hierarchies, (iii) support of heterogeneous many-core platforms, and (iv) optimization of buffer placement and overall scheduling to minimize the period.

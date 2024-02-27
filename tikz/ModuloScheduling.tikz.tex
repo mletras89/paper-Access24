@@ -1,0 +1,513 @@
+\newcommand{\RecurrenceGraph}[2]{
+  \def \xshift{#1}
+  \def \yshift{#2}
+
+  \node[ActorStyle] (a1)           at (0+\xshift,0+\yshift)   {\huge $a_1$};
+  \node[ActorStyle] (a2)           at (-1+\xshift,-2+\yshift) {\huge $a_2$};
+  \node[ActorStyle] (a3)           at (1+\xshift,-2+\yshift)  {\huge $a_3$};
+  \node[ActorStyle] (a4)           at (1+\xshift,-4+\yshift)  {\huge $a_4$};
+  \node[ActorStyle] (a5)           at (0+\xshift,-6+\yshift)  {\huge $a_5$};
+  \node[ActorStyle] (a6)           at (0+\xshift,-8+\yshift)  {\huge $a_6$};
+  \node[ActorStyle] (a7)           at (0+\xshift,-10+\yshift) {\huge $a_7$};
+  % now draw the arrows
+  \draw[ArrowStyle] (a1) -- (a2);
+  \draw[ArrowStyle] (a1) -- (a3);
+  \draw[ArrowStyle] (a3) -- (a4);
+  \draw[ArrowStyle] (a2) -- (a5);
+  \draw[ArrowStyle] (a4) -- (a5);
+  \draw[ArrowStyle] (a5) -- (a6);
+  \draw[ArrowStyle] (a6) -- (a7);
+  \draw[ArrowStyle] (a7) to [bend left] node[left=3mm,fill=none] {\Large $\langle 1 \rangle$}  (a2);
+  \draw[ArrowStyle] (a7) to [bend left] node[mark size=1.4mm] {\Large $\pgfuseplotmark{*}$}  (a2);
+}
+
+
+\newcommand{\RecurrenceExample}{
+\SetCoordinates[xAngle = -10]
+\SetVertexStyle[MinSize = 4.5mm]
+\SetLayerDistance{-5}
+\SetPlaneWidth{10}
+\SetPlaneHeight{10}
+
+\begin{tikzpicture}[multilayer=3d]
+
+\node at (-1,0,1)   {\fontsize{50}{60}\selectfont0};
+\node at (-1,0,-4)  {\fontsize{50}{60}\selectfont1};
+\node at (-1,0,-9) {\fontsize{50}{60}\selectfont2};
+\node at (-1,0,-14) {\fontsize{50}{60}\selectfont3};
+\node at (-1,0,-20) {\fontsize{50}{60}\selectfont4};
+\node at (-1,0,-25) {\fontsize{50}{60}\selectfont5};
+\node at (-1,0,-30) {\fontsize{50}{60}\selectfont6};
+
+\node[rotate=90] at (-5,0,-12) {\fontsize{50}{60}\selectfont Control step};
+
+
+\Plane[layer=7,color=white,opacity=0.4,image=./figs/layerArchitecture.pdf,ImageAndFill,NoBorder]
+\Vertex[layer=7,x=2,y=3,label={\fontsize{60}{70}\selectfont $a_2$},color=candyapplered!30,size=2.5]{B1}
+\Vertex[layer=7,x=7,y=7,label={\fontsize{60}{70}\selectfont $a_3$},color=candyapplered!30,size=2.5]{C1}
+
+\Plane[layer=6,color=white,opacity=0.4,image=./figs/layerArchitecture.pdf,ImageAndFill,NoBorder]
+\Vertex[layer=6,x=2.5,y=7,label={\fontsize{60}{70}\selectfont$a_1$},color=candyapplered!30,size=2.5]{A1}
+\Vertex[layer=6,x=2,y=3,  label={\fontsize{60}{70}\selectfont$a_7$},color=candyapplered!30,size=2.5]{G}
+
+\Plane[layer=5,color=white,opacity=0.4,image=./figs/layerArchitecture.pdf,ImageAndFill,NoBorder]
+\Vertex[layer=5,x=7,y=7,  label={\fontsize{60}{70}\selectfont$a_6$},color=candyapplered!30,size=2.5]{F}
+
+\Plane[layer=4,color=white,opacity=0.4,image=./figs/layerArchitecture.pdf,ImageAndFill,NoBorder]
+\Vertex[layer=4,x=2,y=7,  label={\fontsize{60}{70}\selectfont$a_5$},color=candyapplered!30,size=2.5]{E}
+
+\Plane[layer=3,color=white,opacity=0.4,image=./figs/layerArchitecture.pdf,ImageAndFill,NoBorder]
+\Vertex[layer=3,x=7,y=7,  label={\fontsize{60}{70}\selectfont$a_4$},color=candyapplered!30,size=2.5]{D}
+
+\Plane[layer=2,color=white,opacity=0.4,image=./figs/layerArchitecture.pdf,ImageAndFill,NoBorder]
+\Vertex[layer=2,x=2,y=3,  label={\fontsize{60}{70}\selectfont$a_2$},color=candyapplered!30,size=2.5]{B}
+\Vertex[layer=2,x=7,y=7,  label={\fontsize{60}{70}\selectfont$a_3$},color=candyapplered!30,size=2.5]{C}
+
+\Plane[layer=1,color=white,opacity=0.4,image=./figs/layerArchitecture.pdf,ImageAndFill,NoBorder]
+\Vertex[layer=1,x=2,y=7,  label={\fontsize{60}{70}\selectfont$a_1$},color=candyapplered!30,size=2.5]{A}
+
+\Vertex[layer=1,x=4,y=-2,opacity=1,style={color=black}]{G0}
+
+\EdgesNotInBG
+\Edge[Direct,lw=5.0](G0)(B)
+\Edge[Direct,lw=5.0](A1)(B1)
+\Edge[Direct,lw=5.0](A1)(C1)
+\Edge[Direct,lw=5.0](G)(B1)
+\Edge[Direct,lw=5.0](A)(B)
+\Edge[Direct,lw=5.0](A)(C)
+\Edge[Direct,lw=5.0](C)(D)
+\Edge[Direct,lw=5.0](D)(E)
+\Edge[Direct,lw=5.0](B)(E)
+\Edge[Direct,lw=5.0](E)(F)
+\Edge[Direct,lw=5.0](F)(G)
+
+
+\node at (11,0,-40) { \fontsize{70}{80}\selectfont \textbf{\ldots}};
+\node[rotate=0,color=black] at (26,0,-22.5) {\fontsize{40}{50}\selectfont MII};
+\node[rotate=0] (p1) at (24,0,-9.5) {};
+\node[rotate=0] (p2) at (24,0,-30.5) {};
+\draw[<->,>=triangle 60,line width=0.6mm,color=black!50] (p1) -- (p2);
+
+\end{tikzpicture}
+}
+
+
+
+\newcommand{\SingleIteration}{
+\begin{tikzpicture}
+\node at (0,0){
+
+\SetCoordinates[xAngle = -10]
+\SetVertexStyle[MinSize = 4.5mm]
+\SetLayerDistance{-5}
+\SetPlaneWidth{10}
+\SetPlaneHeight{10}
+
+\begin{tikzpicture}[multilayer=3d]
+
+\Plane[layer=4,color=white,opacity=0.4,image=./figs/layerArchitecture.pdf,ImageAndFill,InBG,NoBorder]
+\Plane[layer=3,color=white,opacity=0.4,image=./figs/layerArchitecture.pdf,ImageAndFill,InBG,NoBorder]
+\Plane[layer=2,color=white,opacity=0.4,image=./figs/layerArchitecture.pdf,ImageAndFill,InBG,NoBorder]
+\Plane[layer=1,color=white,opacity=0.4,image=./figs/layerArchitecture.pdf,ImageAndFill,InBG,NoBorder]
+
+\Vertex[layer=4,x=2,y=7,label={\fontsize{60}{70}\selectfont $a_5$},color=candyapplered!30,size=2.5]{E}
+\Vertex[layer=3,x=2,y=7,label={\fontsize{60}{70}\selectfont $a_3$},color=candyapplered!30,size=2.5]{C}
+\Vertex[layer=3,x=2,y=3,label={\fontsize{60}{70}\selectfont $a_4$},color=candyapplered!30,size=2.5]{D}
+\Vertex[layer=2,x=2,y=7,label={\fontsize{60}{70}\selectfont $a_2$},color=amethyst!30,size=2.5]{B}
+\Vertex[layer=1,x=2,y=7,label={\fontsize{60}{70}\selectfont $a_1$},color=candyapplered!30,size=2.5]{A}
+
+\EdgesNotInBG
+\Edge[Direct,lw=5.0](A)(B)
+\Edge[Direct,lw=5.0](C)(E)
+\Edge[Direct,lw=5.0](D)(E)
+\Edge[Direct,lw=5.0](B)(C)
+\Edge[Direct,lw=5.0](B)(D)
+
+\end{tikzpicture}
+};
+
+\draw [line width=1.5mm,color=black!50,decorate,decoration={brace,amplitude=30pt,raise=8pt},yshift=0pt] (9,13) -- (9,-12) node [black,midway,xshift=2cm,yshift=0cm,rotate=90] {\fontsize{50}{60}\selectfont $\Latency=4$};
+\node at(-9,5){ \fontsize{50}{60}\selectfont  0};
+\node at(-9,0){ \fontsize{50}{60}\selectfont  1};
+\node at(-9,-5){ \fontsize{50}{60}\selectfont 2};
+\node at(-9,-10){ \fontsize{50}{60}\selectfont 3};
+
+\node[rotate=90] at (-11,-2.5) {\fontsize{50}{60}\selectfont Control step};
+
+\end{tikzpicture}
+}
+
+
+\newcommand{\SingleIterationMRB}{
+
+\begin{tikzpicture}
+\node at (0,0){
+
+\SetCoordinates[xAngle = -10]
+\SetVertexStyle[MinSize = 4.5mm]
+\SetLayerDistance{-5}
+\SetPlaneWidth{10}
+\SetPlaneHeight{10}
+
+\begin{tikzpicture}[multilayer=3d]
+
+%\Plane[layer=4,color=white,opacity=0.4,image=./figs/layerArchitecture.pdf,ImageAndFill,InBG,NoBorder]
+\Plane[layer=3,color=white,opacity=0.4,image=./figs/layerArchitecture.pdf,ImageAndFill,InBG,NoBorder]
+\Plane[layer=2,color=white,opacity=0.4,image=./figs/layerArchitecture.pdf,ImageAndFill,InBG,NoBorder]
+\Plane[layer=1,color=white,opacity=0.4,image=./figs/layerArchitecture.pdf,ImageAndFill,InBG,NoBorder]
+
+\Vertex[layer=3,x=2,y=7,label={\fontsize{60}{70}\selectfont $a_5$},color=candyapplered!30,size=2.5]{E}
+\Vertex[layer=2,x=2,y=7,label={\fontsize{60}{70}\selectfont $a_3$},color=candyapplered!30,size=2.5]{C}
+\Vertex[layer=2,x=2,y=3,label={\fontsize{60}{70}\selectfont $a_4$},color=candyapplered!30,size=2.5]{D}
+%\Vertex[layer=2,x=2,y=7,label={\fontsize{60}{70}\selectfont $a_2$},color=amethyst!30,size=2.5]{B}
+\Vertex[layer=1,x=2,y=7,label={\fontsize{60}{70}\selectfont $a_1$},color=candyapplered!30,size=2.5]{A}
+
+\EdgesNotInBG
+\Edge[Direct,lw=5.0](A)(C)
+\Edge[Direct,lw=5.0](A)(D)
+\Edge[Direct,lw=5.0](C)(E)
+%\Edge[Direct,lw=5.0](B)(C)
+\Edge[Direct,lw=5.0](D)(E)
+
+\end{tikzpicture}
+};
+
+\draw [line width=1.5mm,color=black!50,decorate,decoration={brace,amplitude=30pt,raise=8pt},yshift=0pt] (9,10) -- (9,-9) node [black,midway,xshift=2cm,yshift=0cm,rotate=90] {\fontsize{50}{60}\selectfont $\Latency=3$};
+
+\node at(-9,2){ \fontsize{50}{60}\selectfont  0};
+\node at(-9,-3){ \fontsize{50}{60}\selectfont  1};
+\node at(-9,-8){ \fontsize{50}{60}\selectfont 2};
+%\node at(-9,-10){ \fontsize{50}{60}\selectfont 3};
+\node[rotate=90] at (-11,-3) {\fontsize{50}{60}\selectfont Control step};
+
+\end{tikzpicture}
+}
+
+
+
+\newcommand{\PipelinedIteration}{
+
+\begin{tikzpicture}
+
+\node at(0,0){
+\SetCoordinates[xAngle = -10]
+\SetVertexStyle[MinSize = 4.5mm]
+\SetLayerDistance{-6}
+\SetPlaneWidth{10}
+\SetPlaneHeight{10}
+
+\begin{tikzpicture}[multilayer=3d]
+
+\node at (-1,0,1)   {\fontsize{50}{60}\selectfont0};
+\node at (-1,0,-5)  {\fontsize{50}{60}\selectfont1};
+\node at (-1,0,-11) {\fontsize{50}{60}\selectfont2};
+\node at (-1,0,-17) {\fontsize{50}{60}\selectfont3};
+\node at (-1,0,-23) {\fontsize{50}{60}\selectfont4};
+\node at (-1,0,-29) {\fontsize{50}{60}\selectfont5};
+
+\node[rotate=90] at (-4,0,-12) {\fontsize{50}{60}\selectfont Control step};
+
+\node at (11,0,-39.5) {\fontsize{70}{80}\selectfont \textbf{\ldots}};
+
+
+
+\Plane[layer=6,color=white,opacity=0.4,image=./figs/layerArchitecture.pdf,ImageAndFill,InBG,NoBorder]
+\Plane[layer=5,color=white,opacity=0.4,image=./figs/layerArchitecture.pdf,ImageAndFill,InBG,NoBorder]
+\Plane[layer=4,color=white,opacity=0.4,image=./figs/layerArchitecture.pdf,ImageAndFill,InBG,NoBorder]% ,grid=1cm,InBG]
+\Plane[layer=3,color=white,opacity=0.4,image=./figs/layerArchitecture.pdf,ImageAndFill,InBG,NoBorder]
+\Plane[layer=2,color=white,opacity=0.4,image=./figs/layerArchitecture.pdf,ImageAndFill,InBG,NoBorder]
+\Plane[layer=1,color=white,opacity=0.4,image=./figs/layerArchitecture.pdf,ImageAndFill,InBG,NoBorder]
+
+\Vertex[layer=4,x=2,y=7,label={\fontsize{60}{70}\selectfont$a_5$},color=candyapplered!30,size=2.5]{E}
+\Vertex[layer=3,x=2,y=3,label={\fontsize{60}{70}\selectfont$a_3$},color=candyapplered!30,size=2.5]{C}
+\Vertex[layer=3,x=7,y=3,label={\fontsize{60}{70}\selectfont$a_4$},color=candyapplered!30,size=2.5]{D}
+\Vertex[layer=2,x=7,y=7,label={\fontsize{60}{70}\selectfont$a_2$},color=amethyst!30,size=2.5]{B}
+\Vertex[layer=1,x=2,y=7,label={\fontsize{60}{70}\selectfont$a_1$},color=candyapplered!30,size=2.5]{A}
+
+
+\Vertex[layer=6,x=2,y=7,label={\fontsize{60}{70}\selectfont$a_5$},color=candyapplered!30,size=2.5]{E1}
+\Vertex[layer=5,x=2,y=3,label={\fontsize{60}{70}\selectfont$a_3$},color=candyapplered!30,size=2.5]{C1}
+\Vertex[layer=5,x=7,y=3,label={\fontsize{60}{70}\selectfont$a_4$},color=candyapplered!30,size=2.5]{D1}
+\Vertex[layer=4,x=7,y=7,label={\fontsize{60}{70}\selectfont$a_2$},color=amethyst!30,size=2.5]{B1}
+\Vertex[layer=3,x=2.5,y=7.5,label={\fontsize{60}{70}\selectfont$a_1$},color=candyapplered!30,size=2.5]{A1}
+
+\Vertex[layer=6,x=7,y=7,label={\fontsize{60}{70}\selectfont$a_2$},color=amethyst!30,size=2.5]{B2}
+\Vertex[layer=5,x=2.5,y=7.5,label={\fontsize{60}{70}\selectfont$a_1$},color=candyapplered!30,size=2.5]{A2}
+
+\EdgesNotInBG
+\Edge[Direct,lw=5.0](A)(B)
+\Edge[Direct,lw=5.0](D)(E)
+\Edge[Direct,lw=5.0](C)(E)
+\Edge[Direct,lw=5.0](B)(C)
+\Edge[Direct,lw=5.0](B)(D)
+
+\Edge[Direct,lw=5.0](A1)(B1)
+\Edge[Direct,lw=5.0](D1)(E1)
+\Edge[Direct,lw=5.0](C1)(E1)
+\Edge[Direct,,lw=5.0](B1)(C1)
+\Edge[Direct,lw=5.0](B1)(D1)
+
+\Edge[Direct,lw=5.0](A2)(B2)
+\end{tikzpicture}
+
+};
+
+\draw [line width=1.5mm,color=black!50,decorate,decoration={brace,amplitude=30pt,raise=8pt},yshift=0pt] (12,20) -- (12,7.5) node [black,midway,xshift=2.5cm,yshift=0cm,rotate=90] {\fontsize{50}{60}\selectfont $MII=2$};
+
+\draw [line width=1.5mm,color=black!50,decorate,decoration={brace,amplitude=30pt,raise=8pt},yshift=0pt] (12,7) -- (12,-3) node [black,midway,xshift=2.5cm,yshift=0cm,rotate=90] {\fontsize{50}{60}\selectfont Kernel};
+\end{tikzpicture}
+}
+
+
+\newcommand{\KernelWithCommunications}[2]{
+  \def \xshift{#1}
+  \def \yshift{#2}
+
+  \draw[line width=0.5mm,dashed] (-2,1) -- (-2,-5);
+  \draw[line width=0.5mm,dashed] (2,1) -- (2,-5);
+  \draw[line width=0.5mm,dashed] (6,1) -- (6,-5);
+
+  \node[ChannelStyle] (c2)           at (-2+\xshift,-2+\yshift)  {\huge $\channel_2$};
+  \node[ChannelStyle] (c3)           at (-2+\xshift,-4+\yshift)  {\huge $\channel_3$};
+
+  \node[ActorStyle] (a1)           at (0+\xshift,0+\yshift)   {\huge $\actor_1$};
+  \node[ActorStyle] (a3)           at (0+\xshift,-2+\yshift)  {\huge $\actor_3$};
+  \node[ActorStyle] (a4)           at (0+\xshift,-4+\yshift)  {\huge $\actor_4$};
+
+  \node[ChannelStyle] (c1)           at (2+\xshift,0+\yshift)  {\huge $\channel_1$};
+  \node[ChannelStyle] (c4)           at (2+\xshift,-2+\yshift)  {\huge $\channel_4$};
+  \node[ChannelStyle] (c5)           at (2+\xshift,-4+\yshift)  {\huge $\channel_5$};
+
+  \node[ActorBroadcastStyle] (a2)           at (4+\xshift,0+\yshift) {\huge  $\actor_2$};
+  \node[ActorStyle] (a5)           at (4+\xshift,-3+\yshift)  {\huge $\actor_5$};
+
+  \node[ChannelStyle] (c2p)           at (6+\xshift,-2+\yshift)  {\huge $\channel_2$};
+  \node[ChannelStyle] (c3p)           at (6+\xshift,-4+\yshift)  {\huge $\channel_3$};
+
+  % now draw the arrows
+
+  \draw[ArrowStyle] ($(c2)+(-1.8,0)$) -- (c2);
+  \draw[ArrowStyle] ($(c3)+(-1.8,0)$) -- (c3);
+
+  \draw[ArrowStyle] (c2) -- (a3);
+  \draw[ArrowStyle] (c3) -- (a4);
+  \draw[ArrowStyle] (a1) -- (c1);
+  \draw[ArrowStyle] (a3) -- (c4);
+  \draw[ArrowStyle] (a4) -- (c5);
+  \draw[ArrowStyle] (c1) -- (a2);
+  \draw[ArrowStyle] (c4) -- (a5);
+  \draw[ArrowStyle] (c5) -- (a5);
+  \draw[ArrowStyle] (a2) -- (c2p);
+  \draw[ArrowStyle] (a2) -- (c3p);
+
+  \draw[ArrowStyle] (c2p) -- ($(c2p)+(2,0)$) ;
+  \draw[ArrowStyle] (c3p) -- ($(c3p)+(2,0)$) ;
+
+  \path[scope fading=east] (-3.8,0) rectangle (-3.3,-4.5);
+  \fill[fill=white] (-3.8,0) rectangle (-3.3,-4.5);
+
+  \path[scope fading=west] (7,0) rectangle (8,-4.5);
+  \fill[fill=white] (7,0) rectangle (8,-4.5);
+
+
+\draw [line width=0.25mm,color=black!50,decorate,decoration={brace,amplitude=10pt,raise=4pt,mirror},yshift=0pt] (-2.1,-6.15) -- (6.1,-6.15) node [black,midway,xshift=0cm,yshift=0.5cm] {\Huge  Kernel};
+
+}
+
+
+
+\newcommand{\PipelinedIterationMRB}{
+\begin{tikzpicture}
+
+\node at (0,0){
+\SetCoordinates[xAngle = -10]
+\SetVertexStyle[MinSize = 4.5mm]
+\SetLayerDistance{-6}
+\SetPlaneWidth{10}
+\SetPlaneHeight{10}
+
+\begin{tikzpicture}[multilayer=3d]
+
+\node at (-1,0,1)   {\fontsize{50}{60}\selectfont0};
+\node at (-1,0,-5)  {\fontsize{50}{60}\selectfont1};
+\node at (-1,0,-11) {\fontsize{50}{60}\selectfont2};
+\node at (-1,0,-17) {\fontsize{50}{60}\selectfont3};
+\node at (-1,0,-23) {\fontsize{50}{60}\selectfont4};
+\node at (-1,0,-29) {\fontsize{50}{60}\selectfont5};
+
+\node[rotate=90] at (-4,0,-12) {\fontsize{50}{60}\selectfont Control step};
+
+\node at (11,0,-39.5) {\fontsize{70}{80}\selectfont \textbf{\ldots}};
+
+%\node[rotate=90,color=black] at (26,0,-16.5) {\fontsize{50}{60}\selectfont $MII=1$};
+%
+%\node[rotate=0] (p1) at (24,0,-9.5) {};
+%\node[rotate=0] (p2) at (24,0,-15) {};
+
+% \draw[<->,>=triangle 60,line width=0.6mm,color=black!50] (p1) -- (p2);
+
+\Plane[layer=6,color=white,opacity=0.4,image=./figs/layerArchitecture.pdf,ImageAndFill,InBG,NoBorder]
+\Plane[layer=5,color=white,opacity=0.4,image=./figs/layerArchitecture.pdf,ImageAndFill,InBG,NoBorder]
+\Plane[layer=4,color=white,opacity=0.4,image=./figs/layerArchitecture.pdf,ImageAndFill,InBG,NoBorder]% ,grid=1cm,InBG]
+\Plane[layer=3,color=white,opacity=0.4,image=./figs/layerArchitecture.pdf,ImageAndFill,InBG,NoBorder]
+\Plane[layer=2,color=white,opacity=0.4,image=./figs/layerArchitecture.pdf,ImageAndFill,InBG,NoBorder]
+\Plane[layer=1,color=white,opacity=0.4,image=./figs/layerArchitecture.pdf,ImageAndFill,InBG,NoBorder]
+
+\Vertex[layer=6,x=7,y=3,label={\fontsize{60}{70}\selectfont$a_1$},color=candyapplered!30,size=2.5]{A1p5} %cpu4
+\Vertex[layer=6,x=2,y=3,label={\fontsize{60}{70}\selectfont$a_4$},color=candyapplered!30,size=2.5]{A4p4}
+\Vertex[layer=6,x=7,y=7,label={\fontsize{60}{70}\selectfont$a_3$},color=candyapplered!30,size=2.5]{A3p4}
+\Vertex[layer=6,x=2,y=7,label={\fontsize{60}{70}\selectfont$a_5$},color=candyapplered!30,size=2.5]{A5p3}
+
+\Vertex[layer=5,x=7,y=3,label={\fontsize{60}{70}\selectfont$a_1$},color=candyapplered!30,size=2.5]{A1p4} %cpu4
+\Vertex[layer=5,x=2,y=3,label={\fontsize{60}{70}\selectfont$a_4$},color=candyapplered!30,size=2.5]{A4p3}
+\Vertex[layer=5,x=7,y=7,label={\fontsize{60}{70}\selectfont$a_3$},color=candyapplered!30,size=2.5]{A3p3}
+\Vertex[layer=5,x=2,y=7,label={\fontsize{60}{70}\selectfont$a_5$},color=candyapplered!30,size=2.5]{A5p2}
+
+
+\Vertex[layer=4,x=7,y=3,label={\fontsize{60}{70}\selectfont$a_1$},color=candyapplered!30,size=2.5]{A1p3} %cpu4
+\Vertex[layer=4,x=2,y=3,label={\fontsize{60}{70}\selectfont$a_4$},color=candyapplered!30,size=2.5]{A4p2}
+\Vertex[layer=4,x=7,y=7,label={\fontsize{60}{70}\selectfont$a_3$},color=candyapplered!30,size=2.5]{A3p2}
+\Vertex[layer=4,x=2,y=7,label={\fontsize{60}{70}\selectfont$a_5$},color=candyapplered!30,size=2.5]{A5p1}
+
+
+\Vertex[layer=3,x=7,y=3,label={\fontsize{60}{70}\selectfont$a_1$},color=candyapplered!30,size=2.5]{A1p2} %cpu4
+\Vertex[layer=3,x=2,y=3,label={\fontsize{60}{70}\selectfont$a_4$},color=candyapplered!30,size=2.5]{A4p1}
+\Vertex[layer=3,x=7,y=7,label={\fontsize{60}{70}\selectfont$a_3$},color=candyapplered!30,size=2.5]{A3p1}
+\Vertex[layer=3,x=2,y=7,label={\fontsize{60}{70}\selectfont$a_5$},color=candyapplered!30,size=2.5]{A5}
+
+
+\Vertex[layer=2,x=2,y=3,label={\fontsize{60}{70}\selectfont$a_1$},color=candyapplered!30,size=2.5]{A1p1}%cpu3
+\Vertex[layer=2,x=7,y=7,label={\fontsize{60}{70}\selectfont$a_4$},color=candyapplered!30,size=2.5]{A4} % cpu2
+\Vertex[layer=2,x=2,y=7,label={\fontsize{60}{70}\selectfont$a_3$},color=candyapplered!30,size=2.5]{A3} % cpu1
+
+\Vertex[layer=1,x=2,y=7,label={\fontsize{60}{70}\selectfont$a_1$},color=candyapplered!30,size=2.5]{A1}
+
+\EdgesNotInBG
+
+\Edge[Direct,lw=5.0](A1p4)(A3p4)
+\Edge[Direct,lw=5.0](A1p4)(A4p4)
+
+\Edge[Direct,lw=5.0](A1p3)(A3p3)
+\Edge[Direct,lw=5.0](A1p3)(A4p3)
+\Edge[Direct,lw=5.0](A3p3)(A5p3)
+\Edge[Direct,lw=5.0](A4p3)(A5p3)
+
+
+\Edge[Direct,lw=5.0](A1p2)(A3p2)
+\Edge[Direct,lw=5.0](A1p2)(A4p2)
+\Edge[Direct,lw=5.0](A3p2)(A5p2)
+\Edge[Direct,lw=5.0](A4p2)(A5p2)
+
+
+\Edge[Direct,lw=5.0](A1p1)(A3p1)
+\Edge[Direct,lw=5.0](A1p1)(A4p1)
+\Edge[Direct,lw=5.0](A3p1)(A5p1)
+\Edge[Direct,lw=5.0](A4p1)(A5p1)
+
+\Edge[Direct,lw=5.0](A1)(A3)
+\Edge[Direct,lw=5.0](A1)(A4)
+\Edge[Direct,lw=5.0](A3)(A5)
+\Edge[Direct,lw=5.0](A4)(A5)
+\end{tikzpicture}
+};
+
+\draw [line width=1.5mm,color=black!50,decorate,decoration={brace,amplitude=30pt,raise=8pt},yshift=0pt] (12,20) -- (12,11) node [black,midway,xshift=2.5cm,yshift=0cm,rotate=90] {\fontsize{50}{60}\selectfont $MII=1$};
+
+\draw [line width=1.5mm,color=black!50,decorate,decoration={brace,amplitude=30pt,raise=8pt},yshift=0pt] (12,1) -- (12,-4) node [black,midway,xshift=2.5cm,yshift=0cm,rotate=90] {\fontsize{80}{90}\selectfont Kernel};
+
+\end{tikzpicture}
+}
+
+
+\newcommand{\KernelWithCommunicationsMRB}[2]{
+  \def \xshift{#1}
+  \def \yshift{#2}
+
+  \draw[line width=0.5mm,dashed] (0,1) -- (0,-7);
+  \draw[line width=0.5mm,dashed] (4,1) -- (4,-7);
+
+  \node[ChannelStyle] (c4)           at (0+\xshift,0+\yshift)  {\huge $\channel_4$};
+  \node[ChannelStyle] (c5)           at (0+\xshift,-2+\yshift)  {\huge $\channel_5$};
+  \node[ChannelStyle] (c1)           at (0+\xshift,-4+\yshift)  {\huge $\channel_1$};
+
+
+  \node[ActorStyle] (a5)           at (2+\xshift,0+\yshift)   {\huge $\actor_5$};
+  \node[ActorStyle] (a3)           at (2+\xshift,-2+\yshift)  {\huge $\actor_3$};
+  \node[ActorStyle] (a4)           at (2+\xshift,-4+\yshift)  {\huge $\actor_4$};
+  \node[ActorStyle] (a1)           at (2+\xshift,-6+\yshift)  {\huge $\actor_1$};
+
+  \node[ChannelStyle] (c4p)         at (4+\xshift,0+\yshift)  {\huge $\channel_4$};
+  \node[ChannelStyle] (c5p)         at (4+\xshift,-2+\yshift) {\huge $\channel_5$};
+  \node[ChannelStyle] (c1p)         at (4+\xshift,-4+\yshift) {\huge $\channel_1$};
+
+  % now draw the arrows
+
+  \draw[ArrowStyle] ($(c4)+(-1.8,0)$) -- (c4);
+  \draw[ArrowStyle] ($(c5)+(-1.8,0)$) -- (c5);
+  \draw[ArrowStyle] ($(c1)+(-1.8,0)$) -- (c1);
+
+  \draw[ArrowStyle] (c4) -- (a5);
+  \draw[ArrowStyle] (c5) -- (a5);
+  \draw[ArrowStyle] (c1) -- (a3);
+  \draw[ArrowStyle] (c1) -- (a4);
+
+  \draw[ArrowStyle] (a3) -- (c4p)  ;
+  \draw[ArrowStyle] (a4) -- (c5p)  ;
+  \draw[ArrowStyle] (a1) -- (c1p) ;
+
+  \draw[ArrowStyle] (c4p) -- ($(c4p)+(2,0)$);
+  \draw[ArrowStyle] (c5p) -- ($(c5p)+(2,0)$);
+  \draw[ArrowStyle] (c1p) -- ($(c1p)+(2,0)$);
+
+
+%
+  \path[scope fading=east] (-1.8,1) rectangle (-1.3,-6.5);
+  \fill[fill=white] (-1.8,1) rectangle (-1.3,-6.5);
+%
+  \path[scope fading=west] (5,1) rectangle (6,-6.5);
+  \fill[fill=white] (5,1) rectangle (6,-6.5);
+
+\draw [line width=0.25mm,color=black!50,decorate,decoration={brace,amplitude=10pt,raise=4pt,mirror},yshift=0pt] (0,-7.0) -- (4.1,-7.0) node [black,midway,xshift=0cm,yshift=0cm] { Kernel};
+
+}
+
+\newcommand{\KernelScheduled}{
+  \node at (14,-2){
+	\begin{tikzpicture}
+  	   \gantChartUtilizationOnlyDRAM
+	\end{tikzpicture}
+  };
+
+  \node at (26,-2){
+	\begin{tikzpicture}
+  	   \gantChartUtilizationNoReads
+	\end{tikzpicture}
+  };
+  \node at (20,-6){
+	\begin{tikzpicture}
+		\legendGantts
+	\end{tikzpicture}
+  };
+}
+
+\newcommand{\KernelScheduledMRB}{
+  \node at (14,-3){
+	\begin{tikzpicture}
+  	   \gantChartUtilizationMRB
+	\end{tikzpicture}
+  };
+
+  \node at (26,-3){
+	\begin{tikzpicture}
+  	   \gantChartUtilizationMRBNoReads
+	\end{tikzpicture}
+  };
+
+  \node at (20,-7){
+	\begin{tikzpicture}
+		\legendGantts
+	\end{tikzpicture}
+  };
+
+}
+

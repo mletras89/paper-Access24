@@ -1,0 +1,53 @@
+\section{Related Work}\label{sec:relwork}
+
+Approaches for optimizing parallel implementation of applications specified as dataflow networks~\cite{FunState} perform multi-objective optimization of conflicting design objectives, e.g., throughput and number of allocated cores.
+On the one hand, approaches such as~\cite{Letras:2020,falk} optimize dataflow applications' throughput and the number of allocated cores in a given architecture.
+However, the previously presented approaches do not consider any memory footprint evaluation of implementations or the generation of periodic schedules during \ac{DSE}.
+\par
+In the following, we categorize the related work as approaches performing memory footprint minimization and approaches generating periodic schedules.
+
+\subsection{Memory Footprint Minimization}
+
+Approaches for memory footprint minimization can be classified into two main categories: (i) approaches minimizing the size of \acp{FIFO} and (ii) approaches implementing memory-reuse strategies that allow different \acp{FIFO} to be mapped into overlapping memory spaces or track individual token lifetimes to exploit memory footprint reductions over the execution of an application.
+In the first category, techniques such as \ac{FIFO} sizing have been widely studied to reduce the memory footprint of \ac{SDF} applications~\cite{Stuijk:2006,Benazouz:2010,Tang:2017}.
+Such approaches determine the minimal buffer size of an \ac{SDF} application under throughput constraints.
+However, those approaches do not consider any memory-reuse strategy because each buffer is studied as a separate unit allocated in memory, and no shared memory address space is considered.
+In the second category, the approach presented in~\cite{desnos2015memory} derives overlapping memory allocations for individual tokens communicated during the execution of an \ac{SDF} graph.
+However, it assumes no overlap between iterations, i.e., an execution period only contains actor firings of a single iteration.
+Thus, the achievable minimal period is severely constrained.
+Apart from performing an agnostic memory footprint minimization, some approaches exploit the knowledge about the application and actor characteristics.
+For instance, dataflow frameworks~\cite{memFIFO,Yviquel:2015,Mamidala:2011} targeting image processing apply memory minimization strategies based on the behavior of a set of specialized actors performing operations like multi-cast, fork, and join of data.
+For instance, the employed memory minimization strategy described in \cite{Mamidala:2011} merges all outgoing buffers of a multi-cast actor by replacing them with a broadcast \ac{FIFO} that supports a single writer but multiple readers~\cite{Mamidala:2011}.
+However, no other design objectives apart from memory footprint are explored.
+In this paper, we propose a holistic approach that considers not only the minimization of memory footprint but also the mapping and scheduling of communication channels and actors onto heterogeneous many-core architectures as well as the number of allocated CPUs as exploration objectives.
+
+\subsection{Scheduling}
+
+There exist approaches for communication-aware scheduling of \acp{DAG} targeting many-cores that can be classified according to the utilized scheduling method: heuristic-based -- i.e., list-scheduling~\cite{Wang8301529} and clustering-scheduling~\cite{Shah9713729} -- or meta-heuristics-based -- i.e., genetic algorithms~\cite{AKBARI201735,XU2014255,computation8020026}, simulated annealing~\cite{Saad9068118}, and particle swarm~\cite{Gao9406996} --, to mention a few.
+Although able to take into account communication scheduling, the optimization goal is to minimize the schedule make-span, i.e., the latency of a single iteration.
+Thus, minimum periodic schedules are not achievable by the mentioned approaches.
+Moreover, the communications on the \acp{DAG} are often not explicitly specified, but rather using a Communication-to-Computation Ratio (CCR), i.e., no explicit communications over interconnect resources in the target architecture are modeled.
+\par
+When analyzing dataflow, scheduling strategies applied at compile time are beneficial~\cite{Letras:2020}.
+E.g., \ac{STE}~\cite{Stuijk:2006,Xue:2016} simulates the execution of a dataflow graph by using so-called state transformations.
+The state of a \ac{DFG} is encoded as a set of variables representing the current state of the system.
+Changes during the execution of a system -- e.g., an actor consuming/producing tokens from/to a channel --  are represented by state transformations.
+During the simulation of the system, the transforming states are recorded until a periodic pattern emerges, which corresponds to the periodic schedule of the \ac{DFG}.
+However, \ac{STE} does not consider any communication in the scheduling.
+As a remedy,~\cite{Ma:2018,Ma:2021} proposed an extension to \ac{STE} by including communication delay in the model.
+However, these works can only achieve schedules targeting \ac{MPSoC} architectures with a single bus and a global memory.
+Thus, the model assumes a single resource to schedule the communication at a fixed bandwidth.
+This is different to our approach, which is able to target heterogeneous many-core architectures composed of a hierarchical organization of cores, memories, and interconnects.
+\par
+Last, \emph{modulo-scheduling} is a well-known loop scheduling technique applied in compiler optimizations % of instruction-level parallelism of Complex Instruction Set Computers (CISC).
+as well as to periodic scheduling of \acp{DAG} on fine~\cite{Oppermann:2016,Sittel:2022,Fiege:2023,Oppermann:2019,teich1996synthesis} and coarse-grained architectures~\cite{Ferreira:2013,Witterauf:2016,Park:2008,tirelli2023sat}.
+There, applications are modeled as \acp{DAG}, and hardware units such as adders, multipliers, and  accelerators are used to modulo-schedule a hardware implementation of an iterative application~\cite{teich1996synthesis}.
+E.g., approaches such as~\cite{Oppermann:2016,Oppermann:2019} used modulo scheduling in combination with loop unrolling during high-level synthesis.
+Approaches such as~\cite{Witterauf:2016,tirelli2023sat} perform loop unrolling of applications composed of tasks mapped to the processing elements of coarse-grained architectures.
+However, these approaches ignore the scheduling of communications, i.e., transfers of data from cores to memory and from memories to cores over communication resources such as buses or \acp{NoC}.
+%those approaches only consider the scheduling of tasks without including communication tasks transferring data from memory units to processing elements.
+\par
+This paper considered an explorative approach to map and schedule dataflow specifications on heterogeneous multi-core architectures by considering as well the scheduling of actors as the communications between actors.
+Our approach targets heterogeneous many-core architectures where cores of different kinds might exist in the same architecture, and complex communications are explicitly modeled, mapped, and scheduled on interconnect resources and memories respecting a hierarchical tile organization.
+As illustrated, the mapping of as well actors to cores as data buffers in channels to memories, including processor-local memory, tile-local memory, and global memory, is explored during a \ac{DSE}.
+For each solution candidate, a periodic schedule is then optimized either using an ILP formulation or an efficient scheduling heuristic called \ac{CAPS-HMS}.

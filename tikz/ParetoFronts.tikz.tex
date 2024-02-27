@@ -1,0 +1,544 @@
+\newcommand{\ParetoHeuristicBindingsDSE}{
+\pgfplotsset{every tick label/.append style={font=\Large}}
+\pgfplotsset{samples=200}
+
+\pgfplotsset{
+colormap={bluered}{rgb255(0cm)=(0,0,180); rgb255(1cm)=(0,255,255); rgb255(2cm)=(100,255,0);rgb255(3cm)=(255,255,0); rgb255(4cm)=(255,0,0); rgb255(5cm)=(128,0,0)}
+%colormap={greenyellow}{rgb255(0cm)=(255,255,0) rgb255(1cm)=(0,128,0) rgb255(2cm)=(0,0,0)},                       
+%colormap={discreteMap}{
+%rgb255=(255,0,0)       %24
+%rgb255=(245,0,112)       %23
+%rgb255=(237,0,207)       %22
+%rgb255=(233,0,255)       %21
+%rgb255=(150,0,255)       %20
+%rgb255=(50,0,255)       %19
+%rgb255=(0,0,255)       %18
+%rgb255=(4,91,249)       %17
+%rgb255=(7,164,244)       %16
+%rgb255=(0,203,241)       %15
+%rgb255=(11,255,238)       %14
+%rgb255=(8,255,170)       %13
+%rgb255=(4,255,85)       %12
+%rgb255=(0,255,0)       %11
+%rgb255=(73,255,0)       %10
+%rgb255=(255,255,0)       %8
+%rgb255=(255,237,0)       %7
+%rgb255=(255,192,0)       %6
+%rgb255=(255,128,0)       %5
+%rgb255=(207,104,0)       %4
+%rgb255=(173,87,0)       %3
+%%rgb255=(115,58,0)       %2  
+%%rgb255=(0,0,0)       %1     
+%},                       
+}
+  \begin{groupplot}[  
+                      group style={
+                      group name                 = MemoryFooprintDominance,
+                      group size                 = 3 by 1,
+%                      group size                 = 2 by 2,
+                      xlabels at                 = edge bottom,
+                      ylabels at                 = edge left,
+		      vertical sep=2.5cm,
+                      horizontal sep=2.75cm,
+%                      vertical sep=3cm,
+%                      horizontal sep=4cm,
+                      },
+                      ylabel                     = {\huge \begin{tabular}{c} $\MemoryFootprint$ [MiB] \end{tabular}},
+                      xlabel                     = {\huge \begin{tabular}{c} Period $\Period$ [ms] \end{tabular}},
+                      legend style               = {at={(0.25,-0.35)}, minimum height=1.25cm },
+%                      legend style               = {at={(1.75,-0.35)}, minimum height=1.25cm },
+                      legend columns             = 3,
+                      ymajorgrids                = true,
+                      xmajorgrids                = true,
+                      xmode=log,
+                      grid style                 = dashed,
+                      colormap name =bluered,
+                      colorbar sampled,
+                      point meta min=0,
+                      point meta max=24,
+                    ]
+
+%    \nextgroupplot[title=\huge Sobel Sequential,xmin=0,xmax=75,ymin=50,ymax=150]
+    \nextgroupplot[title=\huge Sobel,xmin=0,xmax=80,ymin=40,ymax=170, xtick={0,10,20,40,80}, xticklabels = {10,20,40,80} ]
+%	\addplot[ScatterAlways] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/ModuloScheduling-BindingsDSE-Sobel-Sequential-Always-Fraction.csv};
+%	\addplot[ScatterReference] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/ModuloScheduling-BindingsDSE-Sobel-Sequential-Fraction.csv};
+%	\addplot[ScatterExplore] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024 , scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/ModuloScheduling-BindingsDSE-Sobel-Sequential-Explore-Fraction.csv};
+%
+%	\addplot[NonDominatedAlways] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/Global-ModuloScheduling-BindingsDSE-Sobel-Sequential-Distilled-Always.csv};
+%	\addplot[NonDominatedReference] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/Global-ModuloScheduling-BindingsDSE-Sobel-Sequential-Distilled-Reference.csv};
+%	\addplot[NonDominatedExplore] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024 , scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/Global-ModuloScheduling-BindingsDSE-Sobel-Sequential-Distilled-Explore.csv};
+
+% WITH INITIAL TOKEN
+ 
+	\addplot[ScatterAlways] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/TokenModuloScheduling-BindingsDSE-Sobel-Sequential-Always-Fraction.csv};
+	\addplot[ScatterReference] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/TokenModuloScheduling-BindingsDSE-Sobel-Sequential-Fraction.csv};
+	\addplot[ScatterExplore] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024 , scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/TokenModuloScheduling-BindingsDSE-Sobel-Sequential-Explore-Fraction.csv};
+
+	\addplot[NonDominatedAlways] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/Global-TokenModuloScheduling-BindingsDSE-Sobel-Sequential-Distilled-Always.csv};
+	\addplot[NonDominatedReference] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/Global-TokenModuloScheduling-BindingsDSE-Sobel-Sequential-Distilled-Reference.csv};
+	\addplot[NonDominatedExplore] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024 , scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/Global-TokenModuloScheduling-BindingsDSE-Sobel-Sequential-Distilled-Explore.csv};
+
+
+    \nextgroupplot[title=\huge Sobel$_4$,xmin=0,xmax=75,ymin=45,ymax=130, xtick = {0,10,20,40,75},xticklabels={10,20,40,75} ,xshift=0.7cm   ]
+%      \addplot[ScatterAlways] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/ModuloScheduling-BindingsDSE-Sobel-Parallel-Always-Fraction.csv};
+%      \addplot[ScatterReference] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024 , scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/ModuloScheduling-BindingsDSE-Sobel-Parallel-Fraction.csv};
+%      \addplot[ScatterExplore] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/ModuloScheduling-BindingsDSE-Sobel-Parallel-Explore-Fraction.csv};
+%
+%      \addplot[NonDominatedAlways] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/Global-ModuloScheduling-BindingsDSE-Sobel-Parallel-Distilled-Always.csv};
+%      \addplot[NonDominatedReference] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024 , scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/Global-ModuloScheduling-BindingsDSE-Sobel-Parallel-Distilled-Reference.csv};
+%      \addplot[NonDominatedExplore] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/Global-ModuloScheduling-BindingsDSE-Sobel-Parallel-Distilled-Explore.csv};
+
+% WITH INITIAL TOKEN
+
+      \addplot[ScatterAlways] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/TokenModuloScheduling-BindingsDSE-Sobel-Parallel-Always-Fraction.csv};
+      \addplot[ScatterReference] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024 , scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/TokenModuloScheduling-BindingsDSE-Sobel-Parallel-Fraction.csv};
+      \addplot[ScatterExplore] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/TokenModuloScheduling-BindingsDSE-Sobel-Parallel-Explore-Fraction.csv};
+
+      \addplot[NonDominatedAlways] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/Global-TokenModuloScheduling-BindingsDSE-Sobel-Parallel-Distilled-Always.csv};
+      \addplot[NonDominatedReference] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024 , scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/Global-TokenModuloScheduling-BindingsDSE-Sobel-Parallel-Distilled-Reference.csv};
+      \addplot[NonDominatedExplore] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/Global-TokenModuloScheduling-BindingsDSE-Sobel-Parallel-Distilled-Explore.csv};
+
+    \nextgroupplot[title=\huge Multicamera,xmin=0,xmax=350,ymin=25,ymax=100, xtick={10,40,100,350},xshift=0.7cm,xticklabels={10,40,100,350} ]
+ %   \nextgroupplot[title=\huge Multicamera,xmin=0,xmax=350,ymin=25,ymax=100, xtick={0,10,40,160,350},xshift=5.5cm, colorbar style={xshift=-4.5cm}]
+      \addlegendimage{ScatterReference}
+      \addlegendentry{\huge $\Reference^{\fHeuristic}\quad$}
+      \addlegendimage{ScatterAlways}
+      \addlegendentry{\huge $\MergingAlways^{\fHeuristic}\quad$ }
+      \addlegendimage{ScatterExplore }
+      \addlegendentry{\huge $\MergingExplore^{\fHeuristic}$}
+%      \addplot[ScatterAlways] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/ModuloScheduling-BindingsDSE-Multicamera-1instance-Always-Fraction.csv};
+%      \addplot[ScatterReference] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/ModuloScheduling-BindingsDSE-Multicamera-1instance-Fraction.csv};
+%      \addplot[ScatterExplore] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/ModuloScheduling-BindingsDSE-Multicamera-1instance-Explore-Fraction.csv};
+%
+%      \addplot[NonDominatedAlways] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/Global-ModuloScheduling-BindingsDSE-Multicamera-1instance-Distilled-Always.csv};
+%      \addplot[NonDominatedReference] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/Global-ModuloScheduling-BindingsDSE-Multicamera-1instance-Distilled-Reference.csv};
+%      \addplot[NonDominatedExplore] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/Global-ModuloScheduling-BindingsDSE-Multicamera-1instance-Distilled-Explore.csv};
+
+% WITH INTIAL TOKEN
+      \addplot[ScatterAlways] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/TokenModuloScheduling-BindingsDSE-Multicamera-1instance-Always-Fraction.csv};
+      \addplot[ScatterReference] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/TokenModuloScheduling-BindingsDSE-Multicamera-1instance-Fraction.csv};
+      \addplot[ScatterExplore] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/TokenModuloScheduling-BindingsDSE-Multicamera-1instance-Explore-Fraction.csv};
+
+      \addplot[NonDominatedAlways] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/Global-TokenModuloScheduling-BindingsDSE-Multicamera-1instance-Distilled-Always.csv};
+      \addplot[NonDominatedReference] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/Global-TokenModuloScheduling-BindingsDSE-Multicamera-1instance-Distilled-Reference.csv};
+      \addplot[NonDominatedExplore] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/Global-TokenModuloScheduling-BindingsDSE-Multicamera-1instance-Distilled-Explore.csv};
+
+
+ \end{groupplot}
+
+ \node[rotate=90] at(30.3,3){\huge \begin{tabular}{c} Core Cost $\CoreCost$\end{tabular} };
+
+% \node[rotate=90] at(21.5,3){\huge \begin{tabular}{c} Core Cost $\CoreCost$\end{tabular} };
+% \node[rotate=90] at(15.75,-6){\huge \begin{tabular}{c} Core Cost $\CoreCost$\end{tabular} };
+}
+
+\newcommand{\ParetoILP}{
+\pgfplotsset{every tick label/.append style={font=\Large}}
+\pgfplotsset{samples=200}
+
+\pgfplotsset{
+%%colormap={hot}{color(0cm)=(blue); color(1cm)=(yellow); color(2cm)=(orange); color(3cm)=(red)}  
+%colormap={jet}{rgb255(0cm)=(0,0,128) rgb255(1cm)=(0,0,255) rgb255(3cm)=(0,255,255) rgb255(5cm)=(255,255,0) rgb255(7cm)=(255,0,0) rgb255(8cm)=(128,0,0)}
+%colormap={bluered}{rgb255(0cm)=(0,0,180); rgb255(1cm)=(0,255,255); rgb255(2cm)=(100,255,0);rgb255(3cm)=(255,255,0); rgb255(4cm)=(255,0,0); rgb255(5cm)=(128,0,0)}
+%colormap={greenyellow}{rgb255(0cm)=(255,255,0) rgb255(1cm)=(0,128,0) rgb255(2cm)=(0,0,0)},                      
+colormap={bluered}{rgb255(0cm)=(0,0,180); rgb255(1cm)=(0,255,255); rgb255(2cm)=(100,255,0);rgb255(3cm)=(255,255,0); rgb255(4cm)=(255,0,0); rgb255(5cm)=(128,0,0)},
+%colormap={bluered}{rgb255(0cm)=(228,96,20); rgb255(1cm)=(0,255,0);rgb255(2cm)=(110,250,242); rgb255(3cm)=(0,0,180); rgb255(4cm)=(255,0,0)},
+%colormap={discreteMap}{
+%rgb255=(255,0,0)       %24
+%rgb255=(245,0,112)       %23
+%rgb255=(237,0,207)       %22
+%rgb255=(233,0,255)       %21
+%rgb255=(150,0,255)       %20
+%rgb255=(50,0,255)       %19
+%rgb255=(0,0,255)       %18
+%rgb255=(4,91,249)       %17
+%rgb255=(7,164,244)       %16
+%rgb255=(0,203,241)       %15
+%rgb255=(11,255,238)       %14
+%rgb255=(8,255,170)       %13
+%rgb255=(4,255,85)       %12
+%rgb255=(0,255,0)       %11
+%rgb255=(73,255,0)       %10
+%rgb255=(255,255,0)       %8
+%rgb255=(255,237,0)       %7
+%rgb255=(255,192,0)       %6
+%rgb255=(255,128,0)       %5
+%rgb255=(207,104,0)       %4
+%rgb255=(173,87,0)       %3
+%%rgb255=(115,58,0)       %2  
+%%rgb255=(0,0,0)       %1     
+%},                       
+}
+  \begin{groupplot}[  
+                      group style={
+                      group name                 = MemoryFooprintDominance,
+                      group size                 = 3 by 1,
+%                      group size                 = 2 by 2,
+                      xlabels at                 = edge bottom,
+                      ylabels at                 = edge left,
+		      vertical sep=2.5cm,
+                      horizontal sep=2.75cm,
+%                      vertical sep=3cm,
+%                      horizontal sep=4cm,
+                      },
+                      ylabel                     = {\huge \begin{tabular}{c}  $\MemoryFootprint$ [MiB] \end{tabular}},
+                      xlabel                     = {\huge \begin{tabular}{c}  Period $\Period$ [ms] \end{tabular}},
+                      legend style               = {at={(-0.0,-0.35)}, minimum height=1.25cm},
+                      %legend style               = {at={(1.5,-0.35)}, minimum height=1.25cm },
+                      legend columns             = 3,
+                      ymajorgrids                = true,
+                      xmajorgrids                = true,
+                      grid style                 = dashed,
+                      colormap name =bluered,
+                      colorbar sampled,
+                      point meta min=0,
+                      point meta max=24,
+                      xmode=log,
+                    ]
+
+%    \nextgroupplot[title=\huge Sobel Sequential,xmin=0,xmax=75,ymin=50,ymax=150]
+    \nextgroupplot[title=\huge Sobel ,xmin=0,xmax=80,ymin=40,ymax=170, xtick={0,10,20,40,80},xticklabels = {10,20,40,80} ]
+%	\addplot[ScatterAlways] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/ILPModuloScheduling-Sobel-Sequential-Always-Fraction.csv};
+%	\addplot[ScatterReference] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/ILPModuloScheduling-Sobel-Sequential-Fraction.csv};
+%	\addplot[ScatterExplore] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024 , scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/ILPModuloScheduling-Sobel-Sequential-Explore-Fraction.csv};
+%
+%	\addplot[NonDominatedAlways] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/Global-ILPModuloScheduling-Sobel-Sequential-Distilled-Always.csv};
+%	\addplot[NonDominatedReference] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/Global-ILPModuloScheduling-Sobel-Sequential-Distilled-Reference.csv};
+%	\addplot[NonDominatedExplore] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024 , scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/Global-ILPModuloScheduling-Sobel-Sequential-Distilled-Explore.csv};
+
+	\addplot[ScatterAlways] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/ILPTokenModuloScheduling-Sobel-Sequential-Always-Fraction.csv};
+	\addplot[ScatterReference] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/ILPTokenModuloScheduling-Sobel-Sequential-Fraction.csv};
+	\addplot[ScatterExplore] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024 , scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/ILPTokenModuloScheduling-Sobel-Sequential-Explore-Fraction.csv};
+
+	\addplot[NonDominatedAlways] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/Global-ILPTokenModuloScheduling-Sobel-Sequential-Distilled-Always.csv};
+	\addplot[NonDominatedReference] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/Global-ILPTokenModuloScheduling-Sobel-Sequential-Distilled-Reference.csv};
+	\addplot[NonDominatedExplore] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024 , scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/Global-ILPTokenModuloScheduling-Sobel-Sequential-Distilled-Explore.csv};
+
+    \nextgroupplot[title=\huge Sobel$_4$,xmin=0,xmax=75,ymin=45,ymax=130, xtick = {0,10,20,40,75},xshift=0.7cm  , xticklabels={10,20,40,75}  ]
+%      \addplot[ScatterAlways] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/ILPModuloScheduling-Sobel-Parallel-Always-Fraction.csv};
+%      \addplot[ScatterReference] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024 , scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/ILPModuloScheduling-Sobel-Parallel-Fraction.csv};
+%      \addplot[ScatterExplore] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/ILPModuloScheduling-Sobel-Parallel-Explore-Fraction.csv};
+%
+%      \addplot[NonDominatedAlways] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/Global-ILPModuloScheduling-Sobel-Parallel-Distilled-Always.csv};
+%      \addplot[NonDominatedReference] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024 , scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/Global-ILPModuloScheduling-Sobel-Parallel-Distilled-Reference.csv};
+%      \addplot[NonDominatedExplore] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/Global-ILPModuloScheduling-Sobel-Parallel-Distilled-Explore.csv};
+
+
+      \addplot[ScatterAlways] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/ILPTokenModuloScheduling-Sobel-Parallel-Always-Fraction.csv};
+      \addplot[ScatterReference] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024 , scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/ILPTokenModuloScheduling-Sobel-Parallel-Fraction.csv};
+      \addplot[ScatterExplore] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/ILPTokenModuloScheduling-Sobel-Parallel-Explore-Fraction.csv};
+
+      \addplot[NonDominatedAlways] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/Global-ILPTokenModuloScheduling-Sobel-Parallel-Distilled-Always.csv};
+      \addplot[NonDominatedReference] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024 , scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/Global-ILPTokenModuloScheduling-Sobel-Parallel-Distilled-Reference.csv};
+      \addplot[NonDominatedExplore] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/Global-ILPTokenModuloScheduling-Sobel-Parallel-Distilled-Explore.csv};
+
+
+    \nextgroupplot[title=\huge Multicamera,xmin=0,xmax=350,ymin=25,ymax=100, xtick={10,40,100,350},xshift=0.7cm, xticklabels={10,40,100,350}  ]
+%    \nextgroupplot[title=\huge Multicamera,xmin=0,xmax=350,ymin=25,ymax=100, xtick={0,10,40,160,350},xshift=5.5cm, colorbar style={xshift=-2.5cm}]
+      \addlegendimage{ScatterReference}
+      \addlegendentry{\huge $\Reference^{ILP}\quad$}
+      \addlegendimage{ScatterAlways}
+      \addlegendentry{\huge $\MergingAlways^{ILP}\quad$}
+      \addlegendimage{ScatterExplore }
+      \addlegendentry{\huge $\MergingExplore^{ILP}$}
+%      \addplot[ScatterAlways] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/ILPModuloScheduling-Multicamera-Always-Fraction.csv};
+%      \addplot[ScatterReference] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/ILPModuloScheduling-Multicamera-Fraction.csv};
+%      \addplot[ScatterExplore] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/ILPModuloScheduling-Multicamera-Explore-Fraction.csv};
+%
+%      \addplot[NonDominatedAlways] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/Global-ILPModuloScheduling-Multicamera-Distilled-Always.csv};
+%      \addplot[NonDominatedReference] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/Global-ILPModuloScheduling-Multicamera-Distilled-Reference.csv};
+%      \addplot[NonDominatedExplore] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/Global-ILPModuloScheduling-Multicamera-Distilled-Explore.csv};
+
+      \addplot[ScatterAlways] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/ILPTokenModuloScheduling-Multicamera-1instance-Always-Fraction.csv};
+      \addplot[ScatterReference] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/ILPTokenModuloScheduling-Multicamera-1instance-Fraction.csv};
+      \addplot[ScatterExplore] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/ILPTokenModuloScheduling-Multicamera-1instance-Explore-Fraction.csv};
+
+      \addplot[NonDominatedAlways] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/Global-ILPTokenModuloScheduling-Multicamera-1instance-Distilled-Always.csv};
+      \addplot[NonDominatedReference] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/Global-ILPTokenModuloScheduling-Multicamera-1instance-Distilled-Reference.csv};
+      \addplot[NonDominatedExplore] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/Global-ILPTokenModuloScheduling-Multicamera-1instance-Distilled-Explore.csv};
+ \end{groupplot}
+
+\node[rotate=90] at(30.3,3){\huge \begin{tabular}{c}Core Cost $\CoreCost$\end{tabular} };
+
+% \node[rotate=90] at(21.5,3){\huge \begin{tabular}{c} Core Cost $\CoreCost$\end{tabular} };
+%  \node[rotate=90] at(15.75,-6){\huge \begin{tabular}{c} Core Cost $\CoreCost$\end{tabular} };
+}
+
+
+\newcommand{\ParetoCombinedsDSE}{
+\pgfplotsset{every tick label/.append style={font=\Large}}
+\pgfplotsset{samples=200}
+
+\pgfplotsset{
+colormap={bluered}{rgb255(0cm)=(0,0,180); rgb255(1cm)=(0,255,255); rgb255(2cm)=(100,255,0);rgb255(3cm)=(255,255,0); rgb255(4cm)=(255,0,0); rgb255(5cm)=(128,0,0)}
+}
+  \begin{groupplot}[  
+                      group style={
+                      group name                 = MemoryFooprintDominance,
+                      group size                 = 1 by 1,
+                      xlabels at                 = edge bottom,
+                      ylabels at                 = edge left,
+		      vertical sep=2.5cm,
+                      horizontal sep=2.75cm,
+                      },
+                      %height                     = 5cm,
+                      %width                      = 6.5cm,
+                      ylabel                     = {\huge \begin{tabular}{c} $\MemoryFootprint$ [MiB] \end{tabular}},
+                      xlabel                     = {\huge \begin{tabular}{c} Period $\Period$ [ms] \end{tabular}},
+                      %zlabel                     = {\Large P1},
+                      legend style               = {at={(1.5,-0.35)}, minimum height=1.25cm },
+                      legend columns             = 3,
+                      ymajorgrids                = true,
+                      xmajorgrids                = true,
+                      %zmajorgrids                = true,
+                      grid style                 = dashed,
+%                      colorbar,
+                      colormap name =bluered,
+                      colorbar sampled,
+%                      colormap access=piecewise const, % add this
+                      point meta min=0,
+                      point meta max=24,
+		      colorbar style = {xshift=-2.75cm},
+                    ]
+
+
+    \nextgroupplot[title=\huge Multicamera,xmin=0,xmax=300,ymin=25,ymax=90]
+      \addlegendimage{ScatterReference}
+      \addlegendentry{\huge $\Reference^{\fHeuristic}\quad$}
+      \addlegendimage{ScatterAlways}
+      \addlegendentry{\huge $\MergingAlways^{\fHeuristic}\quad$ }
+      \addlegendimage{ScatterExplore }
+      \addlegendentry{\huge $\MergingExplore^{\fHeuristic}$}
+
+      \addplot[ScatterAlways] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]   {csv/pareto-fronts/CombinedScheduling-60Seconds-Multicamera-Always-Fraction.csv};
+      \addplot[ScatterReference] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/CombinedScheduling-60Seconds-Multicamera-Fraction.csv};
+      \addplot[ScatterExplore] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1},  col sep =tab] {csv/pareto-fronts/CombinedScheduling-60Seconds-Multicamera-Explore-Fraction.csv};
+
+      \addplot[NonDominatedAlways] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]   {csv/pareto-fronts/Global-CombinedScheduling-60Seconds-Multicamera-Distilled-Always.csv};
+      \addplot[NonDominatedReference] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/Global-CombinedScheduling-60Seconds-Multicamera-Distilled-Reference.csv};
+      \addplot[NonDominatedExplore] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1},  col sep =tab] {csv/pareto-fronts/Global-CombinedScheduling-60Seconds-Multicamera-Distilled-Explore.csv};
+
+
+      \addplot[ScatterAlways,opacity=0.3] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=0,  col sep =tab]{csv/pareto-fronts/ModuloScheduling-BindingsDSE-Multicamera-1instance-Always-Fraction.csv};
+      \addplot[ScatterReference,opacity=0.3] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=0,  col sep =tab]{csv/pareto-fronts/ModuloScheduling-BindingsDSE-Multicamera-1instance-Fraction.csv};
+      \addplot[ScatterExplore,opacity=0.3] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=0,  col sep =tab]{csv/pareto-fronts/ModuloScheduling-BindingsDSE-Multicamera-1instance-Explore-Fraction.csv};
+
+      \addplot[NonDominatedAlways,opacity=0.3] table[x expr=1000/\thisrowno{0}, scatter src=0,  y expr=\thisrowno{2}/1024/1024, col sep =tab]{csv/pareto-fronts/Global-ModuloScheduling-BindingsDSE-Multicamera-1instance-Distilled-Always.csv};
+      \addplot[NonDominatedReference,opacity=0.3] table[x expr=1000/\thisrowno{0},y expr=\thisrowno{2}/1024/1024, scatter src=0,   col sep =tab]{csv/pareto-fronts/Global-ModuloScheduling-BindingsDSE-Multicamera-1instance-Distilled-Reference.csv};
+      \addplot[NonDominatedExplore,opacity=0.3] table[x expr=1000/\thisrowno{0},  y expr=\thisrowno{2}/1024/1024, scatter src=0,  col sep =tab]{csv/pareto-fronts/Global-ModuloScheduling-BindingsDSE-Multicamera-1instance-Distilled-Explore.csv};
+
+
+
+ \end{groupplot}
+
+ \node[rotate=90] at(9.5,3){\huge \begin{tabular}{c} Core Cost $\CoreCost$\end{tabular} };
+}
+
+
+
+%\newcommand{\ParetoHeuristic}{
+%\pgfplotsset{every tick label/.append style={font=\Large}}
+%\pgfplotsset{samples=200}
+%
+%\pgfplotsset{
+%%%colormap={hot}{color(0cm)=(blue); color(1cm)=(yellow); color(2cm)=(orange); color(3cm)=(red)}  
+%%colormap={jet}{rgb255(0cm)=(0,0,128) rgb255(1cm)=(0,0,255) rgb255(3cm)=(0,255,255) rgb255(5cm)=(255,255,0) rgb255(7cm)=(255,0,0) rgb255(8cm)=(128,0,0)}
+%%colormap={bluered}{rgb255(0cm)=(0,0,180); rgb255(1cm)=(0,255,255); rgb255(2cm)=(100,255,0);rgb255(3cm)=(255,255,0); rgb255(4cm)=(255,0,0); rgb255(5cm)=(128,0,0)}
+%colormap={greenyellow}{rgb255(0cm)=(255,255,0) rgb255(1cm)=(0,128,0) rgb255(2cm)=(0,0,0)},                       
+%colormap={discreteMap}{
+%rgb255=(255,0,0)       %24
+%rgb255=(245,0,112)       %23
+%rgb255=(237,0,207)       %22
+%rgb255=(233,0,255)       %21
+%rgb255=(150,0,255)       %20
+%rgb255=(50,0,255)       %19
+%rgb255=(0,0,255)       %18
+%rgb255=(4,91,249)       %17
+%rgb255=(7,164,244)       %16
+%rgb255=(0,203,241)       %15
+%rgb255=(11,255,238)       %14
+%%rgb255=(8,255,170)       %13
+%%rgb255=(4,255,85)       %12
+%%rgb255=(0,255,0)       %11
+%%rgb255=(73,255,0)       %10
+%%rgb255=(255,255,0)       %8
+%%rgb255=(255,237,0)       %7
+%%rgb255=(255,192,0)       %6
+%%rgb255=(255,128,0)       %5
+%%rgb255=(207,104,0)       %4
+%%rgb255=(173,87,0)       %3
+%%rgb255=(115,58,0)       %2  
+%%rgb255=(0,0,0)       %1     
+%},                       
+%}
+%  \begin{groupplot}[  
+%                      group style={
+%                      group name                 = MemoryFooprintDominance,
+%                      group size                 = 3 by 1,
+%                      xlabels at                 = edge bottom,
+%                      ylabels at                 = edge left,
+%		      vertical sep=2.5cm,
+%                      horizontal sep=3cm,
+%                      },
+%                      %height                     = 5cm,
+%                      %width                      = 6.5cm,
+%                      ylabel                     = {\huge \begin{tabular}{c} $\fobj{min}{2}$  \\ $\MemoryFootprint$ [MiB] \end{tabular}},
+%                      xlabel                     = {\huge \begin{tabular}{c} $\fobj{max}{1}$  \\  Throughput [$1/\Period$] \end{tabular}},
+%                      %zlabel                     = {\Large P1},
+%                      legend style               = {at={(-0.2,-0.5)}},
+%                      legend columns             = 3,
+%                      ymajorgrids                = true,
+%                      xmajorgrids                = true,
+%                      %zmajorgrids                = true,
+%                      grid style                 = dashed,
+%%                      colorbar,
+%                      colormap name =discreteMap,
+%                      colorbar sampled,
+%                      colormap access=piecewise const, % add this
+%%%                      colorbar horizontal,
+%                      point meta min=0,
+%                      point meta max=10,
+%                    ]
+%
+%    \nextgroupplot[title=\huge Sobel Sequential,xmax=120,xmax=45]
+%
+%	\addplot[NonDominatedAlways] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/Global-ModuloScheduling-BindinsDSE-Sobel-Sequential-Distilled-Always.csv};
+%	\addplot[NonDominatedReference] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/Global-ModuloScheduling-BindingsDSE-Sobel-Sequential-Distilled-Reference.csv};
+%	\addplot[NonDominatedExplore] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024 , scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/Global-ModuloScheduling-BindingsDSE-Sobel-Sequential-Distilled-Explore.csv};
+%
+%	\addplot[ScatterAlways] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/ModuloScheduling-BindingsDSE-Sobel-Sequential-Always-Fraction.csv};
+%	\addplot[ScatterReference] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/ModuloScheduling-BindingsDSE-Sobel-Sequential-Fraction.csv};
+%	\addplot[ScatterExplore] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024 , scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/ModuloScheduling-BindingsDSE-Sobel-Sequential-Explore-Fraction.csv};
+%
+%    \nextgroupplot[title=\huge Sobel split 4,xmax=90]
+%      \addplot[NonDominatedAlways] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/Global-ModuloScheduling-Sobel-Parallel-Distilled-Always.csv};
+%      \addplot[NonDominatedReference] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024 , scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/Global-ModuloScheduling-Sobel-Parallel-Distilled-Reference.csv};
+%      \addplot[NonDominatedExplore] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/Global-ModuloScheduling-Sobel-Parallel-Distilled-Explore.csv};
+%
+%      \addplot[ScatterAlways] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/ModuloScheduling-Sobel-Parallel-Always-Fraction.csv};
+%      \addplot[ScatterReference] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024 , scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/ModuloScheduling-Sobel-Parallel-Fraction.csv};
+%      \addplot[ScatterExplore] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/ModuloScheduling-Sobel-Parallel-Explore-Fraction.csv};
+%
+%
+%    \nextgroupplot[title=\huge Multicamera,xmax=60]
+%      \addlegendimage{ScatterReference}
+%      \addlegendentry{\huge $\Reference^{\fHeuristic}$}
+%      \addlegendimage{ScatterAlways}
+%      \addlegendentry{\huge $\MergingAlways^{\fHeuristic}$}
+%      \addlegendimage{ScatterExplore }
+%      \addlegendentry{\huge $\MergingExplore^{\fHeuristic}$}
+%      \addplot[NonDominatedAlways] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/Global-ModuloScheduling-Multicamera-1instance-Distilled-Always.csv};
+%      \addplot[NonDominatedReference] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/Global-ModuloScheduling-Multicamera-1instance-Distilled-Reference.csv};
+%      \addplot[NonDominatedExplore] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/Global-ModuloScheduling-Multicamera-1instance-Distilled-Explore.csv};
+%%
+%      \addplot[ScatterAlways] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/ModuloScheduling-Multicamera-1instance-Always-Fraction.csv};
+%      \addplot[ScatterReference] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/ModuloScheduling-Multicamera-1instance-Fraction.csv};
+%      \addplot[ScatterExplore] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/ModuloScheduling-Multicamera-1instance-Explore-Fraction.csv};
+%
+%  \end{groupplot}
+%
+% \node[rotate=90] at(29,3){\huge \begin{tabular}{c} $\fobj{min}{3}$ \\ Core Cost $\CoreCost$\end{tabular} };
+%}
+%
+%\newcommand{\ParetoILPBindingsHeuristic}{
+%\pgfplotsset{every tick label/.append style={font=\Large}}
+%\pgfplotsset{samples=200}
+%
+%\pgfplotsset{
+%%%colormap={hot}{color(0cm)=(blue); color(1cm)=(yellow); color(2cm)=(orange); color(3cm)=(red)}  
+%%colormap={jet}{rgb255(0cm)=(0,0,128) rgb255(1cm)=(0,0,255) rgb255(3cm)=(0,255,255) rgb255(5cm)=(255,255,0) rgb255(7cm)=(255,0,0) rgb255(8cm)=(128,0,0)}
+%%colormap={bluered}{rgb255(0cm)=(0,0,180); rgb255(1cm)=(0,255,255); rgb255(2cm)=(100,255,0);rgb255(3cm)=(255,255,0); rgb255(4cm)=(255,0,0); rgb255(5cm)=(128,0,0)}
+%colormap={greenyellow}{rgb255(0cm)=(255,255,0) rgb255(1cm)=(0,128,0) rgb255(2cm)=(0,0,0)},                       
+%colormap={discreteMap}{
+%rgb255=(255,0,0)       %24
+%rgb255=(245,0,112)       %23
+%rgb255=(237,0,207)       %22
+%rgb255=(233,0,255)       %21
+%rgb255=(150,0,255)       %20
+%rgb255=(50,0,255)       %19
+%rgb255=(0,0,255)       %18
+%rgb255=(4,91,249)       %17
+%rgb255=(7,164,244)       %16
+%rgb255=(0,203,241)       %15
+%rgb255=(11,255,238)       %14
+%%rgb255=(8,255,170)       %13
+%%rgb255=(4,255,85)       %12
+%%rgb255=(0,255,0)       %11
+%%rgb255=(73,255,0)       %10
+%%rgb255=(255,255,0)       %8
+%%rgb255=(255,237,0)       %7
+%%rgb255=(255,192,0)       %6
+%%rgb255=(255,128,0)       %5
+%%rgb255=(207,104,0)       %4
+%%rgb255=(173,87,0)       %3
+%%rgb255=(115,58,0)       %2  
+%%rgb255=(0,0,0)       %1     
+%},                       
+%}
+%  \begin{groupplot}[  
+%                      group style={
+%                      group name                 = MemoryFooprintDominance,
+%                      group size                 = 3 by 1,
+%                      xlabels at                 = edge bottom,
+%                      ylabels at                 = edge left,
+%		      vertical sep=2.5cm,
+%                      horizontal sep=3cm,
+%                      },
+%                      %height                     = 5cm,
+%                      %width                      = 6.5cm,
+%                      ylabel                     = {\huge \begin{tabular}{c} $\fobj{min}{2}$  \\ $\MemoryFootprint$ [MiB] \end{tabular}},
+%                      xlabel                     = {\huge \begin{tabular}{c} $\fobj{max}{1}$  \\  Throughput [$1/\Period$] \end{tabular}},
+%                      %zlabel                     = {\Large P1},
+%                      legend style               = {at={(-0.2,-0.5)}},
+%                      legend columns             = 3,
+%                      ymajorgrids                = true,
+%                      xmajorgrids                = true,
+%                      %zmajorgrids                = true,
+%                      grid style                 = dashed,
+%%                      colorbar,
+%                      colormap name =discreteMap,
+%                      colorbar sampled,
+%                      colormap access=piecewise const, % add this
+%%%                      colorbar horizontal,
+%                      point meta min=0,
+%                      point meta max=10,
+%                    ]
+%
+%    \nextgroupplot[title=\huge Sobel Sequential,xmax=120]
+%
+%	\addplot[NonDominatedAlways] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/Global-ILPModuloScheduling-BindingsHeuristic-Sobel-Sequential-Distilled-Always.csv};
+%	\addplot[NonDominatedReference] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/Global-ILPModuloScheduling-BindingsHeuristic-Sobel-Sequential-Distilled-Reference.csv};
+%	\addplot[NonDominatedExplore] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024 , scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/Global-ILPModuloScheduling-BindingsHeuristic-Sobel-Sequential-Distilled-Explore.csv};
+%
+%	\addplot[ScatterAlways] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/ILPModuloScheduling-BindingsHeuristic-Sobel-Sequential-Always-Fraction.csv};
+%	\addplot[ScatterReference] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/ILPModuloScheduling-BindingsHeuristic-Sobel-Sequential-Fraction.csv};
+%	\addplot[ScatterExplore] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024 , scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/ILPModuloScheduling-BindingsHeuristic-Sobel-Sequential-Explore-Fraction.csv};
+%
+%    \nextgroupplot[title=\huge Sobel split 4,xmax=90]
+%      \addplot[NonDominatedAlways] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/Global-ILPModuloScheduling-BindingsHeuristic-Sobel-Parallel-Distilled-Always.csv};
+%      \addplot[NonDominatedReference] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024 , scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/Global-ILPModuloScheduling-BindingsHeuristic-Sobel-Parallel-Distilled-Reference.csv};
+%      \addplot[NonDominatedExplore] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/Global-ILPModuloScheduling-BindingsHeuristic-Sobel-Parallel-Distilled-Explore.csv};
+%
+%      \addplot[ScatterAlways] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1}, col sep =tab]{csv/pareto-fronts/ILPModuloScheduling-BindingsHeuristic-Sobel-Parallel-Always-Fraction.csv};
+%      \addplot[ScatterReference] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024 , scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/ILPModuloScheduling-BindingsHeuristic-Sobel-Parallel-Fraction.csv};
+%      \addplot[ScatterExplore] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/ILPModuloScheduling-BindingsHeuristic-Sobel-Parallel-Explore-Fraction.csv};
+%
+%
+%    \nextgroupplot[title=\huge Multicamera,xmax=60]
+%      \addlegendimage{ScatterReference}
+%      \addlegendentry{\huge $\Reference^{ILP}$}
+%      \addlegendimage{ScatterAlways}
+%      \addlegendentry{\huge $\MergingAlways^{ILP}$}
+%      \addlegendimage{ScatterExplore }
+%      \addlegendentry{\huge $\MergingExplore^{ILP}$}
+%      \addplot[NonDominatedAlways] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/Global-ILPModuloScheduling-BindingsHeuristic-Multicamera-Distilled-Always.csv};
+%      \addplot[NonDominatedReference] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/Global-ILPModuloScheduling-BindingsHeuristic-Multicamera-Distilled-Reference.csv};
+%      \addplot[NonDominatedExplore] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/Global-ILPModuloScheduling-BindingsHeuristic-Multicamera-Distilled-Explore.csv};
+%%%
+%      \addplot[ScatterAlways] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/ILPModuloScheduling-BindingsHeuristic-Multicamera-Always-Fraction.csv};
+%      \addplot[ScatterReference] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024,scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/ILPModuloScheduling-BindingsHeuristic-Multicamera-Fraction.csv};
+%      \addplot[ScatterExplore] table[x expr=1000/\thisrowno{0}, y expr=\thisrowno{2}/1024/1024, scatter src=\thisrowno{1},  col sep =tab]{csv/pareto-fronts/ILPModuloScheduling-BindingsHeuristic-Multicamera-Explore-Fraction.csv};
+%
+% \end{groupplot}
+% \node[rotate=90] at(29,3){\huge \begin{tabular}{c} $\fobj{min}{3}$ \\ Core Cost $\CoreCost$\end{tabular} };
+%}

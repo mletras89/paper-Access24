@@ -1,0 +1,481 @@
+\newcommand{\gantChartUtilizationMRB}
+{
+\begin{scope}
+
+	\begin{ganttchart}[ bar height=0.5, vrule/.style={line width=0.5mm, black,loosely dashed}, canvas/.style={ draw=none},
+                vrule label font=\bfseries, link/.style={->, line width=1pt, black}  ]{1}{44} 
+
+		\ganttbar[bar left shift=0.1, bar right shift=-1,bar top shift=0.4,bar/.style={draw=none}]
+                {\huge $\core_4$}{0}{30}
+		\ganttActorbar[Actorbar top shift=0.0,inline,name=a1e1]{\Large $\actor_1$}{1}{4}
+		\ganttActorbar[Actorbar top shift=0.0,inline]{\Large $\actor_1$}{17}{20}
+		\ganttActorbar[Actorbar top shift=0.0,inline]{\Large $\actor_1$}{33}{36}
+
+                \\
+                \ganttbar[bar left shift=0.1, bar right shift=-0.5,bar top shift=0.75,bar/.style={draw=none}]
+                {\huge $\core_3$}{0}{30}
+		\ganttActorbar[Actorbar top shift=0.4, inline,name=a4e1]{\Large $\actor_4$}{9}{14}
+		\ganttActorbar[Actorbar top shift=0.4, inline]{\Large $\actor_4$}{25}{30}
+		\ganttActorbar[Actorbar top shift=0.4, inline]{\Large $\actor_4$}{41}{44}
+		\\
+                \ganttbar[bar left shift=0.1, bar right shift=-0.5,bar top shift=1.2,bar/.style={draw=none}]
+                {\huge $\core_2$}{0}{30}
+		\ganttActorbar[Actorbar top shift=0.8, inline,name=a3e1]{\Large$\actor_3$}{7}{12}
+		\ganttActorbar[Actorbar top shift=0.8, inline]{\Large$\actor_3$}{23}{28}
+		\ganttActorbar[Actorbar top shift=0.8, inline]{\Large$\actor_3$}{39}{44}
+                \\
+                \ganttbar[bar left shift=0.1, bar right shift=-0.5,bar top shift=1.6,bar/.style={draw=none}]
+                {\huge $\core_1$}{0}{30}
+		\ganttActorbar[Actorbar top shift=1.25,inline,name=a5e1]{\Large $\actor_5$}{5}{12}
+		\ganttActorbar[Actorbar top shift=1.25,inline]{\Large $\actor_5$}{21}{28}
+		\ganttActorbar[Actorbar top shift=1.25,inline]{\Large $\actor_5$}{37}{44}
+
+
+                \\
+                \ganttbar[bar left shift=0.1, bar right shift=0.5,bar top shift=2, bar/.style={draw=none}]{\huge $\crossbar{1}$}{0}{38}
+%CrossbarOpPrev
+		\ganttCrossbarReadbar[CrossbarReadbar   top shift=1.7,inline,name=c4r1]{\Large $\channel_4$}{1}{2}
+		\ganttCrossbarOpPrevbar[CrossbarOpPrevbar   top shift=1.7,inline,name=c4r1]{\Large $\channel_4$}{1}{2}
+                \ganttCrossbarReadbar[CrossbarReadbar   top shift=1.7,inline,name=c5r1]{\Large  $\channel_5$}{3}{4}
+                \ganttCrossbarOpPrevbar[CrossbarOpPrevbar   top shift=1.7,inline,name=c5r1]{\Large  $\channel_5$}{3}{4}
+                \ganttCrossbarReadbar[CrossbarReadbar   top shift=1.7, inline,name=c1r1]{  $\channel_{(1,2,3)}$}{5}{6}
+                \ganttCrossbarOpPrevbar[CrossbarOpPrevbar   top shift=1.7, inline,name=c1r1]{  $\channel_{(1,2,3)}$}{5}{6}
+                \ganttCrossbarReadbar[CrossbarReadbar   top shift=1.7, inline,name=c1r2]{  $\channel_{(1,2,3)}$}{7}{8}
+                \ganttCrossbarOpPrevbar[CrossbarOpPrevbar   top shift=1.7, inline,name=c1r2]{  $\channel_{(1,2,3)}$}{7}{8}
+		\ganttCrossbarWritebar[CrossbarWritebar top shift=1.7,inline,name=c1w1]{$\channel_{(1,2,3)}$}{9}{10}
+		\ganttCrossbarWritebar[CrossbarWritebar top shift=1.7, inline,name=c4w1]{\Large $\channel_4$}{13}{14}  
+  	        \ganttCrossbarWritebar[CrossbarWritebar top shift=1.7, inline,name=c5w1]{\Large $\channel_5$}{15}{16}
+
+		\ganttCrossbarReadbar[CrossbarReadbar   top shift=1.7,inline]{\Large $\channel_4$}{17}{18}
+		\ganttCrossbarOpPrevbar[CrossbarOpPrevbar   top shift=1.7,inline]{\Large $\channel_4$}{17}{18}
+                \ganttCrossbarReadbar[CrossbarReadbar   top shift=1.7,inline]{\Large  $\channel_5$}{19}{20}
+                \ganttCrossbarOpPrevbar[CrossbarOpPrevbar   top shift=1.7,inline]{\Large  $\channel_5$}{19}{20}
+                \ganttCrossbarReadbar[CrossbarReadbar   top shift=1.7,inline]{  $\channel_{(1,2,3)}$}{21}{22}
+                \ganttCrossbarOpPrevbar[CrossbarOpPrevbar   top shift=1.7, inline]{  $\channel_{(1,2,3)}$}{21}{22}
+                \ganttCrossbarReadbar[CrossbarReadbar   top shift=1.7,inline]{  $\channel_{(1,2,3)}$}{23}{24}
+                \ganttCrossbarOpPrevbar[CrossbarOpPrevbar   top shift=1.7, inline]{  $\channel_{(1,2,3)}$}{23}{24}
+		\ganttCrossbarWritebar[CrossbarWritebar top shift=1.7,inline]{$\channel_{(1,2,3)}$}{25}{26}
+		\ganttCrossbarWritebar[CrossbarWritebar top shift=1.7,inline]{\Large $\channel_4$}{29}{30}  
+  	        \ganttCrossbarWritebar[CrossbarWritebar top shift=1.7,inline]{\Large $\channel_5$}{31}{32}
+
+		\ganttCrossbarReadbar[CrossbarReadbar   top shift=1.7,inline]{\Large $\channel_4$}{33}{34}
+		\ganttCrossbarOpPrevbar[CrossbarOpPrevbar   top shift=1.7,inline]{\Large $\channel_4$}{33}{34}
+                \ganttCrossbarReadbar[CrossbarReadbar   top shift=1.7,inline]{\Large  $\channel_5$}{35}{36}
+                \ganttCrossbarOpPrevbar[CrossbarOpPrevbar   top shift=1.7,inline]{\Large  $\channel_5$}{35}{36}
+                \ganttCrossbarReadbar[CrossbarReadbar   top shift=1.7,inline]{  $\channel_{(1,2,3)}$}{37}{38}
+                \ganttCrossbarOpPrevbar[CrossbarOpPrevbar   top shift=1.7, inline]{  $\channel_{(1,2,3)}$}{37}{38}
+                \ganttCrossbarReadbar[CrossbarReadbar   top shift=1.7,inline]{  $\channel_{(1,2,3)}$}{39}{40}
+                \ganttCrossbarOpPrevbar[CrossbarOpPrevbar   top shift=1.7, inline]{  $\channel_{(1,2,3)}$}{39}{40}
+		\ganttCrossbarWritebar[CrossbarWritebar top shift=1.7,inline]{$\channel_{(1,2,3)}$}{41}{42}
+
+		\\
+		\ganttbar[bar/.style={draw=none}]{\huge }{0}{38}
+       		\\
+		\ganttbar[bar/.style={draw=none}]{\huge }{0}{38}      
+
+
+
+	\ganttvrule{\Large}{0}
+	\ganttvrule{\Large}{16}
+	\ganttvrule{\Large}{32}
+
+
+        \draw[-Latex,line width=0.3mm,opacity=0.75] (a1e1) -- (c1w1);
+        \draw[-Latex,line width=0.3mm,opacity=0.75] (a3e1) -| (c4w1);
+        \draw[-Latex,line width=0.3mm,opacity=0.75] (a4e1) -| (c5w1);
+        \draw[-Latex,line width=0.3mm,opacity=0.75] (c4r1) |- (a5e1);
+        \draw[-Latex,line width=0.3mm,opacity=0.75] (c5r1.north) -- (a5e1.west);
+
+        \draw[-Latex,line width=0.3mm,opacity=0.75] (c1r1) |- (a3e1);
+        \draw[-Latex,line width=0.3mm,opacity=0.75] (c1r2) |- (a4e1);
+
+
+
+        \draw[-{Stealth},line width=0.3mm] (0,-7) -- (23.5,-7);
+        \draw[-{Stealth},line width=0.3mm] (0,-7) -- (0,1);
+
+	 \foreach \x in {0,...,22}{
+ 		{\pgfmathtruncatemacro{\label}{(\x)}
+		\node at (\x,-7.4) {\Large \label};}
+		\draw[line width=0.4mm](\x,-6.8) -- (\x,-7.2);
+	}
+
+	\draw[line width=0.4mm](-0.15,-6.25) -- (0.2,-6.25);
+	\draw[line width=0.4mm](-0.15,-4.8) -- (0.2,-4.8);
+	\draw[line width=0.4mm](-0.15,-3.45) -- (0.2,-3.45);
+	\draw[line width=0.4mm](-0.15,-2) -- (0.2,-2);
+	\draw[line width=0.4mm](-0.15,-0.65) -- (0.2,-0.65);
+	\node at (23,0.5) {\Large $\Period=8$};
+	\node at (23,-6.5) {\Large Time};
+
+\draw [line width=0.25mm,color=black,decorate,decoration={brace,amplitude=10pt,raise=4pt},yshift=0pt] (0,0) -- (8,0) node [black,midway,xshift=0cm,yshift=1cm] { \Large $n$ };
+\draw [line width=0.25mm,color=black,decorate,decoration={brace,amplitude=10pt,raise=4pt},yshift=0pt] (8,0) --(16,0) node [black,midway,xshift=0cm,yshift=1cm] { \Large $n+1$ };
+        \end{ganttchart} 
+
+
+
+
+\end{scope}
+
+
+
+}
+
+
+\newcommand{\gantChartUtilizationMRBNoReads}
+{
+\begin{scope}
+	\begin{ganttchart}[ bar height=0.5, vrule/.style={line width=0.5mm, black,loosely dashed}, canvas/.style={ draw=none},
+                vrule label font=\bfseries, link/.style={->, line width=1pt, black}  ]{1}{44} 
+
+		\ganttbar[bar left shift=0.1, bar right shift=-1,bar top shift=0.4,bar/.style={draw=none}]
+                {\huge $\core_4$}{0}{30}
+		\ganttActorbar[Actorbar top shift=0.0,inline,name=a1e1]{\Large $\actor_1$}{1}{4}
+		\ganttActorbar[Actorbar top shift=0.0,inline]{\Large $\actor_1$}{11}{14}
+		\ganttActorbar[Actorbar top shift=0.0,inline]{\Large $\actor_1$}{21}{24}
+		\ganttActorbar[Actorbar top shift=0.0,inline]{\Large $\actor_1$}{31}{34}
+		\ganttActorbar[Actorbar top shift=0.0,inline]{\Large $\actor_1$}{41}{44}
+                \\
+                \ganttbar[bar left shift=0.1, bar right shift=-0.5,bar top shift=0.75,bar/.style={draw=none}]
+                {\huge $\core_3$}{0}{30}
+		\ganttActorbar[Actorbar top shift=0.4, inline,name=a4e1]{\Large $\actor_4$}{3}{8}
+		\ganttActorbar[Actorbar top shift=0.4, inline]{\Large $\actor_4$}{13}{18}
+		\ganttActorbar[Actorbar top shift=0.4, inline]{\Large $\actor_4$}{23}{28}
+		\ganttActorbar[Actorbar top shift=0.4, inline]{\Large $\actor_4$}{33}{38}
+		\ganttActorbar[Actorbar top shift=0.4, inline]{\Large}{43}{44}
+		\\
+                \ganttbar[bar left shift=0.1, bar right shift=-0.5,bar top shift=1.2,bar/.style={draw=none}]
+                {\huge $\core_2$}{0}{30}
+		\ganttActorbar[Actorbar top shift=0.8, inline,name=a3e1]{\Large$\actor_3$}{1}{6}
+		\ganttActorbar[Actorbar top shift=0.8, inline]{\Large$\actor_3$}{11}{16}
+		\ganttActorbar[Actorbar top shift=0.8, inline]{\Large$\actor_3$}{21}{26}
+		\ganttActorbar[Actorbar top shift=0.8, inline]{\Large$\actor_3$}{31}{36}
+		\ganttActorbar[Actorbar top shift=0.8, inline]{\Large$\actor_3$}{41}{44}
+                \\
+                \ganttbar[bar left shift=0.1, bar right shift=-0.5,bar top shift=1.6,bar/.style={draw=none}]
+                {\huge $\core_1$}{0}{30}
+		\ganttActorbar[Actorbar top shift=1.25,inline,name=a5e1]{\Large $\actor_5$}{1}{8}
+		\ganttActorbar[Actorbar top shift=1.25,inline]{\Large $\actor_5$}{11}{18}
+		\ganttActorbar[Actorbar top shift=1.25,inline]{\Large $\actor_5$}{21}{28}
+		\ganttActorbar[Actorbar top shift=1.25,inline]{\Large $\actor_5$}{31}{38}
+		\ganttActorbar[Actorbar top shift=1.25,inline]{\Large $\actor_5$}{41}{44}
+
+                \\
+                \ganttbar[bar left shift=0.1, bar right shift=0.5,bar top shift=2, bar/.style={draw=none}]{\huge $\crossbar{1}$}{0}{38}
+		\ganttCrossbarReadbar[CrossbarReadbar   top shift=1.7, inline,name=c1r1]{  $\channel_{(1,2,3)}$}{1}{2}
+                \ganttCrossbarOpPrevbar[CrossbarOpPrevbar   top shift=1.7, inline]{  $\channel_{(1,2,3)}$}{1}{2}
+
+		\ganttCrossbarWritebar[CrossbarWritebar top shift=1.7,inline,name=c1w1]{$\channel_{(1,2,3)}$}{5}{6}
+		\ganttCrossbarWritebar[CrossbarWritebar top shift=1.7, inline,name=c4w1]{\Large $\channel_4$}{7}{8}  
+  	        \ganttCrossbarWritebar[CrossbarWritebar top shift=1.7, inline,name=c5w1]{\Large $\channel_5$}{9}{10}
+
+		\ganttCrossbarReadbar[CrossbarReadbar   top shift=1.7,inline]{  $\channel_{(1,2,3)}$}{11}{12}
+                \ganttCrossbarOpPrevbar[CrossbarOpPrevbar   top shift=1.7, inline]{  $\channel_{(1,2,3)}$}{11}{12}
+
+		\ganttCrossbarWritebar[CrossbarWritebar top shift=1.7,inline]{$\channel_{(1,2,3)}$}{15}{16}
+		\ganttCrossbarWritebar[CrossbarWritebar top shift=1.7,inline]{\Large $\channel_4$}{17}{18}  
+  	        \ganttCrossbarWritebar[CrossbarWritebar top shift=1.7,inline]{\Large $\channel_5$}{19}{20}
+
+		\ganttCrossbarReadbar[CrossbarReadbar   top shift=1.7,inline]{  $\channel_{(1,2,3)}$}{21}{22}
+                \ganttCrossbarOpPrevbar[CrossbarOpPrevbar   top shift=1.7, inline]{  $\channel_{(1,2,3)}$}{21}{22}
+
+		\ganttCrossbarWritebar[CrossbarWritebar top shift=1.7,inline]{$\channel_{(1,2,3)}$}{25}{26}
+		\ganttCrossbarWritebar[CrossbarWritebar top shift=1.7,inline]{\Large $\channel_4$}{27}{28}  
+  	        \ganttCrossbarWritebar[CrossbarWritebar top shift=1.7,inline]{\Large $\channel_5$}{29}{30}
+		
+		\ganttCrossbarReadbar[CrossbarReadbar   top shift=1.7,inline]{  $\channel_{(1,2,3)}$}{31}{32}
+                \ganttCrossbarOpPrevbar[CrossbarOpPrevbar   top shift=1.7, inline]{  $\channel_{(1,2,3)}$}{31}{32}
+
+		\ganttCrossbarWritebar[CrossbarWritebar top shift=1.7,inline]{$\channel_{(1,2,3)}$}{35}{36}
+		\ganttCrossbarWritebar[CrossbarWritebar top shift=1.7,inline]{\Large $\channel_4$}{37}{38}  
+  	        \ganttCrossbarWritebar[CrossbarWritebar top shift=1.7,inline]{\Large $\channel_5$}{39}{40}
+
+		\ganttCrossbarReadbar[CrossbarReadbar   top shift=1.7,inline]{  $\channel_{(1,2,3)}$}{41}{42}
+                \ganttCrossbarOpPrevbar[CrossbarOpPrevbar   top shift=1.7, inline]{  $\channel_{(1,2,3)}$}{41}{42}
+		\\
+		\ganttbar[bar/.style={draw=none}]{\huge }{0}{38}
+       		\\
+ 		\ganttbar[bar/.style={draw=none}]{\huge }{0}{38}      
+
+	\ganttvrule{\Large}{0}
+	\ganttvrule{\Large}{10}
+	\ganttvrule{\Large}{20}
+	\ganttvrule{\Large}{30}
+	\ganttvrule{\Large}{40}
+
+        \draw[-Latex,line width=0.3mm,opacity=0.75] (c1r1) |- (a4e1);
+        \draw[-Latex,line width=0.3mm,opacity=0.75] (a1e1) -| (c1w1);
+        \draw[-Latex,line width=0.3mm,opacity=0.75] (a3e1) -| (c4w1);
+        \draw[-Latex,line width=0.3mm,opacity=0.75] (a4e1) -| (c5w1);
+
+
+
+        \draw[-{Stealth},line width=0.3mm] (0,-7) -- (23.5,-7);
+        \draw[-{Stealth},line width=0.3mm] (0,-7) -- (0,1);
+
+	 \foreach \x in {0,...,22}{
+ 		{\pgfmathtruncatemacro{\label}{(\x)}
+		\node at (\x,-7.4) {\Large \label};}
+		\draw[line width=0.4mm](\x,-6.8) -- (\x,-7.2);
+	}
+
+	\draw[line width=0.4mm](-0.15,-6.25) -- (0.2,-6.25);
+	\draw[line width=0.4mm](-0.15,-4.8) -- (0.2,-4.8);
+	\draw[line width=0.4mm](-0.15,-3.45) -- (0.2,-3.45);
+	\draw[line width=0.4mm](-0.15,-2) -- (0.2,-2);
+	\draw[line width=0.4mm](-0.15,-0.65) -- (0.2,-0.65);
+	\node at (23,0.5) {\Large $\Period=5$};
+	\node at (23,-6.5) {\Large Time};
+
+\draw [line width=0.25mm,color=black,decorate,decoration={brace,amplitude=10pt,raise=4pt},yshift=0pt] (0,0) -- (5,0) node [black,midway,xshift=0cm,yshift=1cm] { \Large $n$ };
+\draw [line width=0.25mm,color=black,decorate,decoration={brace,amplitude=10pt,raise=4pt},yshift=0pt] (5,0) --(10,0) node [black,midway,xshift=0cm,yshift=1cm] { \Large $n+1$ };
+\draw [line width=0.25mm,color=black,decorate,decoration={brace,amplitude=10pt,raise=4pt},yshift=0pt] (10,0) -- (15,0) node [black,midway,xshift=0cm,yshift=1cm] { \Large $n+2$ };
+\draw [line width=0.25mm,color=black,decorate,decoration={brace,amplitude=10pt,raise=4pt},yshift=0pt] (15,0) --(20,0) node [black,midway,xshift=0cm,yshift=1cm] { \Large $n+3$ };
+        \end{ganttchart} 
+
+\end{scope} 
+}
+
+\newcommand{\legendGantts}
+{
+\begin{scope}
+\node (legendGantt) at (-7.0,-7){
+\resizebox{270pt}{!}{
+\begin{tikzpicture}
+  \begin{axis}[ 
+    xbar stacked,
+    hide axis,
+    xmin=0, xmax=1,
+    ymin=0, ymax=1,
+    legend style={at={(0,0)},anchor=north},
+    legend columns=5,
+    width=2cm,
+    height=2cm
+  ]
+    \addlegendimage{red, pattern=north west lines, pattern color=candyapplered!30}
+    \addlegendentry{actors}
+    \addlegendimage{amethyst, pattern=north west lines, pattern color=amethyst!30}
+    \addlegendentry{multicast}
+    \addlegendimage{black, pattern=north east lines, pattern color=green(munsell)!80}
+    \addlegendentry{write}
+    \addlegendimage{black, pattern=north west lines, pattern color=green!20}
+    \addlegendentry{read}
+  \end{axis}
+\end{tikzpicture}}
+};
+\end{scope}
+}
+
+%\newganttlinktype{newlink}{
+%\ganttsetstartanchor{on right=1}
+%\ganttsetendanchor{on left=0}
+%\draw [ thick, cyan]
+%(\xLeft, \yUpper) --
+%(\xRight, \yLower);
+%}
+
+\newcommand{\gantChartUtilizationOnlyDRAM}
+{
+\begin{scope}
+
+	\begin{ganttchart}[ bar height=0.5, vrule/.style={line width=0.5mm, black,loosely dashed}, canvas/.style={ draw=none},
+                vrule label font=\bfseries, link/.style={->, line width=1pt, black}  ]{1}{44} 
+                \ganttbar[bar left shift=0.1, bar right shift=-1,bar top shift=0.4,bar/.style={draw=none}]
+                {\huge $\core_4$}{0}{44}
+                \ganttActorbar[Actorbar top shift=0.0, inline,name=a4e1]{\Large $\actor_4$}{5}{10}
+                \ganttActorbar[Actorbar top shift=0.0, inline]{\Large$\actor_4$}{29}{34}
+                \\
+                \ganttbar[bar left shift=0.1, bar right shift=-0.5,bar top shift=0.75,bar/.style={draw=none}]
+                {\huge $\core_3$}{0}{30}
+		\ganttActorbar[Actorbar top shift=0.4, inline,name=a3e1]{\Large$\actor_3$}{3}{8}
+		\ganttActorbar[Actorbar top shift=0.4, inline]{\Large$\actor_3$}{27}{32}
+		\\
+                \ganttbar[bar left shift=0.1, bar right shift=-0.5,bar top shift=1.2,bar/.style={draw=none}]
+                {\huge $\core_2$}{0}{30}
+                \ganttBroadcastbar[Broadcastbar top shift=0.8,inline,name=a2e1]{\Large $\actor_2$ }{19}{20}        
+                \ganttBroadcastbar[Broadcastbar top shift=0.8,inline]{\Large $\actor_2$ }{43}{44}        
+                \\
+                \ganttbar[bar left shift=0.1, bar right shift=-0.5,bar top shift=1.6,bar/.style={draw=none}]
+                {\huge $\core_1$}{0}{30}
+                \ganttActorbar[Actorbar top shift=1.25,inline,name=a1e1]{\Large $\actor_1$}{1}{4}   
+                \ganttActorbar[Actorbar top shift=1.25,inline,name=a5e1]{\Large $\actor_5$}{17}{24}             
+
+                \ganttActorbar[Actorbar top shift=1.25,inline]{\Large $\actor_1$}{25}{28}   
+                \ganttActorbar[Actorbar top shift=1.25,inline]{\Large $\actor_5$}{41}{44}             
+
+                \\
+                \ganttbar[bar left shift=0.1, bar right shift=0.5,bar top shift=2, bar/.style={draw=none}]{\huge $\crossbar{1}$}{0}{38}
+                \ganttCrossbarReadbar[CrossbarReadbar   top shift=1.7,inline,name=c2r1]{\Large $\channel_2$}{1}{2}
+                \ganttCrossbarOpPrevbar[CrossbarOpPrevbar   top shift=1.7, inline]{\Large  $\channel_2$}{1}{2}
+                \ganttCrossbarReadbar[CrossbarReadbar   top shift=1.7,inline,name=c3r1]{\Large  $\channel_3$}{3}{4}
+                \ganttCrossbarOpPrevbar[CrossbarOpPrevbar   top shift=1.7, inline]{\Large  $\channel_3$}{3}{4}
+
+                \ganttCrossbarWritebar[CrossbarWritebar top shift=1.7,inline,name=c1w1]{\Large $\channel_1$}{5}{6}             
+
+
+                \ganttCrossbarWritebar[CrossbarWritebar top shift=1.7, inline,name=c4w1]{\Large $\channel_4$}{9}{10}             
+                \ganttCrossbarWritebar[CrossbarWritebar top shift=1.7, inline,name=c5w1]{\Large $\channel_5$}{11}{12}            
+                \ganttCrossbarReadbar[CrossbarReadbar   top shift=1.7,inline,name=c4r1]{\Large $\channel_4$}{13}{14}
+                \ganttCrossbarReadbar[CrossbarReadbar   top shift=1.7,inline,name=c5r1]{\Large  $\channel_5$}{15}{16}
+
+                \ganttCrossbarReadbar[CrossbarReadbar   top shift=1.7, inline,name=c1r1]{\Large  $\channel_1$}{17}{18}
+                \ganttCrossbarWritebar[CrossbarWritebar top shift=1.7, inline,name=c2w1]{\Large $\channel_2$}{21}{22}             
+                \ganttCrossbarWritebar[CrossbarWritebar top shift=1.7, inline,name=c3w1]{\Large $\channel_3$}{23}{24}            
+
+
+                \ganttCrossbarReadbar [CrossbarReadbar  top shift=1.7,inline]{\Large $\channel_2$}{25}{26}
+                \ganttCrossbarOpPrevbar[CrossbarOpPrevbar   top shift=1.7, inline]{\Large  $\channel_2$}{25}{26}
+                \ganttCrossbarReadbar [CrossbarReadbar  top shift=1.7,inline]{\Large  $\channel_3$}{27}{28}
+                \ganttCrossbarOpPrevbar[CrossbarOpPrevbar   top shift=1.7, inline]{\Large  $\channel_3$}{27}{28}
+                \ganttCrossbarWritebar[CrossbarWritebar top shift=1.7,inline]{\Large $\channel_1$}{29}{30}             
+
+                \ganttCrossbarWritebar[CrossbarWritebar top shift=1.7,inline]{\Large $\channel_4$}{33}{34}             
+                \ganttCrossbarWritebar[CrossbarWritebar top shift=1.7,inline]{\Large $\channel_5$}{35}{36}            
+                \ganttCrossbarReadbar [CrossbarReadbar  top shift=1.7,inline]{\Large $\channel_4$}{37}{38}
+                \ganttCrossbarReadbar [CrossbarReadbar  top shift=1.7,inline]{\Large  $\channel_5$}{39}{40}
+                \ganttCrossbarReadbar [CrossbarReadbar  top shift=1.7,inline]{\Large  $\channel_1$}{41}{42}
+		
+		\\
+
+		\ganttbar[bar/.style={draw=none}]{\huge }{0}{38}
+       		\\
+		\ganttbar[bar/.style={draw=none}]{\huge }{0}{38}      
+
+        \draw[-Latex,line width=0.3mm,opacity=0.75] (c2r1) |- (a3e1);
+        \draw[-Latex,line width=0.3mm,opacity=0.75] (c3r1) |- (a4e1);
+        \draw[-Latex,line width=0.3mm,opacity=0.75] (a1e1) -| (c1w1);
+        \draw[-Latex,line width=0.3mm,opacity=0.75] (a3e1) -| (c4w1);
+        \draw[-Latex,line width=0.3mm,opacity=0.75] (a4e1) -| (c5w1);
+        \draw[-Latex,line width=0.3mm,opacity=0.75] (c4r1) |- (a5e1);
+        \draw[-Latex,line width=0.3mm,opacity=0.75] (c5r1.north) -- (a5e1.west);
+
+        \draw[-Latex,line width=0.3mm,opacity=0.75] (c1r1) |- (a2e1);
+        \draw[-Latex,line width=0.3mm,opacity=0.75] (a2e1) -| (c2w1);
+        \draw[-Latex,line width=0.3mm,opacity=0.75] (a2e1) -| (c3w1);
+
+        \draw[-{Stealth},line width=0.3mm] (0,-7) -- (23.5,-7);
+        \draw[-{Stealth},line width=0.3mm] (0,-7) -- (0,1);
+
+	\ganttvrule{\Large}{0}
+	\ganttvrule{\Large}{24}
+	%\ganttvrule{\Large}{44}
+
+	 \foreach \x in {0,...,22}{
+ 		{\pgfmathtruncatemacro{\label}{(\x)}
+		\node at (\x,-7.4) {\Large \label};}
+		\draw[line width=0.4mm](\x,-6.8) -- (\x,-7.2);
+	}
+
+	\draw[line width=0.4mm](-0.15,-6.25) -- (0.2,-6.25);
+	\draw[line width=0.4mm](-0.15,-4.8) -- (0.2,-4.8);
+	\draw[line width=0.4mm](-0.15,-3.45) -- (0.2,-3.45);
+	\draw[line width=0.4mm](-0.15,-2) -- (0.2,-2);
+	\draw[line width=0.4mm](-0.15,-0.65) -- (0.2,-0.65);
+	\node at (23,0.5) {\Large $\Period=12$};
+	\node at (23,-6.5) {\Large Time};
+
+\draw [line width=0.25mm,color=black,decorate,decoration={brace,amplitude=10pt,raise=4pt},yshift=0pt] (0,0) -- (12,0) node [black,midway,xshift=0cm,yshift=1cm] { \Large $n$ };
+
+    \end{ganttchart} 
+
+\end{scope} 
+}
+
+
+\newcommand{\gantChartUtilizationNoReads}
+{
+\begin{scope}
+
+	\begin{ganttchart}[ bar height=0.5, vrule/.style={line width=0.5mm, black,loosely dashed}, canvas/.style={ draw=none},
+                vrule label font=\bfseries, link/.style={->, line width=1pt, black}  ]{1}{44} 
+
+		\ganttbar[bar left shift=0.1, bar right shift=-1,bar top shift=0.4,bar/.style={draw=none}]
+                {\huge $\core_4$}{0}{30}
+		\ganttActorbar[Actorbar top shift=0.0, inline,name=a4e1]{\Large $\actor_4$}{1}{6}
+		\ganttActorbar[Actorbar top shift=0.0, inline]{\Large $\actor_4$}{19}{24}
+		\ganttActorbar[Actorbar top shift=0.0, inline]{\Large $\actor_4$}{37}{42}
+                \\
+		\ganttbar[bar left shift=0.1, bar right shift=-0.5,bar top shift=0.75,bar/.style={draw=none}]
+                {\huge $\core_3$}{0}{30}
+		\ganttActorbar[Actorbar top shift=0.4, inline,name=a3e1]{\Large$\actor_3$}{1}{6}
+		\ganttActorbar[Actorbar top shift=0.4, inline]{\Large$\actor_3$}{19}{24}
+		\ganttActorbar[Actorbar top shift=0.4, inline]{\Large$\actor_3$}{37}{42}
+
+		\\
+		\ganttbar[bar left shift=0.1, bar right shift=-0.5,bar top shift=1.2,bar/.style={draw=none}]
+                {\huge $\core_2$}{0}{30}
+                \ganttBroadcastbar[Broadcastbar top shift=0.8,inline,name=a2e1]{\Large $\actor_2$}{7}{8}        
+                \ganttBroadcastbar[Broadcastbar top shift=0.8,inline]{\Large $\actor_2$ }{25}{26}        
+                \ganttBroadcastbar[Broadcastbar top shift=0.8,inline]{\Large $\actor_2$ }{43}{44}        
+
+                \\
+		\ganttbar[bar left shift=0.1, bar right shift=-0.5,bar top shift=1.6,bar/.style={draw=none}]
+                {\huge $\core_1$}{0}{30}
+		\ganttActorbar[Actorbar top shift=1.25,inline,name=a1e1]{\Large $\actor_1$}{1}{4} 
+                \ganttActorbar[Actorbar top shift=1.25,inline,name=a5e1]{\Large $\actor_5$}{11}{18}             
+
+		\ganttActorbar[Actorbar top shift=1.25,inline]{\Large $\actor_1$}{19}{22} 
+                \ganttActorbar[Actorbar top shift=1.25,inline]{\Large $\actor_5$}{29}{36}             
+
+		\ganttActorbar[Actorbar top shift=1.25,inline]{\Large $\actor_1$}{37}{40} 
+
+ 
+                \\
+		\ganttbar[bar left shift=0.1, bar right shift=0.5,bar top shift=2, bar/.style={draw=none}]{\huge $\crossbar{1}$}{0}{38}
+		\ganttCrossbarWritebar[CrossbarWritebar top shift=1.7,inline,name=c1w1]{\Large $\channel_1$}{5}{6}
+                \ganttCrossbarWritebar[CrossbarWritebar top shift=1.7, inline,name=c4w1]{\Large $\channel_4$}{7}{8}             
+                \ganttCrossbarWritebar[CrossbarWritebar top shift=1.7, inline,name=c5w1]{\Large $\channel_5$}{9}{10}            
+
+                \ganttCrossbarWritebar[CrossbarWritebar top shift=1.7, inline,name=c2w1]{\Large $\channel_2$}{11}{12}             
+                \ganttCrossbarWritebar[CrossbarWritebar top shift=1.7, inline,name=c3w1]{\Large $\channel_3$}{13}{14}            
+
+		\ganttCrossbarWritebar[CrossbarWritebar top shift=1.7,inline ]{\Large $\channel_1$}{23}{24}
+                \ganttCrossbarWritebar[CrossbarWritebar top shift=1.7, inline]{\Large $\channel_4$}{25}{26}             
+                \ganttCrossbarWritebar[CrossbarWritebar top shift=1.7, inline]{\Large $\channel_5$}{27}{28}            
+
+                \ganttCrossbarWritebar[CrossbarWritebar top shift=1.7, inline]{\Large $\channel_2$}{29}{30}             
+                \ganttCrossbarWritebar[CrossbarWritebar top shift=1.7, inline]{\Large $\channel_3$}{31}{32}            
+
+		\ganttCrossbarWritebar[CrossbarWritebar top shift=1.7,inline ]{\Large $\channel_1$}{41}{42}
+                \ganttCrossbarWritebar[CrossbarWritebar top shift=1.7, inline]{\Large $\channel_4$}{43}{44}             
+%                \ganttCrossbarWritebar[CrossbarWritebar top shift=1.7, inline]{\Large $\channel_5$}{43}{44}            
+
+		\\
+		\ganttbar[bar/.style={draw=none}]{\huge }{0}{38}
+       		\\
+		\ganttbar[bar/.style={draw=none}]{\huge }{0}{38}      
+
+        \draw[-Latex,line width=0.3mm,opacity=0.75] (a1e1) -| (c1w1);
+	\draw[-Latex,line width=0.3mm,opacity=0.75] (a3e1) -- (c4w1);  
+	\draw[-Latex,line width=0.3mm,opacity=0.75] (a4e1) -| (c5w1); 
+	\draw[-Latex,line width=0.3mm,opacity=0.75] (a2e1) -- (c2w1);
+	\draw[-Latex,line width=0.3mm,opacity=0.75] (a2e1) -- (c3w1);
+
+	\ganttvrule{\Large}{0}
+	\ganttvrule{\Large}{18}
+	\ganttvrule{\Large}{36}
+
+        \draw[-{Stealth},line width=0.3mm] (0,-7) -- (23.5,-7);
+        \draw[-{Stealth},line width=0.3mm] (0,-7) -- (0,1);
+
+	 \foreach \x in {0,...,22}{
+ 		{\pgfmathtruncatemacro{\label}{(\x)}
+		\node at (\x,-7.4) {\Large \label};}
+		\draw[line width=0.4mm](\x,-6.8) -- (\x,-7.2);
+	}
+
+	\draw[line width=0.4mm](-0.15,-6.25) -- (0.2,-6.25);
+	\draw[line width=0.4mm](-0.15,-4.8) -- (0.2,-4.8);
+	\draw[line width=0.4mm](-0.15,-3.45) -- (0.2,-3.45);
+	\draw[line width=0.4mm](-0.15,-2) -- (0.2,-2);
+	\draw[line width=0.4mm](-0.15,-0.65) -- (0.2,-0.65);
+	\node at (23,0.5) {\Large $\Period=9$};
+	\node at (23,-6.5) {\Large Time};
+
+\draw [line width=0.25mm,color=black,decorate,decoration={brace,amplitude=10pt,raise=4pt},yshift=0pt] (0,0) -- (9,0) node [black,midway,xshift=0cm,yshift=1cm] { \Large $n$ };
+\draw [line width=0.25mm,color=black,decorate,decoration={brace,amplitude=10pt,raise=4pt},yshift=0pt] (9,0) --(18,0) node [black,midway,xshift=0cm,yshift=1cm] { \Large $n+1$ };
+        \end{ganttchart} 
+
+\end{scope} 
+}
+

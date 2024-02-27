@@ -1,0 +1,278 @@
+\vspace{-1mm}
+\section{Results}\label{sec:results}
+
+In the following, we conduct a series of different \ac{DSE} experiments as shown in~\cref{fig:opt4jOptimizationLoop} to assess the effectiveness of our proposed \ac{ILP} and \ac{CAPS-HMS} heuristic in generating high-quality implementations when mapping dataflow applications onto the heterogeneous many-cores shown in~\cref{fig:specification}.
+For each exploration, we employed the OpenDSE~\cite{opendse} framework using the NGSA-II elitist genetic algorithm~\cite{dpam_2002-nsgaII} with a population size of $100$ individuals, each generation generating $25$ new individuals and the crossover rate set to $0.95$.
+\revised{Since the presented \ac{ILP} and \ac{CAPS-HMS} are implemented as evaluators in OpenDSE, they have both been implemented using the Java programming language.
+In the case of the proposed \ac{ILP} approach, the solver used to solve the constraints is CPLEX~\cite{cplex2024}. 
+The platform used to run \ac{DSE} is a 4-core Intel(R) Core(TM) i7-4790 running at 3.60 GHz with 32 GB of  RAM.}
+To measure the effects of selectively introducing \acp{MRB}, we implemented and compared three different exploration strategies: $\Reference$, $\MergingAlways$, and $\MergingExplore$.
+The genotype for the $\Reference$ strategy is $\Genotype = (\ChannelDecisions, \SetBindingsActors)$.
+The multi-cast actor replacement function $\useMRB$ is the all-zeros function.
+Thus, no multi-cast actor is replaced (i.e., $\mrbgraph=\pgraph$).
+In contrast, $\MergingAlways$ also uses the genotype $\Genotype = (\ChannelDecisions, \SetBindingsActors)$ but assumes the all-ones function for $\useMRB$.
+Thus, each multi-cast actor is replaced by its corresponding \ac{MRB}.
+Finally, strategy $\MergingExplore$ selectively explores for each multi-cast actor the choice of its replacement by an \ac{MRB} by using the complete genotype $\Genotype = (\useMRB, \ChannelDecisions, \SetBindingsActors)$.
+Here, the binary string $\useMRB$ is determined during the optimization loop (see \cref{fig:opt4jOptimizationLoop}).
+\par
+Orthogonal to the replacement of multi-cast actors by \acp{MRB}, we also decide on decoding the genotype of each implementation.
+Here, we observe the effects of decoding via an ILP (see \cref{sec:ILP}) or using \ac{CAPS-HMS} (see \cref{sec:heuristic}).
+Both return a phenotype $(\Period,\MemoryFootprint, \CoreCost)$ composed of a minimum period to modulo schedule, the memory footprint, and the cost of cores of an implementation.
+Such a phenotype is used to evaluate the quality of each implementation.
+In the following, the combinations of strategy and way to decode a solution candidate result in six approaches.
+The approaches named $\Reference^{ILP}$, $\MergingAlways^{ILP}$, and $\MergingExplore^{ILP}$ explore the effects of introducing \acp{MRB} when each genotype is decoded using the ILP-based decoder.
+Conversely, the approaches named $\Reference^{\fHeuristic}$, $\MergingAlways^{\fHeuristic}$, and $\MergingExplore^{\fHeuristic}$ use \ac{CAPS-HMS} to decode the genotype.
+\par
+The architecture used for our experiments (shown in~\cref{fig:specification}) contains 24 cores organized into four tiles: $\tile_1, \tile_2, \tile_3$, and $\tile_4$.
+Inter-tile communication is supported via a network-on-chip $\NoC$.
+A global memory $\GlobalMemory$ provides off-chip storage.
+Internally, each tile comprises six cores connected to its correspondent local memory.
+Each core is of one of three core types: $\coretype_1, \coretype_2$, or $\coretype_3$.
+For our experiments, the respective relative core costs have been chosen as $\CoreCost_{\coretype_1} = 1.5$, $\CoreCost_{\coretype_2} = 1.0$, or $\CoreCost_{\coretype_3} = 0.5$.
+Faster cores are usually more expensive than slower ones.
+Thus, the slowest processors in the architecture are those of type $\coretype_3$, and the fastest processors in the architecture are those of type $\coretype_1$.
+The relative core costs thus approximately correlate to the speedup between the cores of different types, i.e., cores of type $\coretype_1$ are $3\times$ faster than cores of type $\coretype_3$, and cores of type $\coretype_2$ are $2\times$ faster than cores of type $\coretype_3$.
+Moreover, each tile supports intra-tile communication via a crossbar $\crossbar{}$ and a tile-local memory $\memory_\tile$.
+To observe the effects of the approaches under observation in a realistic environment, we constrain the size of each memory and the bandwidth of each interconnect resource.
+Accordingly, the core-local and tile-local memories can store up to 2.5 MiB and 50 MiB, respectively.
+We assume the global memory to be large enough to store all channels of the explored applications.
+Last, the bandwidth of each crossbar is 8 $\mathsf{GiB/s}$, and the \ac{NoC} bandwidth is 4 $\mathsf{GiB/s}$.
+\par
+%The set of mappings of each application to the heterogeneous many-core architecture is split into actor-to-core and channel-to-memory mappings, i.e., $\SetMappings = \SetMappings_\SetActors \cup \SetMappings_\SetChannels$.
+We assume that each actor in the application can be mapped to any core in the architecture, and each channel might potentially be mapped to any memory.
+The optimization loop of the \ac{DSE} explores the actor-to-core bindings $\SetBindingsActors$, whereas channel-to-memory bindings $\SetBindingsChannels$ are then determined using \cref{alg:determine-channel-bindings} (see \cref{sec:ActorChannelBindings}).
+\par
+As discussed, the objectives to be minimized are the execution period $\Period$ (see \cref{sec:decoding}), the memory footprint $\MemoryFootprint$, and the cost $\CoreCost$ of allocated cores.
+We quantify the memory footprint of each application $\mrbgraph$ after decoding as follows:
+\begin{equation}\label{eq:memFootprint}
+  \MemoryFootprint = \sum_{\channel\in\mrbgraph.\SetChannels} \Capacity(\channel) \cdot \Size(\channel)
+\end{equation}
+This corresponds to the addition of the product of the token size ($\Size$) and the adjusted channel capacity ($\Capacity$) of each channel.
+\par
+We calculate the core cost $\CoreCost$ of each implementation after decoding as given below:
+\begin{equation}\label{eq:coreCost}
+  \CoreCost = \sum_{\coretype\in\SetCoreTypes} \allocation(\coretype) \cdot \CoreCost_{\coretype}
+\end{equation}
+\par
+As target applications, \cref{tab:datasets} presents a benchmark composed of three real-world image processing applications obtained from self-developed Matlab/Simulink test cases~\cite{Letras:2017}.
+\begin{table}[t!]
+  \caption{\label{tab:datasets}Applications investigated during \ac{DSE} runs.
+  $\MemoryFootprint$ corresponds to the minimal memory footprint in case all multi-cast actors are retained, while $\MemoryFootprint_{{\min}}$ denotes the case when each multi-cast actor is replaced by a corresponding \ac{MRB}.}
+\centering
+%\small
+  \resizebox{\columnwidth}{!}{
+  \begin{tabular}{cccccc} \hline
+% \rowcolor{gray!10}
+   &  &  & & & \\
+ &   &   & & & \\
+ \multirow{-3}{*}{{{Application}}} & \multirow{-3}{*}{\bm{$|\SetActors|$}} & \multirow{-3}{*}{\bm{$|\SetChannels|$}} & \multirow{-3}{*}{\bm{$|\SetActorsMulticast|$} }&   \multirow{-3}{*}{\begin{tabular}{c} $\MemoryFootprint$ \\ $[$MiB$]$  \end{tabular}} & \multirow{-3}{*}{\begin{tabular}{c} $\MemoryFootprint_{{\min}}$ \\ $[$MiB$]$  \end{tabular}}  \\\hline
+  Sobel            &   7  & 7   &  1  &  71.15 & 55.33 \\
+  Sobel$_4$        &  23  & 29  &  4  &  71.22 & 55.38 \\
+%  Foreground      &  13  & 15  &  3  &  94.95 \\
+%  2-Foreground    &  26  & 30  &  6  &  94.95 \\
+%  4-Foreground    &  52  & 60  &  12 &  94.95 \\
+%  Optical flow    &  23  & 28  &  4  &  94.95 \\
+%  2-Optical flow  &  46  & 56  &  8  &  94.95 \\
+%  3-Optical flow  &  69  & 84  &  12 &  94.95 \\
+%  Video           &  21  & 26  &  4  &  94.95 \\
+%  2-Video         &  42  & 52  &  8  &  94.95 \\
+%  3-Video         &  63  & 78  &  12 &  94.95 \\
+ Multicamera      &  62  & 111 & 23  & 50.47 & 32.15 \\\hline
+\end{tabular}
+  }
+\end{table}
+Shown in the table are also the number of actors, the number of channels, and the number of multi-cast actors contained in each application.
+\revised{We consider the Sobel application to be a small size, the Sobel$_4$ to be a mid-size, and the multicamera to be a large-size application.}
+\Cref{tab:datasets} also shows for each application two memory footprints, $\MemoryFootprint$ and $\MemoryFootprint_{{\min}}$, with the following semantics:
+$\MemoryFootprint$ represents the minimal memory footprint of each application when all multi-cast actors are retained, while $\MemoryFootprint_{{\min}}$ represents the minimal memory footprint when each multi-cast actor is replaced by a corresponding \ac{MRB}.
+To calculate both memory footprints $\MemoryFootprint$ and $\MemoryFootprint_{{\min}}$, we use~\cref{eq:memFootprint} and assume a channel capacity of exactly one token for all channels, i.e., $\forall \channel\in\SetChannels: \Capacity(\channel)=1$.
+\par
+Finally, as our applications are all acyclic, they are transformed in such a way that there is at least one initial token per channel, i.e., $\forall \channel\in\SetChannels:\ \Delay(\channel)\ge1$, allowing lower execution periods to be reached.
+\begin{figure*}[t!]
+  \resizebox{\textwidth}{!}{
+    \begin{tikzpicture}
+	\HypervolumeResults
+    \end{tikzpicture}}
+  \caption{\label{fig:hypervolume}Hypervolume scores obtained for the presented applications over 2,500 generations for the six approaches.}
+\end{figure*}
+\begin{figure}
+\centering
+\resizebox{0.8\columnwidth}{!}{
+    \begin{tikzpicture}
+        \HypervolumeLastIteration
+    \end{tikzpicture}}
+  \caption{\label{fig:hypervolumeLast}Hypervolume obtained for the presented applications of the last explored generation for the six approaches.}
+\end{figure}
+%\par
+%In the following, we discuss how the considered approaches are evaluated.
+
+\subsection{Quality of Found Implementations}
+A \revised{\ac{MOP}} generally does not have a single optimal solution due to the conflicting objectives.
+Instead, there exists a set of Pareto-optimal solutions.
+The set of all such solutions is known as the Pareto-front.
+As discussed previously, finding the actual Pareto front of the \ac{MOP} considered in this paper is an intractable problem that can only be approximated.
+To obtain a good approximation of the Pareto front for each application, the Pareto-fronts found by all exploration runs for a given application utilizing all six considered combinations of exploration and decoding strategy are combined into a reference Pareto-front.
+This reference Pareto-front $\ParetoRef$ can be seen as the closest approximation of the actual Pareto-front achieved.
+The quality of each approach for each application can then be evaluated by comparing the Pareto-front approximations found by the five \ac{DSE} runs performed for this application and approach combination against the application's reference Pareto-front.
+To facilitate such a comparison, quality measures are required for Pareto-front approximations that condense characteristics such as proximity to the reference Pareto front (the closer, the better) and diversity into a single measure~\cite{Guerrero:2022}.
+For this purpose, we use the hypervolume~\cite{hyper} quality measure and normalize the reference Pareto-front $\ParetoRef$ and each Pareto-front $\ParetoFront$ found by an approach to only contain objective values between zero and one, i.e., $\ParetoRef, \ParetoFront \subset [0,1]^d$ where the number of objectives is given by $d = 3$.
+%Here, an objective value of zero corresponds to the best (i.e., minimal) value ever found for this objective by all approaches for the given application. Conversely, an objective value of one corresponds to the worst (i.e., maximal) value ever encountered.
+This normalization ensures that each objective is weighted equally in the hypervolume quality measure.
+\par
+Then, given a (normalized) Pareto-front $\ParetoFront \subset [0,1]^d$, the hypervolume of $\ParetoFront$ is the measure of the region weakly dominated\footnote{A point $p \in \Reals^d$ \emph{weakly dominates} a point $q \in \Reals^d$ if $p_i\leq q_i$ for all $1\leq i \leq d$.} by $\ParetoFront$ and bounded above by the reference point $\mathbf{1}$. % that denotes the all ones vector, i.e.,
+\par
+\begin{equation}\label{eq:hypervolume}
+  \textup{hypervolume}(\ParetoFront) = \Lambda( \{ q\in [0,1]^d \mid \exists p \in \ParetoFront : p \leq q\} )
+\end{equation}
+There, $\Lambda(\cdot)$ denotes the Lebesgue measure~\cite{ciesielski1989good}.
+The greater the hypervolume score is, the better a Pareto-front approximation $\ParetoFront$ is considered to be.
+\par
+For each considered application and approach under investigation, five independent \ac{DSE} runs were performed.
+To make the comparison of the approaches feasible and fair, each \ac{DSE} run was given a maximum number of 2,500 generations, which is sufficient for all approaches to reach stagnation, i.e., no or very little further progress could be observed if the exploration runs longer.
+In each generation of the \ac{DSE}, the set of non-dominated solutions\footnote{In our context, the set of non-dominated solutions is an approximation of the Pareto-front of the three-objective optimization problem with period  $\Period$, the memory footprint $\MemoryFootprint$, and core cost $\CoreCost$ to be minimized.} found so far is recorded.
+Thus, for a given application, approach, and generation $i$, there exists a set $\mathbf{\ParetoFront}^{\leq i}$ containing exactly five sets $\ParetoFront^{\leq i}$ of non-dominated solutions found until generation $i$, one for each \ac{DSE} run.
+To evaluate the quality of each approach for each application, we average over the five \ac{DSE} runs as follows:
+\par
+\begin{equation}\label{eq:hypervolume-rel-avg}
+  \frac{1}{|\mathbf{\ParetoFront}^{\leq i}|}\cdot\sum_{\ParetoFront^{\leq i} \in \mathbf{\ParetoFront}^{\leq i}}\frac{\textup{hypervolume}(\ParetoFront^{\leq i})}{\textup{hypervolume}(\ParetoRef)}
+\end{equation}
+\par
+\cref{fig:hypervolume} presents for each explored application and approach the averaged relative hypervolume score, as defined by~\cref{eq:hypervolume-rel-avg}.
+%Each plot shows  the average hypervolume score of five runs of the six approaches under observation at each of the 2,500 generations.
+There, the approaches implementing $\Reference$, $\MergingAlways$\revised{,} and $\MergingExplore$ correspond to dashed, dashed-dotted and solid traces, respectively.
+Moreover, we distinguish approaches using the \ac{ILP} decoder ($\Reference^{ILP}$, $\MergingAlways^{ILP}$\revised{,} and $\MergingExplore^{ILP}$) and approaches using $\fHeuristic$ ($\Reference^{\fHeuristic}$, $\MergingAlways^{\fHeuristic}$\revised{,} and $\MergingExplore^{\fHeuristic}$) colored in red and blue, respectively.
+In the following, we discuss the obtained results.
+\par
+\begin{figure*}[t!]
+  \vspace{-5mm}
+  \centering
+  \resizebox{\textwidth}{!}{
+    \begin{tikzpicture}
+	\ParetoILP
+    \end{tikzpicture}}
+  \caption{\label{fig:ParetoFrontsILP}Union of the Pareto fronts of the last generation obtained for the presented applications after 2,500 generations using the \myBf{ILP-based} decoder.
+    Filled points are non-dominated solutions of the union of the three Pareto fronts.
+    The period $\Period$ is presented in a logarithmic scale for better visualization.\vspace{-1mm}}
+\end{figure*}
+\begin{figure*}[t!]
+  \vspace{-4mm}
+  \centering
+  \resizebox{\textwidth}{!}{
+    \begin{tikzpicture}
+	\ParetoHeuristicBindingsDSE
+    \end{tikzpicture}}
+  \caption{\label{fig:ParetoFrontsHeuristic}Union of the Pareto fronts of the last generation obtained for the presented applications after 2,500 generations using the \myBf{heuristic-based} (\ac{CAPS-HMS}) decoder. Filled points are non-dominated solutions of the union of the three Pareto fronts.
+    The period $\Period$ is presented in a logarithmic scale for better visualization.\vspace{-1mm}}
+\end{figure*}
+%From the hypervolume values of the last generation, we calculate the hypervolume gain of an approach $\mathsf{DSE} \in \{ \MergingAlways, \MergingExplore \}$ using a decoding method $\mathsf{decoder} \in \{ILP,\fHeuristic\}$  compared to its correspondent reference approach as:}
+%\begin{equation}
+%\small
+%\text{gain}(\mathsf{DSE}^{\mathsf{decoder}})= \dfrac{\mathsf{DSE}^{\mathsf{decoder}} - \Reference^{\mathsf{decoder}}}{\Reference^{\mathsf{decoder}}} \times 100\quad  [\%]
+%\end{equation}
+\par
+\KeyObservation
+First, we confirm our expectation that 
+%the hypothesis of whether 
+the replacement of multi-cast actors by \acp{MRB} results in better solutions according to the design objectives.
+The results presented in~\cref{fig:hypervolume,fig:hypervolumeLast} show that regardless of the chosen decoding approach, either \ac{ILP} (see solid red lines) or the \ac{CAPS-HMS} heuristic (see solid blue lines), the selective exploration of \ac{MRB} replacements performed by the $\MergingExplore$ strategy delivers better quality solutions in terms of the hypervolume score compared to the respective $\Reference$ approach.
+These improvements range from 28\,\% for the small Sobel application to 90\,\% for the large multicamera application.
+\par
+Next, it can be observed that the $\MergingExplore$ strategy gains superiority to the $\MergingAlways$ strategy for applications with a rising number of multi-cast actors. 
+%in the application, e.g.
+For example, for the Sobel application containing only 1 multi-cast actor, the hypervolume score is almost identical, but for the Sobel$_4$ application containing 4 multi-cast actors, the $\MergingExplore^{ILP}$ approach improves upon the $\MergingAlways^{ILP}$ approach by 6\,\%.
+For the large multicamera application with 23 multi-cast actors, the improvement of $\MergingExplore^{\fHeuristic}$ compared to $\MergingAlways^{\fHeuristic}$ is even 20\,\%.
+\par
+Finally, it can be observed that the \ac{ILP}-based decoder is superior to the \ac{CAPS-HMS} heuristic for small to mid-sized applications, i.e., Sobel and Sobel$_4$, where utilizing the  $\MergingExplore^{\fHeuristic}$ approach is only slightly inferior by
+%leads to a decrease of 
+7\,\%, respectively, 5\,\% in terms of the hypervolume score compared to the $\MergingExplore^{ILP}$ approach.
+In contrast, the $\MergingExplore^{\fHeuristic}$ approach is superior for the large multicamera application by 67\,\%.
+This observation can be explained by the fact that the \ac{ILP}-solver was provided with a timing budget of three seconds for each \ac{ILP}-decoding to stay within a limit of 1 day for the overall exploration time for each \ac{DSE} run.
+For the small Sobel application, the \ac{ILP}-solver is almost always able to deliver a minimal period schedule for a given binding of actors and channels to cores and memories within the timing budget.
+This was less frequently possible for the larger Sobel$_4$ application, with feasible, but not necessarily optimal solutions returned
+%with sometimes only feasible solutions returned 
+by the \ac{ILP}-solver.
+%Still, this explains the observations that the \ac{ILP}-based approaches outperform the $\fHeuristic$ approaches for both the Sobel and Sobel$_4$ applications.
+But for the multicamera application, the number of variables to be solved by the \ac{ILP} drastically increases compared to the other smaller applications.
+There, the \ac{ILP}-based decoder may only infrequently find an optimal solution within the time budget. %and instead deliver a feasible period $\Period$ solution.
+If the \ac{ILP}-solver finds no optimal solution within three seconds, it often delivered at least a feasible modulo-schedule $\Period$ solution, thus explaining the inferiority over \ac{CAPS-HMS} for medium and large problem sizes.
+%Thus, leading to inadequate solution quality when compared to the heuristic.
+\par
+To alleviate this, we might increase the timeout of the \ac{ILP}, but this would be detrimental to the exploration runtime.
+\begin{table*}[th]
+\vspace{-4mm}
+\centering
+\caption{Exploration time\protect\footnotemark\ comparison of $\fHeuristic$ decoder against the \ac{ILP} decoder for running 2,500 generations.}
+\label{tab:speedup}
+\centering
+\large
+    \resizebox{\textwidth}{!}{
+	\begin{tabular}{|l | r r r| r r r | r r r |}
+	\hline
+\multirow{2}{*}{ {Application}} & \multicolumn{3}{c|}{ {{runtime ILP [hours]}} }          & \multicolumn{3}{c|}{ {{runtime \ac{CAPS-HMS} [minutes]}}}                                               & \multicolumn{3}{c|}{ {{speedup}}} \\
+		& $\Reference^{ILP}$ & $\MergingAlways^{ILP}$ & $\MergingExplore^{ILP}$  & $\Reference^{\fHeuristic}$ & $\MergingAlways^{\fHeuristic}$ & $\MergingExplore^{\fHeuristic}$  & $\Reference$   &$\MergingAlways$&$\MergingExplore$ \\\hline
+    Sobel       & 16.02\hspace{7mm}  & 12.00\hspace{0.5cm}    & 13.30\hspace{0.5cm}      &   7.38\hspace{1.1cm}       &   5.76\hspace{0.8cm}           &  5.37\hspace{0.8cm}              & $130\times\;\;$& $125\times\;\;$& $149\times\;\;$  \\
+    Sobel$_4$   & 20.00\hspace{7mm}  & 22.68\hspace{0.5cm}    & 20.84\hspace{0.5cm}      &  42.28\hspace{1.1cm}       &  27.19\hspace{0.8cm}           & 31.53\hspace{0.8cm}              &  $28\times\;\;$&  $50\times\;\;$&  $40\times\;\;$  \\
+    Multicamera & 17.80\hspace{7mm}  & 15.61\hspace{0.5cm}    & 14.62\hspace{0.5cm}      & 272.87\hspace{1.1cm}       & 137.77\hspace{0.8cm}           & 96.32\hspace{0.8cm}              &   $4\times\;\;$&   $7\times\;\;$&   $9\times\;\;$  \\\hline
+%   Sobel       & 57677.67           & 43159.76               & 47889.30                 & 442.99                     &  346.03                        & 322.41                           & $130.20\times$ & $124.72\times$ & $148.53\times$   \\
+%   Sobel$_4$   & 72004.62           & 81659.53               & 75015.29                 & 2537.23                    & 1631.85                        & 1891.62                          & $28.40\times$  &  $50.04\times$ &  $39.65\times$   \\
+%   Multicamera & 64066.47           & 56208.70               & 52617.70                 & 16372.33                   & 8265.98                        & 5779.15                          & $3.90 \times$  &   $6.80\times$ &  $ 9.10\times$   \\\hline
+	\end{tabular} }
+\end{table*}
+%We will give more detailed explanations in \cref{sec:expRuntime}.
+Detailed explanations follow from an exploration time analysis in \cref{sec:expRuntime}.
+%We conclude that the $\MergingExplore^{\fHeuristic}$ approach may lead to exploring a much larger number of candidates in the huge design space even if, for some design points, an optimal schedule is not achieved.
+We conclude that only if the specification is relatively small, the ILP-based $\MergingExplore^{ILP}$ approach may find slightly better Pareto-front approximations after an equal number of generations, but it provides inferior solutions for larger problem sizes where the efficient $\MergingExplore^{\fHeuristic}$ approach is by far superior.
+%On the other hand, if the design space is relatively small, the ILP-based $\MergingExplore^{ILP}$ approach definitely finds a better Pareto-front approximation after an equal number of generations.
+\par
+Next, we examine the Pareto fronts for each approach and application to more closely check whether replacing multi-cast actors with \acp{MRB} will always provide superior solutions.
+It will also be shown how improvements in the hypervolume score are reflected in the space of the design objectives.
+For each of the three applications, the union of Pareto fronts achieved in the last generation by the strategies $\Reference$, $\MergingAlways$, and $\MergingExplore$ using the \ac{ILP}-based, respectively, the $\fHeuristic$ decoder are shown in~\cref{fig:ParetoFrontsILP,fig:ParetoFrontsHeuristic}.
+Each plot in these figures displays the objective space spanned by period $\Period$, memory footprint $\MemoryFootprint$, and core cost $\CoreCost$.
+The core cost $\CoreCost$ is thereby represented by a color gradient from blue to red (as shown in the color map on the right).
+Circle, square, and triangle symbols represent solutions obtained by the strategies $\Reference$, $\MergingAlways$, and $\MergingExplore$.
+Filled symbols indicate non-dominated solutions from the union of the Pareto fronts of all three approaches combined.
+\par
+%Based on \cref{fig:ParetoFrontsILP,fig:ParetoFrontsHeuristic}, we can drive the following conclusions:
+\KeyObservation
+First, most filled symbols present in each plot correspond to the strategy $\MergingExplore$, regardless of whether the \ac{ILP} or the $\fHeuristic$ decoder is used, leading to the conclusion that most of the non-dominated solutions are found when using the strategy $\MergingExplore$, which selectively replaces multi-cast actors with \acp{MRB}.
+\par
+Second, for each application, when comparing circle to triangle symbols denoting comparable period solutions, circle symbols indicate a much larger memory footprint $\MemoryFootprint$ than the corresponding triangle symbols.
+Hence, the selective replacement of multi-cast actors by \acp{MRB}, in contrast to not including any \ac{MRB}, leads to significant savings in memory footprint.
+For example, most of the non-dominated points for the multicamera application shown in \cref{fig:ParetoFrontsHeuristic} for the approach $\MergingExplore^{\fHeuristic}$ require between 32 and 40\,MiB of memory (see filled triangles).
+In contrast, the memory footprint of the non-dominated solutions found by the $\Reference^{\fHeuristic}$ approach (see circle symbols) vary between 55 and 90\,MiB.
+\par
+Third, the shortest-period solution for the Sobel$_4$ and multicamera applications are characterized by a filled triangle symbol. % denotes the shortest-period solution for the Sobel$_4$ and multicamera applications.
+Moreover, when examining shortest-period solutions for a given memory footprint, one can observe that almost all of these are found by the strategy $\MergingExplore$ (filled triangles).
+%Hence, validating 
+This validates our assertion from~\cref{sec:MFvsPeriod} that there are cases where an \ac{MRB} replacement is detrimental to (i.e., it increases) the execution period.
+Thus, we can conclude that for mid to large size applications containing a non-negligible number of multi-cast actors, the selective replacement of these multi-cast actors by \acp{MRB} may lead to shorter periods compared to not including any \ac{MRB} or replacing all multi-cast actors with \acp{MRB}.
+
+\subsection{Exploration Time}\label{sec:expRuntime}
+
+Another essential feature for evaluating a \ac{DSE} approach is the exploration time.
+In the context of \ac{DSE}, the evaluation time is crucial because a \ac{DSE} run may require thousands of design point evaluations~\cite{PimentelExploringExploration}.
+\cref{tab:speedup} presents the exploration time in seconds when using the \ac{ILP} decoder and the $\fHeuristic$ decoder after 2,500 generations.
+We also present the speedup ratio, comparing the time of the much faster heuristic-based $\fHeuristic$ decoder against the \ac{ILP}.
+The speedup for each \ac{DSE} approach is calculated as follows:
+\par
+\begin{equation}
+\begin{split}
+\mathsf{DSE} \in \{\Reference, \MergingAlways, \MergingExplore \}\\
+\textup{speedup}(\mathsf{DSE}) = \dfrac{\textup{runtime}(\mathsf{DSE}^{ILP})}{\textup{runtime}(\mathsf{DSE}^{\fHeuristic})}
+\end{split}
+\end{equation}
+\KeyObservation
+In general, we can observe that the ILP-based decoder requires significantly more time to perform the exploration of the design space for a given number of generations when compared to the $\fHeuristic$ decoder.
+Even for the small Sobel application, the ILP-based approach $\Reference^{ILP}$ takes 16.02 hours to complete 2,500 generations, while the approach $\Reference^{\fHeuristic}$ only requires 7.38 minutes.
+The reported speedup range of $\fHeuristic$ is $125\times$ to $149\times$ for the Sobel application.
+However, both approaches require more time to explore middle- to large-size applications.
+For Sobel$_4$, the $\fHeuristic$ decoder requires between 27.19 and 42.28 minutes, while the \ac{ILP} decoder requires between 20 and 22.68 hours to perform 2,500 generations of the optimization loop.
+\footnotetext{The exploration times shown in \cref{tab:speedup} were obtained by running the presented \ac{DSE} approaches on a 4-core Intel(R) Core(TM) i7-4790 running at 3.60 GHz with 32 GB of RAM.}
+Accordingly, for the Sobel$_4$, the speedup range of the $\fHeuristic$ decoder is between $28\times$ and $50\times$.
+For the largest multicamera application, the exploration time varies between 1.60 and 4.54 hours for $\fHeuristic$.
+In contrast, the ILP decoder takes between 14.62 and 17.80 hours.
+There, the reported speedup of $\fHeuristic$ ranges between $4\times$ and $9\times$.
+Note here that the reported speedup range is lower compared to the other applications because the ILP-based decoder has a timeout of three seconds.
+In summary, the ILP-based decoder is best suited for small to mid-size applications, as it is then able to find a minimal period schedule for any given binding of actors to cores and channels to memories.
+In contrast, the proposed $\fHeuristic$ heuristic is the preferable solution for realistically sized applications, as solving explodes with an increasing number of variables.
+%A less accurate but much faster evaluator is a better option in such cases.

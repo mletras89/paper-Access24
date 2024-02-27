@@ -1,0 +1,627 @@
+%\newcommand{\tradeoffSobelReference}{
+%
+%\tkzKiviatDiagramFromFile[scale =.25,label distance =.5cm,gap= 1,label space= 4,lattice= 10]{csv/pareto-fronts/ModuloScheduling-Multicamera-1instance-transpose.csv}
+%
+%\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Sobel-Sequential-transpose.csv}{1}
+%\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Sobel-Sequential-transpose.csv}{2}
+%\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Sobel-Sequential-transpose.csv}{3}
+%\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Sobel-Sequential-transpose.csv}{4}
+%\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Sobel-Sequential-transpose.csv}{5}
+%
+%% thp lines
+%\node at (2,-0.5)  {\footnotesize \textbf{10}};
+%\node at (4,-0.5)  {\footnotesize \textbf{20}};
+%\node at (6,-0.5)  {\footnotesize \textbf{30}};
+%\node at (8,-0.5)  {\footnotesize \textbf{40}};
+%\node at (10,-0.5) {\footnotesize \textbf{50}};
+%
+%\node at (0.2,-2)  {\footnotesize \textbf{40}};
+%\node at (0.8,-4)  {\footnotesize \textbf{80}};
+%\node at (1.2,-6)  {\footnotesize \textbf{120}};
+%\node at (1.6,-8)  {\footnotesize \textbf{160}};
+%\node at (2,-10) {\footnotesize \textbf{200}};
+%
+%\node at (-6,11) {\large $\Reference$};
+%}
+%
+%\newcommand{\tradeoffSobelAlways}{
+%
+%\tkzKiviatDiagramFromFile[scale =.25,label distance =.5cm,gap= 1,label space= 4,lattice= 10]{csv/pareto-fronts/ModuloScheduling-Multicamera-1instance-transpose.csv}
+%
+%\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Sobel-Sequential-Always-transpose.csv}{1}
+%\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Sobel-Sequential-Always-transpose.csv}{2}
+%\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Sobel-Sequential-Always-transpose.csv}{3}
+%\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Sobel-Sequential-Always-transpose.csv}{4}
+%\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Sobel-Sequential-Always-transpose.csv}{5}
+%
+%% thp lines
+%\node at (2,-0.5)  {\footnotesize \textbf{10}};
+%\node at (4,-0.5)  {\footnotesize \textbf{20}};
+%\node at (6,-0.5)  {\footnotesize \textbf{30}};
+%\node at (8,-0.5)  {\footnotesize \textbf{40}};
+%\node at (10,-0.5) {\footnotesize \textbf{50}};
+%
+%\node at (0.2,-2)  {\footnotesize \textbf{40}};
+%\node at (0.8,-4)  {\footnotesize \textbf{80}};
+%\node at (1.2,-6)  {\footnotesize \textbf{120}};
+%\node at (1.6,-8)  {\footnotesize \textbf{160}};
+%\node at (2,-10) {\footnotesize \textbf{200}};
+%
+%\node at (-6,11) {\large $\MergingAlways$};
+%}
+%
+%\newcommand{\tradeoffSobelExplore}{
+%
+%\tkzKiviatDiagramFromFile[scale =.25,label distance =.5cm,gap= 1,label space= 4,lattice= 10]{csv/pareto-fronts/ModuloScheduling-Multicamera-1instance-transpose.csv}
+%
+%\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Sobel-Sequential-Explore-transpose.csv}{1}
+%\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Sobel-Sequential-Explore-transpose.csv}{2}
+%\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Sobel-Sequential-Explore-transpose.csv}{3}
+%\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Sobel-Sequential-Explore-transpose.csv}{4}
+%\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Sobel-Sequential-Explore-transpose.csv}{5}
+%
+%% thp lines
+%\node at (2,-0.5)  {\footnotesize \textbf{10}};
+%\node at (4,-0.5)  {\footnotesize \textbf{20}};
+%\node at (6,-0.5)  {\footnotesize \textbf{30}};
+%\node at (8,-0.5)  {\footnotesize \textbf{40}};
+%\node at (10,-0.5) {\footnotesize \textbf{50}};
+%
+%\node at (0.2,-2)  {\footnotesize \textbf{40}};
+%\node at (0.8,-4)  {\footnotesize \textbf{80}};
+%\node at (1.2,-6)  {\footnotesize \textbf{120}};
+%\node at (1.6,-8)  {\footnotesize \textbf{160}};
+%\node at (2,-10) {\footnotesize \textbf{200}};
+%
+%\node at (-6,11) {\large $\MergingExplore$};
+%}
+%
+%
+%\newcommand{\tradeoffSobelParallelReference}{
+%
+%\tkzKiviatDiagramFromFile[scale =.25,label distance =0.5cm,gap= 1,label space= 4,lattice= 10]{csv/pareto-fronts/ModuloScheduling-Multicamera-1instance-transpose.csv}
+%
+%\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Sobel-Parallel-transpose.csv}{1}
+%\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Sobel-Parallel-transpose.csv}{2}
+%\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Sobel-Parallel-transpose.csv}{3}
+%\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Sobel-Parallel-transpose.csv}{4}
+%\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Sobel-Parallel-transpose.csv}{5}
+%
+%% thp lines
+%\node at (2,-0.5)  {\footnotesize \textbf{10}};
+%\node at (4,-0.5)  {\footnotesize \textbf{20}};
+%\node at (6,-0.5)  {\footnotesize \textbf{30}};
+%\node at (8,-0.5)  {\footnotesize \textbf{40}};
+%\node at (10,-0.5) {\footnotesize \textbf{50}};
+%
+%\node at (0.2,-2)  {\footnotesize \textbf{40}};
+%\node at (0.8,-4)  {\footnotesize \textbf{80}};
+%\node at (1.2,-6)  {\footnotesize \textbf{120}};
+%\node at (1.6,-8)  {\footnotesize \textbf{160}};
+%\node at (2,-10) {\footnotesize \textbf{200}};
+%
+%\node at (-6,11) {\large $\Reference$};
+%}
+%
+%\newcommand{\tradeoffSobelParallelAlways}{
+%
+%\tkzKiviatDiagramFromFile[scale =.25,label distance =0.5cm,gap= 1,label space= 4,lattice= 10]{csv/pareto-fronts/ModuloScheduling-Multicamera-1instance-transpose.csv}
+%
+%\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Sobel-Parallel-Always-transpose.csv}{1}
+%\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Sobel-Parallel-Always-transpose.csv}{2}
+%\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Sobel-Parallel-Always-transpose.csv}{3}
+%\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Sobel-Parallel-Always-transpose.csv}{4}
+%\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Sobel-Parallel-Always-transpose.csv}{5}
+%
+%% thp lines
+%\node at (2,-0.5)  {\footnotesize \textbf{10}};
+%\node at (4,-0.5)  {\footnotesize \textbf{20}};
+%\node at (6,-0.5)  {\footnotesize \textbf{30}};
+%\node at (8,-0.5)  {\footnotesize \textbf{40}};
+%\node at (10,-0.5) {\footnotesize \textbf{50}};
+%
+%\node at (0.2,-2)  {\footnotesize \textbf{40}};
+%\node at (0.8,-4)  {\footnotesize \textbf{80}};
+%\node at (1.2,-6)  {\footnotesize \textbf{120}};
+%\node at (1.6,-8)  {\footnotesize \textbf{160}};
+%\node at (2,-10) {\footnotesize \textbf{200}};
+%
+%\node at (-6,11) {\large $\MergingAlways$};
+%}
+%
+%\newcommand{\tradeoffSobelParallelExplore}{
+%
+%\tkzKiviatDiagramFromFile[scale =.25,label distance =0.5cm,gap= 1,label space= 4,lattice= 10]{csv/pareto-fronts/ModuloScheduling-Multicamera-1instance-transpose.csv}
+%
+%\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Sobel-Parallel-Explore-transpose.csv}{1}
+%\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Sobel-Parallel-Explore-transpose.csv}{2}
+%\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Sobel-Parallel-Explore-transpose.csv}{3}
+%\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Sobel-Parallel-Explore-transpose.csv}{4}
+%\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Sobel-Parallel-Explore-transpose.csv}{5}
+%
+%% thp lines
+%\node at (2,-0.5)  {\footnotesize \textbf{10}};
+%\node at (4,-0.5)  {\footnotesize \textbf{20}};
+%\node at (6,-0.5)  {\footnotesize \textbf{30}};
+%\node at (8,-0.5)  {\footnotesize \textbf{40}};
+%\node at (10,-0.5) {\footnotesize \textbf{50}};
+%
+%\node at (0.2,-2)  {\footnotesize \textbf{40}};
+%\node at (0.8,-4)  {\footnotesize \textbf{80}};
+%\node at (1.2,-6)  {\footnotesize \textbf{120}};
+%\node at (1.6,-8)  {\footnotesize \textbf{160}};
+%\node at (2,-10) {\footnotesize \textbf{200}};
+%
+%\node at (-6,11) {\large $\MergingExplore$};
+%}
+
+
+
+\newcommand{\tradeoffMulticameraReference}{
+
+\tkzKiviatDiagramFromFile[scale =.25,label distance =.5cm,gap= 1,label space= 4,lattice= 10]{csv/pareto-fronts/ModuloScheduling-Multicamera-1instance-transpose.csv}
+
+\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Multicamera-1instance-transpose.csv}{1}
+\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Multicamera-1instance-transpose.csv}{2}
+\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Multicamera-1instance-transpose.csv}{3}
+\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Multicamera-1instance-transpose.csv}{4}
+\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Multicamera-1instance-transpose.csv}{5}
+
+% thp lines
+\node at (2,-0.5)  {\footnotesize \textbf{10}};
+\node at (4,-0.5)  {\footnotesize \textbf{20}};
+\node at (6,-0.5)  {\footnotesize \textbf{30}};
+\node at (8,-0.5)  {\footnotesize \textbf{40}};
+\node at (10,-0.5) {\footnotesize \textbf{50}};
+
+\node at (0.2,-2)  {\footnotesize \textbf{20}};
+\node at (0.8,-4)  {\footnotesize \textbf{40}};
+\node at (1.2,-6)  {\footnotesize \textbf{60}};
+\node at (1.6,-8)  {\footnotesize \textbf{80}};
+\node at (2,-10) {\footnotesize \textbf{100}};
+
+\node at (-6,11) {\large $\Reference$};
+}
+
+\newcommand{\tradeoffMulticameraAlways}{
+
+\tkzKiviatDiagramFromFile[scale =.25,label distance =.5cm,gap= 1,label space= 4,lattice= 10]{csv/pareto-fronts/ModuloScheduling-Multicamera-1instance-Always-transpose.csv}
+
+\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Multicamera-1instance-Always-transpose.csv}{1}
+\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Multicamera-1instance-Always-transpose.csv}{2}
+\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Multicamera-1instance-Always-transpose.csv}{3}
+\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Multicamera-1instance-Always-transpose.csv}{4}
+\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Multicamera-1instance-Always-transpose.csv}{5}
+
+% thp lines
+\node at (2,-0.5)  {\footnotesize \textbf{10}};
+\node at (4,-0.5)  {\footnotesize \textbf{20}};
+\node at (6,-0.5)  {\footnotesize \textbf{30}};
+\node at (8,-0.5)  {\footnotesize \textbf{40}};
+\node at (10,-0.5) {\footnotesize \textbf{50}};
+
+\node at (0.2,-2)  {\footnotesize \textbf{20}};
+\node at (0.8,-4)  {\footnotesize \textbf{40}};
+\node at (1.2,-6)  {\footnotesize \textbf{60}};
+\node at (1.6,-8)  {\footnotesize \textbf{80}};
+\node at (2,-10) {\footnotesize \textbf{100}};
+
+\node at (-6,11) {\large $\MergingAlways$};
+}
+
+\newcommand{\tradeoffMulticameraExplore}{
+
+\tkzKiviatDiagramFromFile[scale =.25,label distance =.5cm,gap= 1,label space= 4,lattice= 10]{csv/pareto-fronts/ModuloScheduling-Multicamera-1instance-Explore-transpose.csv}
+
+\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Multicamera-1instance-Explore-transpose.csv}{1}
+\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Multicamera-1instance-Explore-transpose.csv}{2}
+\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Multicamera-1instance-Explore-transpose.csv}{3}
+\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Multicamera-1instance-Explore-transpose.csv}{4}
+\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Multicamera-1instance-Explore-transpose.csv}{5}
+
+% thp lines
+\node at (2,-0.5)  {\footnotesize \textbf{10}};
+\node at (4,-0.5)  {\footnotesize \textbf{20}};
+\node at (6,-0.5)  {\footnotesize \textbf{30}};
+\node at (8,-0.5)  {\footnotesize \textbf{40}};
+\node at (10,-0.5) {\footnotesize \textbf{50}};
+
+\node at (0.2,-2)  {\footnotesize \textbf{20}};
+\node at (0.8,-4)  {\footnotesize \textbf{40}};
+\node at (1.2,-6)  {\footnotesize \textbf{60}};
+\node at (1.6,-8)  {\footnotesize \textbf{80}};
+\node at (2,-10) {\footnotesize \textbf{100}};
+
+\node at (-6,11) {\large $\MergingExplore$};
+}
+
+
+%\newcommand{\tradeoffMulticameraTwoReference}{
+%
+%\tkzKiviatDiagramFromFile[scale =.25,label distance =.5cm,gap= 1,label space= 4,lattice= 10]{csv/pareto-fronts/ModuloScheduling-Multicamera-transpose.csv}
+%
+%\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Multicamera-transpose.csv}{1}
+%\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Multicamera-transpose.csv}{2}
+%\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Multicamera-transpose.csv}{3}
+%\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Multicamera-transpose.csv}{4}
+%\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Multicamera-transpose.csv}{5}
+%
+%% thp lines
+%\node at (2,-0.5)  {\footnotesize \textbf{4}};
+%\node at (4,-0.5)  {\footnotesize \textbf{8}};
+%\node at (6,-0.5)  {\footnotesize \textbf{12}};
+%\node at (8,-0.5)  {\footnotesize \textbf{16}};
+%\node at (10,-0.5) {\footnotesize \textbf{20}};
+%
+%\node at (0.2,-2)  {\footnotesize \textbf{40}};
+%\node at (0.8,-4)  {\footnotesize \textbf{80}};
+%\node at (1.2,-6)  {\footnotesize \textbf{120}};
+%\node at (1.6,-8)  {\footnotesize \textbf{160}};
+%\node at (2,-10) {\footnotesize \textbf{200}};
+%
+%\node at (-6,11) {\large $\Reference$};
+%}
+%
+%\newcommand{\tradeoffMulticameraTwoAlways}{
+%
+%\tkzKiviatDiagramFromFile[scale =.25,label distance =.5cm,gap= 1,label space= 4,lattice= 10]{csv/pareto-fronts/ModuloScheduling-Multicamera-Always-transpose.csv}
+%
+%\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Multicamera-Always-transpose.csv}{1}
+%\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Multicamera-Always-transpose.csv}{2}
+%\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Multicamera-Always-transpose.csv}{3}
+%\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Multicamera-Always-transpose.csv}{4}
+%\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Multicamera-Always-transpose.csv}{5}
+%
+%% thp lines
+%\node at (2,-0.5)  {\footnotesize \textbf{4}};
+%\node at (4,-0.5)  {\footnotesize \textbf{8}};
+%\node at (6,-0.5)  {\footnotesize \textbf{12}};
+%\node at (8,-0.5)  {\footnotesize \textbf{16}};
+%\node at (10,-0.5) {\footnotesize \textbf{20}};
+%
+%\node at (0.2,-2)  {\footnotesize \textbf{40}};
+%\node at (0.8,-4)  {\footnotesize \textbf{80}};
+%\node at (1.2,-6)  {\footnotesize \textbf{120}};
+%\node at (1.6,-8)  {\footnotesize \textbf{160}};
+%\node at (2,-10) {\footnotesize \textbf{200}};
+%
+%\node at (-6,11) {\large $\MergingAlways$};
+%}
+%
+%\newcommand{\tradeoffMulticameraTwoExplore}{
+%
+%\tkzKiviatDiagramFromFile[scale =.25,label distance =.5cm,gap= 1,label space= 4,lattice= 10]{csv/pareto-fronts/ModuloScheduling-Multicamera-Explore-transpose.csv}
+%
+%\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Multicamera-Explore-transpose.csv}{1}
+%\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Multicamera-Explore-transpose.csv}{2}
+%\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Multicamera-Explore-transpose.csv}{3}
+%\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Multicamera-Explore-transpose.csv}{4}
+%\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Multicamera-Explore-transpose.csv}{5}
+%
+%% thp lines
+%\node at (2,-0.5)  {\footnotesize \textbf{4}};
+%\node at (4,-0.5)  {\footnotesize \textbf{8}};
+%\node at (6,-0.5)  {\footnotesize \textbf{12}};
+%\node at (8,-0.5)  {\footnotesize \textbf{16}};
+%\node at (10,-0.5) {\footnotesize \textbf{20}};
+%
+%\node at (0.2,-2)  {\footnotesize \textbf{40}};
+%\node at (0.8,-4)  {\footnotesize \textbf{80}};
+%\node at (1.2,-6)  {\footnotesize \textbf{120}};
+%\node at (1.6,-8)  {\footnotesize \textbf{160}};
+%\node at (2,-10) {\footnotesize \textbf{200}};
+%
+%\node at (-6,11) {\large $\MergingExplore$};
+%}
+%
+%\newcommand{\tradeoffMulticameraThreeReference}{
+%
+%\tkzKiviatDiagramFromFile[scale =.25,label distance =.5cm,gap= 1,label space= 4,lattice= 10]{csv/pareto-fronts/ModuloScheduling-Multicamera-3instances-transpose.csv}
+%
+%\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Multicamera-3instances-transpose.csv}{1}
+%\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Multicamera-3instances-transpose.csv}{2}
+%\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Multicamera-3instances-transpose.csv}{3}
+%\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Multicamera-3instances-transpose.csv}{4}
+%\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Multicamera-3instances-transpose.csv}{5}
+%
+%% thp lines
+%\node at (2,-0.5)  {\footnotesize \textbf{2}};
+%\node at (4,-0.5)  {\footnotesize \textbf{4}};
+%\node at (6,-0.5)  {\footnotesize \textbf{6}};
+%\node at (8,-0.5)  {\footnotesize \textbf{8}};
+%\node at (10,-0.5) {\footnotesize \textbf{10}};
+%
+%\node at (0.2,-2)  {\footnotesize \textbf{60}};
+%\node at (0.8,-4)  {\footnotesize \textbf{120}};
+%\node at (1.2,-6)  {\footnotesize \textbf{180}};
+%\node at (1.6,-8)  {\footnotesize \textbf{240}};
+%\node at (2,-10) {\footnotesize \textbf{300}};
+%
+%\node at (-6,11) {\large $\Reference$};
+%}
+%
+%\newcommand{\tradeoffMulticameraThreeAlways}{
+%
+%\tkzKiviatDiagramFromFile[scale =.25,label distance =.5cm,gap= 1,label space= 4,lattice= 10]{csv/pareto-fronts/ModuloScheduling-Multicamera-3instances-Always-transpose.csv}
+%
+%\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Multicamera-3instances-Always-transpose.csv}{1}
+%\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Multicamera-3instances-Always-transpose.csv}{2}
+%\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Multicamera-3instances-Always-transpose.csv}{3}
+%\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Multicamera-3instances-Always-transpose.csv}{4}
+%\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Multicamera-3instances-Always-transpose.csv}{5}
+%
+%% thp lines
+%\node at (2,-0.5)  {\footnotesize \textbf{2}};
+%\node at (4,-0.5)  {\footnotesize \textbf{4}};
+%\node at (6,-0.5)  {\footnotesize \textbf{6}};
+%\node at (8,-0.5)  {\footnotesize \textbf{8}};
+%\node at (10,-0.5) {\footnotesize \textbf{10}};
+%
+%\node at (0.2,-2)  {\footnotesize \textbf{60}};
+%\node at (0.8,-4)  {\footnotesize \textbf{120}};
+%\node at (1.2,-6)  {\footnotesize \textbf{180}};
+%\node at (1.6,-8)  {\footnotesize \textbf{240}};
+%\node at (2,-10) {\footnotesize \textbf{300}};
+%
+%\node at (-6,11) {\large $\MergingAlways$};
+%}
+%
+%\newcommand{\tradeoffMulticameraThreeExplore}{
+%
+%\tkzKiviatDiagramFromFile[scale =.25,label distance =.5cm,gap= 1,label space= 4,lattice= 10]{csv/pareto-fronts/ModuloScheduling-Multicamera-3instances-Explore-transpose.csv}
+%
+%\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Multicamera-3instances-Explore-transpose.csv}{1}
+%\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Multicamera-3instances-Explore-transpose.csv}{2}
+%\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Multicamera-3instances-Explore-transpose.csv}{3}
+%\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Multicamera-3instances-Explore-transpose.csv}{4}
+%\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Multicamera-3instances-Explore-transpose.csv}{5}
+%
+%% thp lines
+%\node at (2,-0.5)  {\footnotesize \textbf{2}};
+%\node at (4,-0.5)  {\footnotesize \textbf{4}};
+%\node at (6,-0.5)  {\footnotesize \textbf{6}};
+%\node at (8,-0.5)  {\footnotesize \textbf{8}};
+%\node at (10,-0.5) {\footnotesize \textbf{10}};
+%
+%\node at (0.2,-2)  {\footnotesize \textbf{60}};
+%\node at (0.8,-4)  {\footnotesize \textbf{120}};
+%\node at (1.2,-6)  {\footnotesize \textbf{180}};
+%\node at (1.6,-8)  {\footnotesize \textbf{240}};
+%\node at (2,-10) {\footnotesize \textbf{300}};
+%
+%\node at (-6,11) {\large $\MergingExplore$};
+%}
+%
+%
+%
+%\newcommand{\tradeoffForegroundFourReference}{
+%
+%\tkzKiviatDiagramFromFile[scale =.25,label distance =.5cm,gap= 1,label space= 4,lattice= 10]{csv/pareto-fronts/ModuloScheduling-Foreground-4instances-transpose.csv}
+%
+%\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Foreground-4instances-transpose.csv}{1}
+%\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Foreground-4instances-transpose.csv}{2}
+%\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Foreground-4instances-transpose.csv}{3}
+%\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Foreground-4instances-transpose.csv}{4}
+%\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Foreground-4instances-transpose.csv}{5}
+%
+%% thp lines
+%\node at (2,-0.5)  {\footnotesize \textbf{0.4}};
+%\node at (4,-0.5)  {\footnotesize \textbf{0.8}};
+%\node at (6,-0.5)  {\footnotesize \textbf{1.2}};
+%\node at (8,-0.5)  {\footnotesize \textbf{1.6}};
+%\node at (10,-0.5) {\footnotesize \textbf{2}};
+%
+%\node at (0.0,-2)  {\footnotesize \textbf{400}};
+%\node at (0.6,-4)  {\footnotesize \textbf{800}};
+%\node at (1.0,-6)  {\footnotesize \textbf{1200}};
+%
+%\node at (-6,11) {\large $\Reference$};
+%}
+%
+%\newcommand{\tradeoffForegroundFourAlways}{
+%
+%\tkzKiviatDiagramFromFile[scale =.25,label distance =.5cm,gap= 1,label space= 4,lattice= 10]{csv/pareto-fronts/ModuloScheduling-Foreground-4instances-Always-transpose.csv}
+%
+%\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Foreground-4instances-Always-transpose.csv}{1}
+%\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Foreground-4instances-Always-transpose.csv}{2}
+%\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Foreground-4instances-Always-transpose.csv}{3}
+%\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Foreground-4instances-Always-transpose.csv}{4}
+%\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Foreground-4instances-Always-transpose.csv}{5}
+%
+%% thp lines
+%\node at (2,-0.5)  {\footnotesize \textbf{0.4}};
+%\node at (4,-0.5)  {\footnotesize \textbf{0.8}};
+%\node at (6,-0.5)  {\footnotesize \textbf{1.2}};
+%\node at (8,-0.5)  {\footnotesize \textbf{1.6}};
+%\node at (10,-0.5) {\footnotesize \textbf{2}};
+%
+%\node at (0.0,-2)  {\footnotesize \textbf{400}};
+%\node at (0.6,-4)  {\footnotesize \textbf{800}};
+%\node at (1.0,-6)  {\footnotesize \textbf{1200}};
+%
+%\node at (-6,11) {\large $\MergingAlways$};
+%}
+%
+%\newcommand{\tradeoffForegroundFourExplore}{
+%
+%\tkzKiviatDiagramFromFile[scale =.25,label distance =.5cm,gap= 1,label space= 4,lattice= 10]{csv/pareto-fronts/ModuloScheduling-Foreground-4instances-Explore-transpose.csv}
+%
+%\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Foreground-4instances-Explore-transpose.csv}{1}
+%\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Foreground-4instances-Explore-transpose.csv}{2}
+%\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Foreground-4instances-Explore-transpose.csv}{3}
+%\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Foreground-4instances-Explore-transpose.csv}{4}
+%\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Foreground-4instances-Explore-transpose.csv}{5}
+%
+%% thp lines
+%\node at (2,-0.5)  {\footnotesize \textbf{0.4}};
+%\node at (4,-0.5)  {\footnotesize \textbf{0.8}};
+%\node at (6,-0.5)  {\footnotesize \textbf{1.2}};
+%\node at (8,-0.5)  {\footnotesize \textbf{1.6}};
+%\node at (10,-0.5) {\footnotesize \textbf{2}};
+%
+%\node at (0.0,-2)  {\footnotesize \textbf{400}};
+%\node at (0.6,-4)  {\footnotesize \textbf{800}};
+%\node at (1.0,-6)  {\footnotesize \textbf{1200}};
+%
+%\node at (-6,11) {\large $\MergingExplore$};
+%}
+%
+%
+%
+%\newcommand{\tradeoffForegroundSevenReference}{
+%
+%\tkzKiviatDiagramFromFile[scale =.25,label distance =.5cm,gap= 1,label space= 4,lattice= 10]{csv/pareto-fronts/ModuloScheduling-Foreground-transpose.csv}
+%
+%\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Foreground-transpose.csv}{1}
+%\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Foreground-transpose.csv}{2}
+%\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Foreground-transpose.csv}{3}
+%\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Foreground-transpose.csv}{4}
+%\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Foreground-transpose.csv}{5}
+%
+%% thp lines
+%\node at (2,-0.5)  {\footnotesize \textbf{0.2}};
+%\node at (4,-0.5)  {\footnotesize \textbf{0.4}};
+%\node at (6,-0.5)  {\footnotesize \textbf{0.6}};
+%\node at (8,-0.5)  {\footnotesize \textbf{0.8}};
+%\node at (10,-0.5) {\footnotesize \textbf{1}};
+%
+%\node at (0.0,-2)  {\footnotesize \textbf{400}};
+%\node at (0.6,-4)  {\footnotesize \textbf{800}};
+%\node at (1.0,-6)  {\footnotesize \textbf{1200}};
+%\node at (1.4,-8)  {\footnotesize \textbf{1600}};
+%\node at (1.8,-10) {\footnotesize \textbf{2000}};
+%
+%\node at (-6,11) {\large $\Reference$};
+%}
+%
+%\newcommand{\tradeoffForegroundSevenAlways}{
+%
+%\tkzKiviatDiagramFromFile[scale =.25,label distance =.5cm,gap= 1,label space= 4,lattice= 10]{csv/pareto-fronts/ModuloScheduling-Foreground-Always-transpose.csv}
+%
+%\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Foreground-Always-transpose.csv}{1}
+%\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Foreground-Always-transpose.csv}{2}
+%\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Foreground-Always-transpose.csv}{3}
+%\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Foreground-Always-transpose.csv}{4}
+%\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Foreground-Always-transpose.csv}{5}
+%
+%% thp lines
+%\node at (2,-0.5)  {\footnotesize \textbf{0.2}};
+%\node at (4,-0.5)  {\footnotesize \textbf{0.4}};
+%\node at (6,-0.5)  {\footnotesize \textbf{0.6}};
+%\node at (8,-0.5)  {\footnotesize \textbf{0.8}};
+%\node at (10,-0.5) {\footnotesize \textbf{1}};
+%
+%\node at (0.0,-2)  {\footnotesize \textbf{400}};
+%\node at (0.6,-4)  {\footnotesize \textbf{800}};
+%\node at (1.0,-6)  {\footnotesize \textbf{1200}};
+%\node at (1.4,-8)  {\footnotesize \textbf{1600}};
+%\node at (1.8,-10) {\footnotesize \textbf{2000}};
+%
+%\node at (-6,11) {\large $\MergingAlways$};
+%}
+%
+%\newcommand{\tradeoffForegroundSevenExplore}{
+%
+%\tkzKiviatDiagramFromFile[scale =.25,label distance =.5cm,gap= 1,label space= 4,lattice= 10]{csv/pareto-fronts/ModuloScheduling-Foreground-Explore-transpose.csv}
+%
+%\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Foreground-Explore-transpose.csv}{1}
+%\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Foreground-Explore-transpose.csv}{2}
+%\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Foreground-Explore-transpose.csv}{3}
+%\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Foreground-Explore-transpose.csv}{4}
+%\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Foreground-Explore-transpose.csv}{5}
+%
+%% thp lines
+%\node at (2,-0.5)  {\footnotesize \textbf{0.2}};
+%\node at (4,-0.5)  {\footnotesize \textbf{0.4}};
+%\node at (6,-0.5)  {\footnotesize \textbf{0.6}};
+%\node at (8,-0.5)  {\footnotesize \textbf{0.8}};
+%\node at (10,-0.5) {\footnotesize \textbf{1}};
+%
+%\node at (0.0,-2)  {\footnotesize \textbf{400}};
+%\node at (0.6,-4)  {\footnotesize \textbf{800}};
+%\node at (1.0,-6)  {\footnotesize \textbf{1200}};
+%\node at (1.4,-8)  {\footnotesize \textbf{1600}};
+%\node at (1.8,-10) {\footnotesize \textbf{2000}};
+%
+%\node at (-6,11) {\large $\MergingExplore$};
+%}
+%
+%
+%
+%\newcommand{\tradeoffVideoThreeReference}{
+%
+%\tkzKiviatDiagramFromFile[scale =.25,label distance =.5cm,gap= 1,label space= 4,lattice= 10]{csv/pareto-fronts/ModuloScheduling-Video-Object-transpose.csv}
+%
+%\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Video-Object-transpose.csv}{1}
+%\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Video-Object-transpose.csv}{2}
+%\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Video-Object-transpose.csv}{3}
+%\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Video-Object-transpose.csv}{4}
+%\tkzKiviatLineFromFile [SpiderReference]{csv/pareto-fronts/ModuloScheduling-Video-Object-transpose.csv}{5}
+%
+%% thp lines
+%\node at (2,-0.5)  {\footnotesize \textbf{16}};
+%\node at (4,-0.5)  {\footnotesize \textbf{32}};
+%\node at (6,-0.5)  {\footnotesize \textbf{48}};
+%\node at (8,-0.5)  {\footnotesize \textbf{64}};
+%\node at (10,-0.5) {\footnotesize \textbf{80}};
+%
+%\node at (0.0,-2)  {\footnotesize \textbf{20}};
+%\node at (0.6,-4)  {\footnotesize \textbf{40}};
+%\node at (1.0,-6)  {\footnotesize \textbf{60}};
+%\node at (1.4,-8)  {\footnotesize \textbf{80}};
+%%\node at (1.8,-10) {\footnotesize \textbf{2000}};
+%
+%\node at (-6,11) {\large $\Reference$};
+%}
+%
+%\newcommand{\tradeoffVideoThreeAlways}{
+%
+%\tkzKiviatDiagramFromFile[scale =.25,label distance =.5cm,gap= 1,label space= 4,lattice= 10]{csv/pareto-fronts/ModuloScheduling-Video-Object-Always-transpose.csv}
+%
+%\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Video-Object-Always-transpose.csv}{1}
+%\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Video-Object-Always-transpose.csv}{2}
+%\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Video-Object-Always-transpose.csv}{3}
+%\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Video-Object-Always-transpose.csv}{4}
+%\tkzKiviatLineFromFile[SpiderAlways]{csv/pareto-fronts/ModuloScheduling-Video-Object-Always-transpose.csv}{5}
+%
+%% thp lines
+%\node at (2,-0.5)  {\footnotesize \textbf{16}};
+%\node at (4,-0.5)  {\footnotesize \textbf{32}};
+%\node at (6,-0.5)  {\footnotesize \textbf{48}};
+%\node at (8,-0.5)  {\footnotesize \textbf{64}};
+%\node at (10,-0.5) {\footnotesize \textbf{80}};
+%
+%\node at (0.0,-2)  {\footnotesize \textbf{20}};
+%\node at (0.6,-4)  {\footnotesize \textbf{40}};
+%\node at (1.0,-6)  {\footnotesize \textbf{60}};
+%\node at (1.4,-8)  {\footnotesize \textbf{80}};
+%%\node at (1.8,-10) {\footnotesize \textbf{2000}};
+%
+%\node at (-6,11) {\large $\MergingAlways$};
+%}
+%
+%\newcommand{\tradeoffVideoThreeExplore}{
+%
+%\tkzKiviatDiagramFromFile[scale =.25,label distance =.5cm,gap= 1,label space= 4,lattice= 10]{csv/pareto-fronts/ModuloScheduling-Video-Object-Explore-transpose.csv}
+%
+%\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Video-Object-Explore-transpose.csv}{1}
+%\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Video-Object-Explore-transpose.csv}{2}
+%\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Video-Object-Explore-transpose.csv}{3}
+%\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Video-Object-Explore-transpose.csv}{4}
+%\tkzKiviatLineFromFile[SpiderExplore]{csv/pareto-fronts/ModuloScheduling-Video-Object-Explore-transpose.csv}{5}
+%
+%% thp lines
+%\node at (2,-0.5)  {\footnotesize \textbf{16}};
+%\node at (4,-0.5)  {\footnotesize \textbf{32}};
+%\node at (6,-0.5)  {\footnotesize \textbf{48}};
+%\node at (8,-0.5)  {\footnotesize \textbf{64}};
+%\node at (10,-0.5) {\footnotesize \textbf{80}};
+%
+%\node at (0.0,-2)  {\footnotesize \textbf{20}};
+%\node at (0.6,-4)  {\footnotesize \textbf{40}};
+%\node at (1.0,-6)  {\footnotesize \textbf{60}};
+%\node at (1.4,-8)  {\footnotesize \textbf{80}};
+%%\node at (1.8,-10) {\footnotesize \textbf{2000}};
+%
+%\node at (-6,11) {\large $\MergingExplore$};
+%}

@@ -1,0 +1,175 @@
+\newcommand{\legendArch}
+{
+\pgfplotsset{ytick style={draw=none}}
+%  \begin{scope}
+        \begin{axis}[
+                xbar stacked,
+                hide axis,
+                xmin=0,
+                xmax=1,
+                width=2cm,
+                height=2cm,
+                ymin=0,
+                ymax=0.4,
+                legend style={at={(0.5,-0.4)},anchor=north},
+                legend columns=5,
+                ]
+                        \addlegendimage{black,fill=bananayellow!25}
+                        \addlegendentry{Tile $\tile_1$}
+                        \addlegendimage{black, fill=bleudefrance!25}
+                        \addlegendentry{Tile $\tile_2$}
+                        \addlegendimage{black, fill=brickred!25}
+                        \addlegendentry{Tile $\tile_3$}
+                        \addlegendimage{black, fill=emerald!70}
+                        \addlegendentry{Local memory ($\SetMemoriesLocal$)}
+                        \addlegendimage{black, fill=amethyst!60}
+                        \addlegendentry{Tile local memory ($\SetTileLocalMemories$)}
+        \end{axis}
+%    \end{scope}
+}
+
+\newcommand{\legendApp}
+{
+\pgfplotsset{ytick style={draw=none}}
+%  \begin{scope}
+        \begin{axis}[
+                xbar stacked,
+                hide axis,
+                xmin=0,
+                xmax=1,
+                width=2cm,
+                height=2cm,
+                ymin=0,
+                ymax=0.4,
+                legend style={at={(0.5,-0.4)},anchor=north},
+                legend columns=3,
+                ]
+                        \addlegendimage{black,fill=candyapplered!30}
+                        \addlegendentry{actors}
+                        \addlegendimage{black, fill=amethyst!30}
+                        \addlegendentry{multicast actor}
+                        \addlegendimage{black, fill=green(munsell)!30}
+                        \addlegendentry{channels}
+        \end{axis}
+%    \end{scope}
+}
+
+\newcommand{\simpleApplication}[2]{
+  \def \xshift{#1}
+  \def \yshift{#2}
+  \node[ActorStyle] (actorSource)           at (-0.25+\xshift,0+\yshift) {\Large $a_1$};
+  \node[ChannelStyle] (channelZero)         at (1.5+\xshift,0+\yshift) {\Large $c_1$};
+  \node[ActorBroadcastStyle] (broadCastOne) at (3.25+\xshift,0+\yshift) {\Large $a_2$};
+  \node[ChannelStyle] (channelOne)          at (4.75+\xshift,1.25+\yshift) {\Large $c_2$};
+  \node[ChannelStyle] (channelTwo)          at (4.75+\xshift,-1.25+\yshift) {\Large $c_3$};
+  \node[ActorStyle] (vertical)              at (6.25+\xshift,2+\yshift) {\Large $a_3$};
+  \node[ActorStyle] (horizontal)            at (6.25+\xshift,-2+\yshift) {\Large $a_4$ };
+  \node[ChannelStyle] (channelThree)        at (7.75+\xshift,1.25+\yshift) {\Large $c_4$};
+  \node[ChannelStyle] (channelFour)         at (7.75+\xshift,-1.25+\yshift) {\Large $c_5$};
+  \node[ActorStyle] (sink)                  at (9+\xshift,0+\yshift) {\Large $a_5$ };
+%  % now draw the arrows
+  
+ \draw[ArrowStyle] (actorSource) -- (channelZero);
+  \draw[ArrowStyle] (channelZero) -- (broadCastOne);
+  
+  \draw[ArrowStyle] (broadCastOne) -- (channelOne);
+  \draw[ArrowStyle] (broadCastOne) -- (channelTwo);
+  \draw[ArrowStyle] (channelOne) -- (vertical);
+  \draw[ArrowStyle] (channelTwo)  -- (horizontal);
+  
+  \draw[ArrowStyle] (vertical)  -- (channelThree);
+  \draw[ArrowStyle] (horizontal)  -- (channelFour);
+  \draw[ArrowStyle] (channelThree) --  (sink);
+  \draw[ArrowStyle] (channelFour)  -- (sink);
+}
+
+\newcommand{\TileTemplate}[5]{
+        \draw[draw=black,fill=#1!25,line width=0.15mm] (-0.5,-0.25) rectangle (5.0,3.8);
+        
+        \node[rectangle,draw,line width=0.15mm,fill=#1,minimum width=1cm] (CPU1) at (1,3.25) {\large $\core_{#3}$};
+        \node at (2.25,2.9) {\Huge $\ldots$};
+        \node[rectangle,draw,line width=0.15mm,fill=#1,minimum width=1cm] (CPU#2) at (3.5,3.25) {\large $\core_{#2}$};
+        \node[rectangle,draw,line width=0.15mm,fill=emerald!70,minimum width=1cm] (lmem1) at (1,2.25) {\large $\memory_{#3}$};
+        \node[rectangle,draw,line width=0.15mm,fill=emerald!70,minimum width=1cm] (lmem#2) at (3.5,2.25) {\large $\memory_{#2}$};
+        
+        \node[rectangle,draw,line width=0.2mm,minimum width=4cm,fill=internationalorange!50] (crossbar) at (2.25,1.25) {\large $\crossbar_{#4}$};
+        
+        \node[rectangle,draw,line width=0.2mm,minimum width=4cm,fill=amethyst!60] (tileMem) at (2.25,0.25) {\large $\memory_{#5}$};
+        
+        \draw[<->,>=triangle 60,] (CPU1) -- (lmem1);
+        \draw[<->,>=triangle 60,] (CPU#2) -- (lmem#2);
+
+        \draw[<->,>=triangle 60,] (lmem1) -- ($(lmem1.south)+(0,-0.45)$);
+        \draw[<->,>=triangle 60,] (lmem#2) -- ($(lmem#2.south)+(0,-0.45)$);
+        
+        \draw[<->,>=triangle 60,] (CPU1.west) -- ($(CPU1.west)+(-0.75,0)$) |- (crossbar);
+        \draw[<->,>=triangle 60,] (CPU#2.east) -- ($(CPU#2.east)+(0.75,0)$) |- (crossbar);
+        
+        \draw[<->,>=triangle 60,] (crossbar) -- (tileMem);
+}
+
+\newcommand{\architectureMultiTile}{
+    \simpleApplication{-18.5}{-1.2}
+
+    \node (tileA) at (-6,-0.2){
+    \begin{tikzpicture}
+        \TileTemplate{bananayellow}{4}{1}{1}{21}
+    \end{tikzpicture}};
+
+    \node (tileB) at (0,-0.2){
+    \begin{tikzpicture}
+        \TileTemplate{bleudefrance}{12}{5}{2}{22}
+    \end{tikzpicture}};
+    
+    \node (tileC) at (6,-0.2){
+    \begin{tikzpicture}
+        \TileTemplate{brickred}{20}{13}{3}{23}
+    \end{tikzpicture}};
+  
+    \node[rectangle,draw,line width=0.2mm,minimum width=17.75cm,fill=amber] (noc) at (0.1,-3.15) {$\NoC$};
+    \node[rectangle,draw,line width=0.2mm,minimum width=17.75cm,fill=electricgreen!50] (globalMem) at (0.1,-4.2) {$\GlobalMemory$};
+    
+    \draw[<->,>=triangle 60,] ($(tileA.south)+(0,0.1)$) -- ($(tileA.south)+(0,-0.5)$);
+    \draw[<->,>=triangle 60,] ($(tileB.south)+(0,0.1)$) -- ($(tileB.south)+(0,-0.5)$);
+    \draw[<->,>=triangle 60,] ($(tileC.south)+(0,0.1)$) -- ($(tileC.south)+(0,-0.53)$);
+    \draw[<->,>=triangle 60,] (noc) -- (globalMem);
+
+    \node at (0,-5){
+      \resizebox{380pt}{!}{  
+      \begin{tikzpicture}
+        \legendArch
+      \end{tikzpicture}}
+    };
+
+    \node at (-14,-5){
+      \resizebox{200pt}{!}{  
+      \begin{tikzpicture}
+        \legendApp
+      \end{tikzpicture}}
+    };
+    % draw mappings
+    \node(tile1) at (-8,1.5) {};
+    \node(tile2) at (-2.3,1.5) {};
+    \node(tile3) at (3.5,-1.65) {};
+
+    \draw[MappingStyle,line width=0.5mm,draw=red] (sink)  -- (tile1);
+    \draw[MappingStyle,line width=0.5mm,draw=red] (sink)  -- (tile2);
+    \draw[MappingStyle,line width=0.5mm,draw=red] (sink)  -- (tile3);
+
+    \node(global) at (-1.25,-4.0) {};
+    \node(local1) at (-7.35,0.3) {};
+    \node(local2) at (-5.0,0.2) {};
+    \node(local3) at (-1.5,0.4) {};
+    \node(local4) at (1.25,0.0) {};
+    \node(local5) at (5,0.3) {};
+    \node(local6) at (7.5,0.3) {};
+    \node(tileLocal1) at (-4.0,-1.5) {};
+    \node(tileLocal2) at (-1.8,-1.65) {};
+    \node(tileLocal3) at (4.0,-1.5) {};
+
+    \draw[MappingStyle,line width=0.5mm,draw=blue] (channelFour)  -- (local3);
+    \draw[MappingStyle,line width=0.5mm,draw=blue] (channelFour)  -- (local4);
+    \draw[MappingStyle,line width=0.5mm,draw=blue] (channelFour)  -- (tileLocal2);
+    \draw[MappingStyle,line width=0.5mm,draw=blue] (channelFour)  -- (global);
+
+}

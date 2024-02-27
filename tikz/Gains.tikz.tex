@@ -1,0 +1,116 @@
+\newcommand{\HypervolumeLastIteration}{
+\begin{groupplot}[ 
+                    group style={
+                    group name                 = LastIterHyper,
+                    group size                 = 4 by 2,
+                    xlabels at                 = edge bottom,
+                    ylabels at                 = edge left,
+		    vertical sep=1.7cm,
+                    },
+      width=7.5cm,%
+      height=3.9cm,%
+      ybar=1pt,%
+%      bar width=0.3cm,%
+      enlarge x limits=0.3,% horizontal spacing
+      %symbolic x coords={10,20,30},%
+      xtick={10,20,30},
+      xticklabels={Sobel, Sobel$_4$, Multicamera},%
+      every node near coord/.append style={rotate=90, anchor=west,font=\scriptsize },
+      nodes near coords,
+      nodes near coords align={vertical},
+      ylabel={hypervolume},%
+      x tick label style={font=\small},
+      y tick label style={font=\small},
+      legend style={at={(0.975,-0.25)},draw=none,fill=none,legend columns=3},
+      legend cell align=left,
+      ymax=1.2,
+      ytick={0.2,0.4,0.6,0.8,1},
+      yticklabels={0.2,0.4,0.6,0.8,1},
+      axis lines*=left,
+%      clip=false,
+      ]
+
+  \nextgroupplot[title=Hypervolume of last generation, bar width=0.2cm  ]
+    \addlegendimage{draw=black, fill=amaranth!30}
+    \addlegendentry{\footnotesize $\Reference^{ILP}$}
+    \addlegendimage{draw=black, fill=amaranth!90}
+    \addlegendentry{\footnotesize $\MergingAlways^{ILP}$}
+    \addlegendimage{draw=black, fill=carmine}
+    \addlegendentry{\footnotesize $\MergingExplore^{ILP}$}
+    \addlegendimage{draw=black, fill=babyblue}
+    \addlegendentry{\footnotesize $\Reference^{\fHeuristic}$}
+    \addlegendimage{draw=black, fill=azureBlue}
+    \addlegendentry{\footnotesize $\MergingAlways^{\fHeuristic}$}
+    \addlegendimage{draw=black, fill=blue}
+    \addlegendentry{\footnotesize $\MergingExplore^{\fHeuristic}$}
+
+    \addplot[draw=black, fill=amaranth!30] table[y index=1, x index=0,col sep=tab]{csv/gains/ILP-hypervolumes-last-generation.csv};
+    \addplot[draw=black, fill=amaranth!90] table[y index=2, x index=0,col sep=tab]{csv/gains/ILP-hypervolumes-last-generation.csv};
+    \addplot[draw=black, fill=carmine] table[y index=3, x index=0,col sep=tab]{csv/gains/ILP-hypervolumes-last-generation.csv};
+    \addplot[draw=black, fill=babyblue] table[y index=1, x index=0,col sep=tab]{csv/gains/Heuristic-hypervolumes-last-generation.csv};
+    \addplot[draw=black, fill=azureBlue] table[y index=2, x index=0,col sep=tab]{csv/gains/Heuristic-hypervolumes-last-generation.csv};
+    \addplot[draw=black, fill=blue] table[y index=3, x index=0,col sep=tab]{csv/gains/Heuristic-hypervolumes-last-generation.csv};
+    
+\end{groupplot}
+}
+
+
+\newcommand{\GainHypervolumeLastIteration}{
+\begin{groupplot}[ 
+                    group style={
+                    group name                 = LastIterHyper,
+                    group size                 = 4 by 2,
+                    xlabels at                 = edge bottom,
+                    ylabels at                 = edge left,
+		    vertical sep=1.7cm,
+                    },
+      width=6.2cm,%
+      height=4.3cm,%
+      ybar=1pt,%
+%      bar width=0.3cm,%
+      enlarge x limits=0.3,% horizontal spacing
+      %symbolic x coords={10,20,30},%
+      xtick={10,20,30},
+      xticklabels={Sobel, Sobel$_4$, Multicamera},%
+%      xticklabel style={align=center},%
+%      xtick=data,%
+%      xtick pos=left,
+%      ytick pos=left,
+%      y tick style={transparent},% hide x tick marks
+%      ymin=0,%
+%      ymax=7,%
+      ylabel={gain [$\%$]},%
+      x tick label style={font=\small},
+      y tick label style={font=\small},
+%      ymajorgrids,
+%      ytick={0,2,4,6,8,10,12,14,16},
+      legend style={at={(1.1,-0.25)},draw=none,fill=none,legend columns=2},
+      legend cell align=left,
+      ymax=230,
+%      restrict y to domain*=0:110,
+      axis lines*=left,
+%      clip=false,
+      ytick={50,100,150,200},
+      yticklabels={50,100,150,200},
+      every node near coord/.append style={rotate=90, anchor=west,font=\scriptsize },
+      nodes near coords, 
+      nodes near coords align={vertical},
+      ]
+
+  \nextgroupplot[title=Hypervolume gains of the last generation, bar width=0.2cm  ]
+    \addlegendimage{draw=amaranth!90, fill=amaranth!90}
+    \addlegendentry{\footnotesize $\text{gain}(\MergingAlways^{ILP})$}
+    \addlegendimage{draw=carmine, fill=carmine}
+    \addlegendentry{\footnotesize $\text{gain}(\MergingExplore^{ILP})$}
+    \addlegendimage{draw=azureBlue, fill=azureBlue}
+    \addlegendentry{\footnotesize $\text{gain}(\MergingAlways^{\fHeuristic})$}
+    \addlegendimage{draw=blue, fill=blue}
+    \addlegendentry{\footnotesize $\text{gain}(\MergingExplore^{\fHeuristic})$}
+
+    \addplot[draw=amaranth!90, fill=amaranth!90] table[y index=1, x index=0,col sep=tab]{csv/gains/ILP-gains-last-generation.csv};
+    \addplot[draw=carmine, fill=carmine] table[y index=2, x index=0,col sep=tab]{csv/gains/ILP-gains-last-generation.csv};
+    \addplot[draw=azureBlue, fill=azureBlue] table[y index=1, x index=0,col sep=tab]{csv/gains/Heuristic-gains-last-generation.csv};
+    \addplot[draw=blue, fill=blue] table[y index=2, x index=0,col sep=tab]{csv/gains/Heuristic-gains-last-generation.csv};
+
+\end{groupplot}
+}

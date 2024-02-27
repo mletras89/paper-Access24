@@ -1,0 +1,33 @@
+\section{Design Space Exploration}\label{sec:dse}
+
+Allocation of resources, binding, and scheduling a \ac{DFG} onto a heterogeneous many-core system is a \ac{MOP}~\cite{Blickle1998,teichHSWCOUT}, and trade-offs exist and shall be explored between different objectives, e.g., execution period, memory footprint, and core cost.
+In general, there is no single best solution but a set of Pareto-optimal solutions that trade the different objectives against each other.
+\par
+Moreover, the introduced design space of bindings and schedules is huge even for small applications and a modest number of processors, memories, and communication resources, such as the example shown in~\cref{fig:specification}.
+Thus, finding the actual set of Pareto-optimal solutions is an intractable problem that can only be approximated via heuristics.
+For this purpose, many state-of-the-art \ac{ESL} design flows employ \emph{meta-heuristic optimization} techniques based on \acp{MOEA}~\cite{Blickle1998,Keinert:2009,Letras:2020}.
+%During this process, the optimization loop shown in~\cref{fig:opt4jOptimizationLoop} iteratively improves a population of \emph{solution candidates}.
+The advantage of such population-based techniques is that the search space is sampled in parallel and that not only one compromise solution but an approximation of the Pareto-front is found after several generations of offspring as a result of the \ac{DSE}.
+However, whereas \acp{MOEA} have been shown to provide quite good results for allocation and binding problems~\cite{Blickle1998,teichHSWCOUT}, it is difficult to find good encodings for feasible schedules of operations.
+\par
+Indeed, pure meta-heuristic optimization techniques, while applicable to a broad domain of problems, are often too generic.
+This general applicability can be traded for a better optimization performance, e.g., quality of found solutions or required runtime to obtain these solutions, by employing problem-specific heuristics.
+Hence, it is beneficial to \emph{integrate problem knowledge} into meta-heuristic optimization techniques -- restricting their general applicability to a particular domain but improving optimization performance.
+\par
+In this paper, we propose a new hybrid \ac{DSE} approach in which the exploration of the design space is split between (i) a \ac{MOEA} to explore the space of \emph{multi-cast actor replacement function} $\useMRB$ (encoded as a binary string), \emph{channel decision function} $\ChannelDecisions$ (integer encoding), and the \emph{set of actor bindings} $\SetBindingsActors$ (integer encoding).
+To find a schedule minimizing the execution period $\Period$ for a given solution candidate, (ii) a specialized scheduling algorithm is applied.
+This so-called hybrid \emph{decoding} process is illustrated in~\cref{fig:opt4jOptimizationLoop}.
+\par
+For decoding, we first propose an exact formulation for the related scheduling problem and subsequently introduce our heuristic \acs{CAPS-HMS}.
+The \ac{ILP}-based decoding will obtain a schedule with minimal period for a given set of actor bindings and channel decisions but may suffer from long evaluation times.
+In contrast, our heuristic \acs{CAPS-HMS} will allow for a much faster evaluation of solution candidates but does not guarantee to find the exact minimal period.
+\par
+In both alternative approaches, \cref{alg:merging} is applied first to compute a transformed application graph $\mrbgraph$ containing the \acp{MRB} decided by the \ac{DSE} via the multi-cast actor replacement function $\useMRB$.
+This function $\useMRB$, the channel decision function $\ChannelDecisions$, and the set of actor bindings $\SetBindingsActors$ together form the genotype $\Genotype$.
+In both cases, the genotype will be decoded into the \emph{phenotype} representing the period $\Period$, the set of actor and channel bindings $\SetBindings$, and the channel capacity function $\Capacity$.
+Based on the phenotype, the evaluators finally determine the quality of the solution candidate under evaluation with respect to the design \emph{objectives}.
+For our mapping and scheduling problem, the objectives are the minimization of
+(i) the execution period $\Period$,
+(ii) the memory footprint $\MemoryFootprint = \sum_{\channel \in \mrbgraph.\SetChannels} \Capacity(\channel) \cdot \Size(\channel)$, and
+(iii) the core cost $\CoreCost = \sum_{\coretype \in \SetCoreTypes} \allocation(\coretype) \cdot \CoreCost_\coretype$.%
+\footnote{Here, $\CoreCost_\coretype$ denotes the cost of a core of type $\coretype$.}

@@ -1,0 +1,363 @@
+\RequirePackage{letltxmacro}
+\LetLtxMacro{\LaTeXtextbf}{\textbf}
+\documentclass{ieeeaccess}
+\LetLtxMacro{\textbf}{\LaTeXtextbf}
+
+\usepackage{textcomp}
+\usepackage[hidelinks]{hyperref}
+\usepackage{graphicx}
+\usepackage{mathptmx}
+\usepackage{tabularx}
+\usepackage{ragged2e}
+\usepackage{color, colortbl}
+\usepackage[singlelinecheck=false,labelfont={bf}]{caption}
+\usepackage[nolist]{acronym}
+\usepackage{booktabs}
+\usepackage{xfrac}
+\usepackage{tikz}
+\NewSpotColorSpace{PANTONE}
+\AddSpotColor{PANTONE} {PANTONE3015C} {PANTONE\SpotSpace 3015\SpotSpace C} {1 0.3 0 0.2}
+\SetPageColorSpace{PANTONE}
+\usepackage{epstopdf}
+\usepackage{amsmath}
+\usepackage{placeins}
+\usepackage{bm}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{bigstrut}
+\usepackage{rotating}
+\usepackage{listings}
+\usetikzlibrary{external}
+
+% Enable the library !!!>>> MUST be in the preamble <<<!!!!
+\tikzexternalize[prefix=plots/]
+\usetikzlibrary{matrix,fit,arrows,snakes,backgrounds,patterns,automata,mindmap,shadows,calc,shapes,arrows.meta,fadings,decorations,shadows.blur,fit}
+\usetikzlibrary{plotmarks}
+\usepackage{tikz-network}
+\usetikzlibrary{shapes.symbols}
+\usepackage{pgfgantt}
+\usepackage[ruled,linesnumbered,vlined,noend]{algorithm2e}
+\usepackage{multirow}
+\usepackage{flushend}
+
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\pgfplotsset{compat=newest}
+\usepgfplotslibrary{groupplots,statistics}
+\usepgfplotslibrary{fillbetween}
+\usepgfplotslibrary{external}
+\usepgflibrary{patterns}
+\usetikzlibrary{pgfplots.external}
+
+\usepgflibrary{patterns.meta} % ConTeXt and pure pgf
+\usetikzlibrary{patterns.meta}
+
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{pdfpages}
+\usepackage{textcomp}
+\usepackage{lipsum}
+\usepackage{orcidlink}
+\usepackage[capitalise]{cleveref}
+\usepackage{anyfontsize}
+\usepackage{wrapfig}
+
+\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{decorations.pathmorphing}
+\usepackage{tkz-kiviat}
+\usepackage[numbers,sort&compress]{natbib}
+
+% acronyms
+\newacro{CAPS-HMS}{Communication-Aware Periodic Scheduling on Heterogeneous Many-core Systems}
+\newacro{DAG}{Directed Acyclic Graph}
+\newacro{DFG}{Dataflow Graph}
+\newacro{DSE}{Design Space Exploration}
+\newacro{EA}{Evolutionary Algorithm}
+\newacro{ESL}{Electronic System Level}
+%\newacro{FCFS}{First Come First Serve}
+\newacro{FIFO}{First In First Out}
+%\newacro{FPS}{Frames per Second}
+\newacro{HSDF}{Homogeneous Synchronous Dataflow}
+\newacro{ILP}{Integer Linear Program}
+%\newacro{MII}{Minimum Initiation Interval}
+\newacro{MoC}{Model of Computation}
+\acrodefplural{MoC}[MoCs]{Models of Computation}
+\newacro{MOEA}{Multi-Objective Evolutionary Algorithm}
+\newacro{MOP}{Multi-objective Optimization Problem}
+\newacro{MPSoC}{Multi-Processor System-on-a-Chip}
+\acrodefplural{MPSoC}[MPSoCs]{Multi-Processor Systems-on-a-Chip}
+\newacro{MRB}{Multi-Reader Buffer}
+\newacro{NoC}{Network-on-Chip}
+%\newacro{PSOS}{Periodic Static-Order Schedule}
+%\newacro{RecII}{Recurrence-constrained Initiation Interval}
+%\newacro{ResII}{Resource-constrained Initiation Interval}
+\newacro{SDF}{Synchronous Dataflow}
+\newacro{STE}{Self-Timed Execution}
+
+%\newacro{SysteMoC}{SystemC Models of Computation}
+% symbolsi
+
+\newtheorem{definition}{Definition}[section]
+
+% Other stuff
+%\newcommand{\revised}[1]{{\color{blue}#1}}
+\newcommand{\revised}[1]{{#1}}
+
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+\newcommand{\subreff}[1]{(\subref{#1})}
+
+% Integer sets
+\newcommand{\Natural}{\mathbb{N}}
+\newcommand{\NaturalwithZero}{\mathbb{N}_{0}}
+% Reals
+\newcommand{\Reals}{\mathbb{R}}
+\newcommand{\RealsNonNegative}{\mathbb{R}^+_{0}}
+% Power set
+\newcommand{\PowerSet}[1]{\mathbb{P}(#1)}
+
+\newcommand{\graph}{g}
+%Application Graph
+\newcommand{\pgraph}{\graph_\textrm{A}}
+\newcommand{\SetPGEdges}{E}
+\newcommand{\SetPGEdgesIn}{E_\textrm{I}}
+\newcommand{\SetPGEdgesOut}{E_\textrm{O}}
+\newcommand{\mrbgraph}{\graph_{\tilde{\textrm{A}}}}
+\newcommand{\SetActors}{A}
+\newcommand{\actor}{a}
+\newcommand{\SetActorsMulticast}{\SetActors_\textbf{M}}
+\newcommand{\actorMulticast}{{\actor_\textbf{m}}}
+\newcommand{\SetChannels}{C}
+\newcommand{\channel}{c}
+\newcommand{\Delay}{\delta}
+\newcommand{\Capacity}{\gamma}
+\newcommand{\Size}{\varphi}
+\newcommand{\execTime}{\tau}
+
+%Architecture graph
+\newcommand{\rgraph}{\graph_\textrm{R}}
+\newcommand{\SetResources}{R}
+\newcommand{\resource}{r}
+\newcommand{\SetLinks}{L}
+\newcommand{\SetCores}{P}
+\newcommand{\core}{p}
+\newcommand{\SetCoreTypes}{\Theta}
+\newcommand{\coretype}{\vartheta}
+\newcommand{\SetMemories}{Q}
+\newcommand{\SetMemoriesLocal}{\SetMemories_\SetCores}
+\newcommand{\SetTileLocalMemories}{\SetMemories_\tile}
+\newcommand{\memory}{q}
+\newcommand{\GlobalMemory}{q_{global}}
+\newcommand{\MemoryCapacity}[1]{W_{#1}}
+\newcommand{\memoryUsage}[1]{w_{#1}}
+\newcommand{\SetInterconnects}{H}
+\newcommand{\SetCrossbars}{\SetInterconnects_\tile}
+\newcommand{\interconnect}{h}
+\newcommand{\crossbar}[1]{{\interconnect_{\tile_{#1}}}}
+\newcommand{\NoC}{\interconnect_{NoC}}
+\newcommand{\Bandwidth}[1]{B_{#1}}
+\newcommand{\SetTiles}{\mathbb{T}}
+\newcommand{\tile}{T}
+\newcommand{\Routing}{\mathcal{R}}
+
+%Specification graph
+\newcommand{\sgraph}{\graph_\textrm{S}}
+\newcommand{\SetSGVertices}{V_\textrm{S}}
+\newcommand{\SetSGEdges}{E_\textrm{S}}
+\newcommand{\SetMappings}{M}
+\newcommand{\SetMappingsActors}{\SetMappings_\SetActors}
+\newcommand{\SetMappingsChannels}{\SetMappings_\SetChannels}
+%\newcommand{\mapping}{m}
+
+% MRB substitution
+\newcommand{\useMRB}{\xi}
+\newcommand{\GenMRB}{\channel_\textbf{m}}
+\newcommand{\Writer}{\actor_\textbf{w}}
+\newcommand{\Reader}{\actor_{\textbf{r}}}
+\newcommand{\Write}{\omega}
+\newcommand{\Read}{\rho}
+\newcommand{\Free}{\mathsf{F}}
+\newcommand{\Tokens}{\mathsf{T}}
+\newcommand{\Consume}{\kappa}
+\newcommand{\Produce}{\psi}
+
+%Actor and Channel Bindings
+\newcommand{\SetBindings}{\beta}
+\newcommand{\SetBindingsActors}{\beta_\SetActors}
+\newcommand{\SetBindingsChannels}{\beta_\SetChannels}
+\newcommand{\SetBindingsCoreTypes}{\beta_\SetCoreTypes}
+\newcommand{\allocation}{\alpha}
+\newcommand{\ChannelDecisions}{\SetChannels_\mathtt{\mathbf{d}}}
+
+%Scheduling
+\newcommand{\SetTasks}{\mathbf{T}}
+\newcommand{\task}{\mathbf{t}}
+\newcommand{\startTime}{s}
+\newcommand{\edge}{e}
+\newcommand{\order}{e}
+\newcommand{\Period}{\mathbf{P}}
+
+%Design Space Exploration
+\newcommand{\Genotype}{\mathcal{G}}
+\newcommand{\GenotypeILP}{\mathcal{G}_{\mathtt{ILP}}}
+\newcommand{\GenotypeHeuristic}{\mathcal{G}_{\mathtt{Heuristic}}}
+\newcommand{\MemoryFootprint}{\mathbf{M_F}}
+\newcommand{\CoreCost}{\mathbf{K}}
+
+% For ILP scheduling
+\newcommand{\bigDelay}{D}
+
+% For scheduling-heuristics
+\newcommand{\canSchedule}{\textup{CAPS-HMS}}
+\newcommand{\fHeuristic}{\textup{{CAPS-HMS}}}
+\newcommand{\fPop}{f_{Pop}}
+\newcommand{\fWrap}{f_\mathrm{wrap}}
+
+\newcommand{\Utilization}{\mathtt{U}}
+\newcommand{\ReadyList}{\mathtt{L}}
+
+\newcommand{\timeInputReads}{\execTime_{\SetPGEdgesIn(\actor)} }
+\newcommand{\timeOutputWrites}{\execTime_{\SetPGEdgesOut(\actor)} }
+
+\newcommand{\timeInputReadsParam}[1]{\execTime_{\SetPGEdgesIn(\actor_{#1})} }
+\newcommand{\timeOutputWritesParam}[1]{\execTime_{\SetPGEdgesOut(\actor_{#1})} }
+
+% Results
+
+\newcommand{\ParetoFront}{S}
+\newcommand{\ParetoRef}{\ParetoFront_\mathrm{Ref}}
+%\newcommand{\ParetoApp}{\ParetoFront_\mathrm{Approach}}
+
+\newcommand{\Reference}{\textit{Reference}}
+\newcommand{\MergingAlways}{\textit{MRB}_{\mathrm{Always}}}
+\newcommand{\MergingExplore}{\textit{MRB}_{\mathrm{Explore}}}
+
+\newcommand{\myBf}[1]{\textbf{\color{greycolor}#1}}
+\newcommand{\KeyObservation}{\textsf{\small\myBf{Key Observations:\ }}}
+\newcommand\AddEqLabel[1]{%
+  \refstepcounter{equation}% increment equation counter
+  (\theequation)% print equation number
+  \label{#1}% give the equation a \label
+}
+
+\input{tikz/definitions.tikz}
+%\input{tikz/ganttChartPlots.tikz}
+\input{tikz/architecture.tikz}
+\input{tikz/FifoMerging.tikz}
+\input{tikz/examplesMBR.tikz}
+\input{tikz/designFlow.tikz}
+\input{tikz/ModuloScheduling.tikz}
+\input{tikz/HyperVolume.tikz}
+\input{tikz/ParetoFronts.tikz}
+\input{tikz/heuristicExample.tikz}
+\input{tikz/examples.tikz}
+\input{tikz/utilizationPlots.tikz}
+\input{tikz/Gains.tikz}
+%\renewcommand{\figurename}{Fig.}
+%\Crefname{algorithm}{Alg.}{Algs.}
+
+
+\usepackage{textcomp}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\DeclareCaptionFont{blue}{\color{accessblue}}
+\DeclareCaptionLabelSeparator{dot}{. }
+\captionsetup{labelsep=dot,labelfont={blue,bf,sf,footnotesize}}
+
+\let\mod\undefined % get rid of old \mod
+\DeclareMathOperator{\mod}{mod}
+\renewcommand{\baselinestretch}{0.988}
+\begin{document}
+\bstctlcite{IEEEexample:BSTcontrol}
+\history{{\textcolor{white}{Date of publication xxxx 00, 0000, date of current version xxxx 00, 0000.}}}
+%\doi{10.1109/ACCESS.2023.0322000}
+\doi{}
+\title{Exploring Multi-Reader Buffers and Channel Placement during Dataflow Network Mapping to Heterogeneous Many-core Systems
+}
+\author{\uppercase{Martín Letras}~\orcidlink{0000-0002-1429-8982},
+\uppercase{Joachim Falk}~\orcidlink{0009-0006-0834-3237}, and \uppercase{J{\"u}rgen Teich}~\orcidlink{0000-0001-6285-5862} \IEEEmembership{Fellow, IEEE}}
+\address{Friedrich-Alexander-Universität Erlangen-Nürnberg (FAU), Erlangen, Germany (e-mail:\{martin.letras, joachim.falk, juergen.teich\}@fau.de)}
+\tfootnote{\revised{This work has been partially funded by the Deutsche Forschungsgemeinschaft (DFG, German Research Foundation) under project grants 502213043 and 530178246.}}
+%\tfootnote{This paragraph of the first footnote will contain support
+%information, including sponsor and financial support acknowledgment. For
+%example, ``This work was supported in part by the U.S. Department of
+%Commerce under Grant BS123456.''}
+\markboth
+%{Letras, Falk, and Teich \headeretal: Preparation of Papers for IEEE TRANSACTIONS and JOURNALS}
+{Letras, Falk, and Teich}
+{Letras, Falk, and Teich}
+\corresp{Corresponding author: Martin Letras (e-mail: martin.letras@fau.de).}
+\def\thevol{1}
+%to hide logos
+%\def\headerlogo{\raisebox{-2pt}{}}
+%\def\headerlogoall{\raisebox{-2pt}{}}
+\begin{abstract}
+This paper presents an approach for reducing the memory requirements \revised{of periodically executed} dataflow applications, while \revised{minimizing the period} when deployed on a many-core target.
+Often, implementations of dataflow applications suffer from data duplication if identical data has to be processed by multiple actors.
+In fact, multi-cast (also called fork) actors can produce huge memory overheads when storing and communicating copies of the same data.
+As a remedy, so-called \revised{\emph{\acp{MRB}}} can be utilized to forward identical data to multiple actors in a \revised{\ac{FIFO}} manner while storing each data item only once by sharing.
+However, using \acp{MRB} may increase the achievable period due to contention when accessing the shared data.
+This paper proposes a novel multi-objective design space exploration approach that selectively replaces multi-cast actors with \acp{MRB} and explores actor and \ac{FIFO} channel mappings to find trade-offs between the objectives of period, memory footprint, and core cost.
+In distinction to the state-of-the-art, our approach considers
+(i) memory-size constraints for on-chip memories,
+(ii) hierarchical memories to implement the buffers, e.g., tile-local memories,
+(iii) supports heterogeneous many-core platforms, i.e., core-type dependent actor execution times, and
+(iv) optimizes the buffer placement and overall scheduling to minimize the execution period by proposing a novel combined actor and \revised{communication} scheduling heuristic for period minimization called \revised{\emph{\ac{CAPS-HMS}}}.
+Our results show that the explored Pareto fronts improve a hypervolume indicator over a reference approach by up to $66\,\%$ for small to mid-size applications and $90\,\%$ for large applications.
+Moreover, selectively replacing multi-cast actors with corresponding \acp{MRB} proves to be always superior to never or always replacing them.
+Finally, it is shown that the quality of the explored Pareto fronts does not degrade when replacing the efficient scheduling heuristic \ac{CAPS-HMS} by an exact \revised{\ac{ILP}} solver that requires orders of magnitude higher solver times and thus cannot be applied to \revised{large} scale dataflow network problems.
+\end{abstract}
+\begin{keywords}
+Many-Core Systems, Dataflow Networks, Mapping, Pareto Optimization, Memory Management, Modulo Scheduling\vspace{-1mm}
+\end{keywords}
+\titlepgskip=-21pt
+\maketitle
+\input{src/01-intro.tex}
+\input{src/07-relwork.tex}
+\input{src/02-fundamentals.tex}
+\input{src/03-design-space.tex}
+\input{src/04-DSE.tex}
+\input{src/05-decoding.tex}
+\input{src/06-results.tex}
+\input{src/08-conclusions.tex}
+%\bibliographystyle{ieeetr}
+%\bibliography{literature}
+
+\footnotesize
+\bibliographystyle{IEEEtran}
+\bibliography{literature}
+\vspace{-2.11cm}
+\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{bios/letras.jpeg}}]{Martin Letras}
+is a researcher at the Chair of Hardware/Software Co-Design at the Friedrich-
+Alexander-Universität Erlangen-Nürnberg (FAU) where he is currently pursuing a Ph.D. degree. Martín
+holds a B.Sc. from the Meritorious Autonomous University of Puebla (BUAP) since 2013, and a M.Sc.
+from the Instituto Nacional de Astrofísica, Óptica y Electrónica (INAOE) since 2015. His research
+interests are Reconfigurable Computing, FPGA-based design, Embedded Systems, Electronic-system
+level design, Pattern Recognition and Evolutionary Computing.
+\end{IEEEbiography}
+\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{bios/falk.jpg}}]{Joachim Falk}
+studied electrical engineering at the Georg Simon Ohm University of Applied Sciences in Nuremberg, Germany. 
+There, he earned his degree Dipl.-Ing. (FH) in electrical engineering with a specialization in data processing in 2002. 
+In 2003, he joined the Chair of Hardware/Software Co-Design of Prof. Dr.-Ing. Jürgen Teich at the Friedrich-Alexander-Universität Erlangen-Nürnberg. 
+From 2006 onward, he has been working as a PhD student in the project ‘‘Actor-Oriented Synthesis and Optimization of Digital Hardware/Software-Systems at the Electronic System Level,” receiving his PhD degree in 2014 from the Friedrich-Alexander-Universität Erlangen-Nürnberg. He has been working as a reviewer for many international scientific journals (including ACM TACO, ACM TECS, ACM TODAES, IEEE-IES TII, IEEE TC, IEEE TCAD, Real-Time Systems - The International Journal of Time-Critical Computing Systems (Springer), and Design Automation for Embedded Systems), conferences (including DAC (IEEE), DATE (IEEE), FPL (IEEE), CODES+ISSS (ACM)), and workshops (including SCOPES, MBMV, ESTIMEDIA). His main research focuses on data flow languages and transformations for data flow graphs in the context of embedded system design.
+\end{IEEEbiography}
+\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{bios/teich.jpg}}]{Jürgen Teich (Fellow,IEEE)}
+received the M.S. (Dipl.-Ing.) degree (Hons.) from the University of Kaiserslautern,
+Kaiserslautern, Germany, in 1989, and the Ph.D. (Dr.-Ing.) degree (summa cum laude) from the University of Saarland,
+Saarbrücken, Germany, in 1993. From 1998 to 2002, he was a Full Professor with the Electrical Engineering and Information
+Technology Department, University of Paderborn, Paderborn, Germany. He is with Friedrich-Alexander-Universität Erlangen-
+Nürnberg, Erlangen, Germany, where he has been directing the Chair for Hardware/Software Co-Design, since 2003. From
+2010-2022, he has been the Principal Coordinator of the Transregional Research Center 89 “Invasive Computing” funded by the
+German Research Foundation (DFG). He has edited two text books on Hardware/Software Co-Design and a Handbook on
+Hardware/Software Co-Design (Springer). His current research interests include electronic design automation of embedded
+systems with emphasis on hardware/software codesign, reconfigurable computing, and multicore systems. Dr. Teich is a
+member of the Academia Europaea, the Academy of Europe, the National Academy of Science and Engineering (acatech),
+and the German Society of Humboldtians. He serves on the Editorial Board of several journals, including ACM Transactions on
+Design Automation of Electronic Systems and ACM Transactions on Embedded Computing Systems. He has organized
+various ACM/IEEE Conferences/Symposium as a Program Chair, including CODES+ISSS’07, FPL’08, ASAP’10, and
+DATE’16. He was the Vice General Chair of DATE 2018 and the General Chair of DATE 2019.
+\end{IEEEbiography}
+\EOD
+\clearpage
+\end{document}

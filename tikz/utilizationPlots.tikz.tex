@@ -1,0 +1,107 @@
+\newcommand{\comparisonCores}{
+  \begin{groupplot}[group style={
+                      group name=Combinatorial,
+                      group size= 3 by 2,
+                      xlabels at=edge bottom,
+                      ylabels at=edge left,
+                      vertical sep=1.6cm,
+                    },
+                    height=3.8cm,width=7.0cm,
+                    ylabel={\large Utilization [\%]},
+                    legend style = {at={(0.0,-0.35)}},
+                    legend columns             = 3,
+                    xlabel={\large Number of Generations},
+                    legend columns=3,
+                    xmode=normal,
+                    ybar,
+                    ymin =0,
+                    ymax =100,
+                    enlarge x limits=0.3,
+                    xtick={0,1,2},
+                    xticklabels={$\Reference$,$\MergingAlways$,$\MergingExplore$}
+                    ]
+                     
+    \nextgroupplot[title={\large Sobel}]
+      \addplot[CoreOneBar] table[x index=0,y index=1,col sep=tab]{csv/cores-utilization/ModuloScheduling-BindingsDSE-Sobel-Sequential-ALL.csv};
+      \addplot[CoreTwoBar] table[x index=0,y index=2,col sep=tab]{csv/cores-utilization/ModuloScheduling-BindingsDSE-Sobel-Sequential-ALL.csv};
+      \addplot[CoreThreeBar] table[x index=0,y index=3,col sep=tab]{csv/cores-utilization/ModuloScheduling-BindingsDSE-Sobel-Sequential-ALL.csv};
+                 
+    \nextgroupplot[title={\large Sobel split 4}]
+      \addplot[CoreOneBar] table[x index=0,y index=1,col sep=tab]{csv/cores-utilization/ModuloScheduling-BindingsDSE-Sobel-Parallel-ALL.csv};
+      \addplot[CoreTwoBar] table[x index=0,y index=2,col sep=tab]{csv/cores-utilization/ModuloScheduling-BindingsDSE-Sobel-Parallel-ALL.csv};
+      \addplot[CoreThreeBar] table[x index=0,y index=3,col sep=tab]{csv/cores-utilization/ModuloScheduling-BindingsDSE-Sobel-Parallel-ALL.csv};
+
+    \nextgroupplot[title={\large Multicamera}]
+      \addlegendimage{CoreOneBar}
+      \addlegendentry{\large cores of type $\coretype_1$}
+      \addlegendimage{CoreTwoBar}
+      \addlegendentry{\large cores of type $\coretype_2$}
+      \addlegendimage{CoreThreeBar}
+      \addlegendentry{\large cores of type $\coretype_3$}
+
+      \addplot[CoreOneBar] table[x index=0,y index=1,col sep=tab]{csv/cores-utilization/ModuloScheduling-BindingsDSE-Multicamera-ALL.csv};
+      \addplot[CoreTwoBar] table[x index=0,y index=2,col sep=tab]{csv/cores-utilization/ModuloScheduling-BindingsDSE-Multicamera-ALL.csv};
+      \addplot[CoreThreeBar] table[x index=0,y index=3,col sep=tab]{csv/cores-utilization/ModuloScheduling-BindingsDSE-Multicamera-ALL.csv};
+
+\end{groupplot}
+}
+
+\newcommand{\comparisonInterconnect}{
+\pgfplotsset{every tick label/.append style={font=\large}}
+
+  \begin{groupplot}[group style={
+                      group name=Combinatorial,
+                      group size= 3 by 2,
+                      xlabels at=edge bottom,
+                      ylabels at=edge left,
+                      vertical sep=1.6cm,
+                    },
+                    height=4cm,width=9.0cm,
+                    ylabel={\Large Utilization [\%]},
+                    legend style = {at={(0.75,-0.35)}},
+                    legend columns             = 5,
+                    xlabel={\Large Number of Generations},
+                    xmode=normal,
+                    ybar,
+                    ymin =0,
+                    ymax =100,
+                    enlarge x limits=0.3,
+                    xtick={0,1,2},
+                    xticklabels={\Large $\Reference$, \Large $\MergingAlways$, \Large $\MergingExplore$}
+                    ]
+                     
+    \nextgroupplot[title={\Large Sobel}]
+      \addplot[LocalMemBar] table[x index=0,y index=11,col sep=tab]{csv/cores-utilization/ModuloScheduling-BindingsDSE-Sobel-Sequential-ALL.csv};
+      \addplot[TileMemBar] table[x index=0,y index=8,col sep=tab]{csv/cores-utilization/ModuloScheduling-BindingsDSE-Sobel-Sequential-ALL.csv};
+      \addplot[GlobalMemBar] table[x index=0,y index=10,col sep=tab]{csv/cores-utilization/ModuloScheduling-BindingsDSE-Sobel-Sequential-ALL.csv};
+      \addplot[CrossbarBar] table[x index=0,y expr={(\thisrowno{4}+\thisrowno{5}+\thisrowno{6})/3 }  ,col sep=tab]{csv/cores-utilization/ModuloScheduling-BindingsDSE-Sobel-Sequential-ALL.csv};
+      \addplot[NOCBar] table[x index=0,y index=9,col sep=tab]{csv/cores-utilization/ModuloScheduling-BindingsDSE-Sobel-Sequential-ALL.csv};
+                 
+    \nextgroupplot[title={\Large Sobel split 4}]
+      \addplot[LocalMemBar] table[x index=0,y index=11,col sep=tab]{csv/cores-utilization/ModuloScheduling-BindingsDSE-Sobel-Parallel-ALL.csv};
+      \addplot[TileMemBar] table[x index=0,y index=8,col sep=tab]{csv/cores-utilization/ModuloScheduling-BindingsDSE-Sobel-Parallel-ALL.csv};
+      \addplot[GlobalMemBar] table[x index=0,y index=10,col sep=tab]{csv/cores-utilization/ModuloScheduling-BindingsDSE-Sobel-Parallel-ALL.csv};
+      \addplot[CrossbarBar] table[x index=0,y expr={(\thisrowno{4}+\thisrowno{5}+\thisrowno{6})/3 }  ,col sep=tab]{csv/cores-utilization/ModuloScheduling-BindingsDSE-Sobel-Parallel-ALL.csv};
+      \addplot[NOCBar] table[x index=0,y index=9,col sep=tab]{csv/cores-utilization/ModuloScheduling-BindingsDSE-Sobel-Parallel-ALL.csv};
+
+    \nextgroupplot[title={\Large Multicamera}]
+      \addlegendimage{LocalMemBar}
+      \addlegendentry{\Large core local memories ($\memory_\core$)}
+      \addlegendimage{TileMemBar}
+      \addlegendentry{\Large tile local memories ($\memory_\tile$)}
+      \addlegendimage{GlobalMemBar}
+      \addlegendentry{\Large global memory ($\GlobalMemory$)}
+      \addlegendimage{CrossbarBar}
+      \addlegendentry{\Large crossbars ($\crossbar{}$)}
+      \addlegendimage{NOCBar}
+      \addlegendentry{\Large NoC ($\NoC$)}
+
+      \addplot[LocalMemBar] table[x index=0,y index=11,col sep=tab]{csv/cores-utilization/ModuloScheduling-BindingsDSE-Multicamera-ALL.csv};
+      \addplot[TileMemBar] table[x index=0,y index=8,col sep=tab]{csv/cores-utilization/ModuloScheduling-BindingsDSE-Multicamera-ALL.csv};
+      \addplot[GlobalMemBar] table[x index=0,y index=10,col sep=tab]{csv/cores-utilization/ModuloScheduling-BindingsDSE-Multicamera-ALL.csv};
+      \addplot[CrossbarBar] table[x index=0,y expr={(\thisrowno{4}+\thisrowno{5}+\thisrowno{6}+\thisrowno{7})/4 }  ,col sep=tab]{csv/cores-utilization/ModuloScheduling-BindingsDSE-Multicamera-ALL.csv};
+      \addplot[NOCBar] table[x index=0,y index=9,col sep=tab]{csv/cores-utilization/ModuloScheduling-BindingsDSE-Multicamera-ALL.csv};
+
+\end{groupplot}
+}
+

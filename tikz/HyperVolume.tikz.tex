@@ -1,0 +1,438 @@
+\newcommand{\HypervolumeResults}{
+\pgfplotsset{every tick label/.append style={font=\Large}}
+\pgfplotsset{samples=200}
+\begin{groupplot}[  
+                    group style={
+                    group name                 = MemoryFooprintDominance,
+%                    group size                 = 2 by 2,
+                    group size                 = 3 by 1,
+                    xlabels at                 = edge bottom,
+                    ylabels at                 = edge left,
+%		    vertical sep=1.7cm,
+%                   vertical sep=2cm,
+%                   horizontal sep=3cm,
+                    },
+                    height                     = 7cm,
+                    xlabel                     = {\Large Generation},
+                    ylabel                     = {\Large hypervolume},
+                    legend style               = {at={(0.875,-0.25)}, minimum height=0.85cm},
+%                    legend style               = {at={(1.35,-0.25)}, minimum height=0.85cm},
+                    legend columns             = 6,
+%                   legend columns             = 3,
+                    ymajorgrids                = true,
+                    xmajorgrids                = true,
+                    grid style                 = dashed,
+		    xtick={0,500,1500,2500},
+		    ymin=0,
+                  ]
+
+  \nextgroupplot[title=\Large Sobel,xmax=3000]
+%     \addplot[ILPDRAMSP,each nth point={25}] table[x index=0,y expr={{1-\thisrowno{6}}} , col sep =tab]{hypervolume/sobel-sequential/results/ILP-sobel-sequential.stats};
+%     \addplot[ILPDRAMSPMergingAlways,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}} , col sep =tab] {hypervolume/sobel-sequential/results/ILP-sobel-sequential-always-MRB.stats};
+%     \addplot[ILPDRAMSPMergingExplore,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}} , col sep =tab]{hypervolume/sobel-sequential/results/ILP-sobel-sequential-explore-MRB.stats};
+%
+
+     \addplot[name path=SSHReference,ILPDRAMSP,each nth point={25}] table[x index=0,y expr={{1-\thisrowno{6}}} , col sep =tab]               {hypervolume/sobel-sequential-transformer/results/ILP-Transformer-sobel-sequential.stats};
+     \addplot[ILPDRAMSPMergingAlways,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}} , col sep =tab] {hypervolume/sobel-sequential-transformer/results/ILP-Transformer-sobel-sequential-always-MRB.stats};
+     \addplot[name path=SSHExplore,ILPDRAMSPMergingExplore,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}} , col sep =tab]{hypervolume/sobel-sequential-transformer/results/ILP-Transformer-sobel-sequential-explore-MRB.stats};
+
+% Heuristic Initial Token Random Priority
+%     \addplot[DRAMSP,each nth point={25}] table[x index=0,y expr={{1-\thisrowno{6}}}, col sep =tab]               {hypervolume/sobel-sequential-transformer/results/Heuristic-Transformer-sobel-sequential.stats};
+%     \addplot[DRAMSPMergingAlways,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab] {hypervolume/sobel-sequential-transformer/results/Heuristic-Transformer-sobel-sequential-always-MRB.stats};
+%     \addplot[DRAMSPMergingExplore,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]{hypervolume/sobel-sequential-transformer/results/Heuristic-Transformer-sobel-sequential-explore-MRB.stats};
+
+% Heuristic no-initial Tokens
+%     \addplot[DRAMSP,each nth point={25}] table[x index=0,y expr={{1-\thisrowno{6}}}, col sep =tab]{hypervolume/sobel-sequential-transformer/results/BindingsDSE-sobel-sequential.stats};
+%     \addplot[DRAMSPMergingAlways,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]{hypervolume/sobel-sequential-transformer/results/BindingsDSE-sobel-sequential-always-MRB.stats};
+%     \addplot[DRAMSPMergingExplore,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]{hypervolume/sobel-sequential-transformer/results/BindingsDSE-sobel-sequential-explore-MRB.stats};
+%
+
+
+% Heuristic Initial Token Topological Priority
+%     \addplot[HeuristicTopologicalInit,each nth point={25}] table[x index=0,y expr={{1-\thisrowno{6}}}, col sep =tab]        {hypervolume/sobel-sequential-transformer/results/Sorting-Topological-sobel-sequential.stats};
+%     \addplot[HeuristicTopologicalInitAlways,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab] {hypervolume/sobel-sequential-transformer/results/Sorting-Topological-sobel-sequential-always-MRB.stats};
+%     \addplot[HeuristicTopologicalInitExplore,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]{hypervolume/sobel-sequential-transformer/results/Sorting-Topological-sobel-sequential-explore-MRB.stats};
+
+    \addplot[opacity=0.5,green!50] fill between[of=SSHReference and SSHExplore, soft clip={domain=2300:2500}];
+
+% Heuristic Initial Token Inverse Topological Priority
+     \addplot[DRAMSP,each nth point={25}] table[x index=0,y expr={{1-\thisrowno{6}}}, col sep =tab]        {hypervolume/sobel-sequential-transformer/results/Sorting-Inverse-sobel-sequential.stats};
+     \addplot[DRAMSPMergingAlways,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab] {hypervolume/sobel-sequential-transformer/results/Sorting-Inverse-sobel-sequential-always-MRB.stats};
+     \addplot[DRAMSPMergingExplore,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]{hypervolume/sobel-sequential-transformer/results/Sorting-Inverse-sobel-sequential-explore-MRB.stats};
+
+  \nextgroupplot[title=\Large Sobel$_4$,xmax=3000]
+%     \addplot[name path=SPHReference,ILPDRAMSP,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]              {hypervolume/sobel-parallel/results/ILP-sobel-parallel4.stats};
+%     \addplot[ILPDRAMSPMergingAlways,each nth point={25}] table[x index=0,y expr={{1-\thisrowno{6}}} , col sep =tab] {hypervolume/sobel-parallel/results/ILP-sobel-parallel4-always-MRB.stats};
+%     \addplot[name path=SPHExplore,ILPDRAMSPMergingExplore,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]{hypervolume/sobel-parallel/results/ILP-sobel-parallel4-explore-MRB.stats};
+%
+%     \addplot[DRAMSP,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}} , col sep =tab]              {hypervolume/sobel-parallel/results/BindingsDSE-sobel-parallel4.stats};
+%     \addplot[DRAMSPMergingAlways,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab] {hypervolume/sobel-parallel/results/BindingsDSE-sobel-parallel4-always-MRB.stats};
+%     \addplot[DRAMSPMergingExplore,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]{hypervolume/sobel-parallel/results/BindingsDSE-sobel-parallel4-explore-MRB.stats};
+
+     \addplot[name path=SPHReference,ILPDRAMSP,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]            {hypervolume/sobel-parallel-transformer/results/ILP-Transformer-sobel-parallel4.stats};
+     \addplot[ILPDRAMSPMergingAlways,each nth point={25}] table[x index=0,y expr={{1-\thisrowno{6}}} , col sep =tab]                      {hypervolume/sobel-parallel-transformer/results/ILP-Transformer-sobel-parallel4-always-MRB.stats};
+     \addplot[name path=SPHExplore,ILPDRAMSPMergingExplore,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]{hypervolume/sobel-parallel-transformer/results/ILP-Transformer-sobel-parallel4-explore-MRB.stats};
+
+% Heuristic Initial Token Random Priority
+%     \addplot[DRAMSP,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}} , col sep =tab]             {hypervolume/sobel-parallel-transformer/results/Heuristic-Transformer-sobel-parallel4.stats};
+%     \addplot[DRAMSPMergingAlways,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab] {hypervolume/sobel-parallel-transformer/results/Heuristic-Transformer-sobel-parallel4-always-MRB.stats};
+%     \addplot[DRAMSPMergingExplore,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]{hypervolume/sobel-parallel-transformer/results/Heuristic-Transformer-sobel-parallel4-explore-MRB.stats};
+
+% Heuristic no-initial Tokens
+%     \addplot[DRAMSP,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}} , col sep =tab]             {hypervolume/sobel-parallel-transformer/results/BindingsDSE-sobel-parallel4.stats};
+%     \addplot[DRAMSPMergingAlways,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab] {hypervolume/sobel-parallel-transformer/results/BindingsDSE-sobel-parallel4-always-MRB.stats};
+%     \addplot[DRAMSPMergingExplore,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]{hypervolume/sobel-parallel-transformer/results/BindingsDSE-sobel-parallel4-explore-MRB.stats};
+
+% Heuristic Initial Token Topological Priority
+%     \addplot[HeuristicTopologicalInit,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}} , col sep =tab]      {hypervolume/sobel-parallel-transformer/results/Sorting-Topological-sobel-parallel4.stats};
+%     \addplot[HeuristicTopologicalInitAlways,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab] {hypervolume/sobel-parallel-transformer/results/Sorting-Topological-sobel-parallel4-always-MRB.stats};
+%     \addplot[HeuristicTopologicalInitExplore,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]{hypervolume/sobel-parallel-transformer/results/Sorting-Topological-sobel-parallel4-explore-MRB.stats};
+%
+% Heuristic Initial Token Inverse Topological Priority
+     \addplot[DRAMSP,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}} , col sep =tab]      {hypervolume/sobel-parallel-transformer/results/Sorting-Inverse-sobel-parallel4.stats};
+     \addplot[DRAMSPMergingAlways,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab] {hypervolume/sobel-parallel-transformer/results/Sorting-Inverse-sobel-parallel4-always-MRB.stats};
+     \addplot[DRAMSPMergingExplore,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]{hypervolume/sobel-parallel-transformer/results/Sorting-Inverse-sobel-parallel4-explore-MRB.stats};
+
+    \addplot[opacity=0.5,green!50] fill between[of=SPHReference and SPHExplore, soft clip={domain=2300:2500}];
+
+
+  \nextgroupplot[title=\Large Multicamera,xmax=3000 ]
+%  \nextgroupplot[title=\Large Multicamera,xmax=3000,xshift=5cm ]
+    \addlegendimage{ILPDRAMSP}
+    \addlegendentry{\Large $\Reference^{ILP}$}
+    \addlegendimage{ILPDRAMSPMergingAlways}
+    \addlegendentry{\Large $\MergingAlways^{ILP}$}
+    \addlegendimage{ILPDRAMSPMergingExplore }
+    \addlegendentry{\Large $\MergingExplore^{ILP}$}
+    \addlegendimage{DRAMSP}
+    \addlegendentry{\Large $\Reference^{\fHeuristic}$}
+    \addlegendimage{DRAMSPMergingAlways}
+    \addlegendentry{\Large $\MergingAlways^{\fHeuristic}$}
+    \addlegendimage{DRAMSPMergingExplore }
+    \addlegendentry{\Large $\MergingExplore^{\fHeuristic}$}
+
+    \addplot[name path=PRILP,ILPDRAMSP,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}} , col sep =tab]          {hypervolume/multicamera-1instance-transformer/results/ILP-Transformer-multicamera.stats};
+    \addplot[ILPDRAMSPMergingAlways,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}} , col sep =tab]               {hypervolume/multicamera-1instance-transformer/results/ILP-Transformer-multicamera-always-MRB.stats};
+    \addplot[name path=PEIP,ILPDRAMSPMergingExplore,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]{hypervolume/multicamera-1instance-transformer/results/ILP-Transformer-multicamera-explore-MRB.stats};
+
+% Heuristic Initial Token Random Priority
+%    \addplot[name path=MHReference,DRAMSP,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]            {hypervolume/multicamera-1instance-transformer/results/Heuristic-Transformer-multicamera-1instance.stats};
+%    \addplot[DRAMSPMergingAlways,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]                     {hypervolume/multicamera-1instance-transformer/results/Heuristic-Transformer-multicamera-1instance-always-MRB.stats};
+%    \addplot[name path=MHExplore,DRAMSPMergingExplore,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]{hypervolume/multicamera-1instance-transformer/results/Heuristic-Transformer-multicamera-1instance-explore-MRB.stats};
+
+% Heuristic no-Initial Tokens
+%    \addplot[name path=MHReference,DRAMSP,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]            {hypervolume/multicamera-1instance-transformer/results/BindingsDSE-multicamera-1instance.stats};
+%    \addplot[DRAMSPMergingAlways,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]                     {hypervolume/multicamera-1instance-transformer/results/BindingsDSE-multicamera-1instance-always-MRB.stats};
+%    \addplot[name path=MHExplore,DRAMSPMergingExplore,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]{hypervolume/multicamera-1instance-transformer/results/BindingsDSE-multicamera-1instance-explore-MRB.stats};
+
+% Heuristic Initial Token Random Priority
+%    \addplot[HeuristicTopologicalInit,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]       {hypervolume/multicamera-1instance-transformer/results/Sorting-Topological-multicamera-1instance.stats};
+%    \addplot[HeuristicTopologicalInitAlways,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab] {hypervolume/multicamera-1instance-transformer/results/Sorting-Topological-multicamera-1instance-always-MRB.stats};
+%    \addplot[HeuristicTopologicalInitExplore,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]{hypervolume/multicamera-1instance-transformer/results/Sorting-Topological-multicamera-1instance-explore-MRB.stats};
+
+% Heuristic Initial Token Inverse Topological Priority
+    \addplot[DRAMSP, name path=MHReference,  each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]       {hypervolume/multicamera-1instance-transformer/results/Sorting-Inverse-multicamera-1instance.stats};
+    \addplot[DRAMSPMergingAlways,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab] {hypervolume/multicamera-1instance-transformer/results/Sorting-Inverse-multicamera-1instance-always-MRB.stats};
+    \addplot[DRAMSPMergingExplore,name path=MHExplore, each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]{hypervolume/multicamera-1instance-transformer/results/Sorting-Inverse-multicamera-1instance-explore-MRB.stats};
+
+    \addplot[opacity=0.5,green!50] fill between[of=MHExplore and MHReference, soft clip={domain=2300:2500}];
+
+\end{groupplot}
+
+\draw [line width=0.25mm,color=black,decorate,decoration={brace,amplitude=5pt,raise=4pt,mirror},yshift=0pt] (5.3,3.75) -- (5.3,5) node [black,midway,xshift=0.8cm,yshift=0cm] { \large $28\,\%$ };
+
+\draw [line width=0.25mm,color=black,decorate,decoration={brace,amplitude=5pt,raise=4pt,mirror},yshift=0pt] (12.9,2.75) -- (12.9,5) node [black,midway,xshift=0.8cm,yshift=0cm] { \large $66\,\%$ };
+\draw [line width=0.25mm,color=black,decorate,decoration={brace,amplitude=5pt,raise=4pt,mirror},yshift=0pt] (20.4,2.5) -- (20.4,5) node [black,midway,xshift=0.8cm,yshift=0cm] { \large $90\,\%$ };
+
+%\draw [line width=0.25mm,color=black,decorate,decoration={brace,amplitude=5pt,raise=4pt,mirror},yshift=0pt] (14.9,2.75) -- (14.9,5) node [black,midway,xshift=0.8cm,yshift=0cm] { \large $33\,\%$ };
+%\draw [line width=0.25mm,color=black,decorate,decoration={brace,amplitude=5pt,raise=4pt,mirror},yshift=0pt] (10.4,-5) -- (10.4,-2.5) node [black,midway,xshift=0.8cm,yshift=0cm] { \large $45\,\%$ };
+
+}
+
+\newcommand{\HypervolumeOtherApps}{
+\pgfplotsset{every tick label/.append style={font=\Large}}
+\pgfplotsset{samples=200}
+\begin{groupplot}[  
+                    group style={
+                    group name                 = MemoryFooprintDominance,
+                    group size                 = 4 by 2,
+                    xlabels at                 = edge bottom,
+                    ylabels at                 = edge left,
+		    vertical sep=1.7cm,
+                    },
+                    height                     = 7cm,
+                    %width                      = 6.5cm,
+                    xlabel                     = {\Large Generation},
+                    ylabel                     = {\Large hypervolume},
+                    legend style               = {at={(0.0,-0.25)}, minimum height=0.85cm},
+                    legend columns             = 6,
+                    ymajorgrids                = true,
+                    xmajorgrids                = true,
+                    grid style                 = dashed,
+		    xtick={0,500,1500,2500},
+		    ymin=0,
+                  ]
+
+  \nextgroupplot[title=\Large Foreground]
+     \addplot[ILPDRAMSP,each nth point={25}] table[x index=0,y expr={{1-\thisrowno{6}}} , col sep =tab]               {hypervolume/foreground-1instance/results/ILP-foreground-1instance.stats};
+     \addplot[ILPDRAMSPMergingAlways,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}} , col sep =tab] {hypervolume/foreground-1instance/results/ILP-foreground-1instance-always-MRB.stats};
+     \addplot[ILPDRAMSPMergingExplore,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}} , col sep =tab]{hypervolume/foreground-1instance/results/ILP-foreground-1instance-explore-MRB.stats};
+
+     \addplot[DRAMSP,each nth point={25}] table[x index=0,y expr={{1-\thisrowno{6}}}, col sep =tab]               {hypervolume/foreground-1instance/results/BindingsDSE-foreground-1instance.stats};
+     \addplot[DRAMSPMergingAlways,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab] {hypervolume/foreground-1instance/results/BindingsDSE-foreground-1instance-always-MRB.stats};
+     \addplot[DRAMSPMergingExplore,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]{hypervolume/foreground-1instance/results/BindingsDSE-foreground-1instance-explore-MRB.stats};
+
+  \nextgroupplot[title=\Large 4-Foreground]
+     \addplot[ILPDRAMSP,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]              {hypervolume/foreground-4instances/results/ILP-foreground-4instances.stats};
+     \addplot[ILPDRAMSPMergingAlways,each nth point={25}] table[x index=0,y expr={{1-\thisrowno{6}}} , col sep =tab] {hypervolume/foreground-4instances/results/ILP-foreground-4instances-always-MRB.stats};
+     \addplot[ILPDRAMSPMergingExplore,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]{hypervolume/foreground-4instances/results/ILP-foreground-4instances-explore-MRB.stats};
+
+     \addplot[DRAMSP,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}} , col sep =tab]             {hypervolume/foreground-4instances/results/BindingsDSE-foreground-4instances.stats};
+     \addplot[DRAMSPMergingAlways,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab] {hypervolume/foreground-4instances/results/BindingsDSE-foreground-4instances-always-MRB.stats};
+     \addplot[DRAMSPMergingExplore,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]{hypervolume/foreground-4instances/results/BindingsDSE-foreground-4instances-explore-MRB.stats};
+
+%  \nextgroupplot[title=\Large 2-Foreground]
+%     \addplot[ILPDRAMSP,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]              {hypervolume/foreground-2instances/results/ILP-foreground-2instances.stats};
+%     \addplot[ILPDRAMSPMergingAlways,each nth point={25}] table[x index=0,y expr={{1-\thisrowno{6}}} , col sep =tab] {hypervolume/foreground-2instances/results/ILP-foreground-2instances-always-MRB.stats};
+%     \addplot[ILPDRAMSPMergingExplore,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]{hypervolume/foreground-2instances/results/ILP-foreground-2instances-explore-MRB.stats};
+%
+%     \addplot[DRAMSP,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}} , col sep =tab]             {hypervolume/foreground-2instances/results/BindingsDSE-foreground-2instances.stats};
+%     \addplot[DRAMSPMergingAlways,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab] {hypervolume/foreground-2instances/results/BindingsDSE-foreground-2instances-always-MRB.stats};
+%     \addplot[DRAMSPMergingExplore,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]{hypervolume/foreground-2instances/results/BindingsDSE-foreground-2instances-explore-MRB.stats};
+
+
+  \nextgroupplot[title=\Large Optical flow]
+     \addplot[ILPDRAMSP,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]              {hypervolume/optical-flow-1instance/results/ILP-optical-flow-1instance.stats};
+     \addplot[ILPDRAMSPMergingAlways,each nth point={25}] table[x index=0,y expr={{1-\thisrowno{6}}} , col sep =tab] {hypervolume/optical-flow-1instance/results/ILP-optical-flow-1instance-always-MRB.stats};
+     \addplot[ILPDRAMSPMergingExplore,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]{hypervolume/optical-flow-1instance/results/ILP-optical-flow-1instance-explore-MRB.stats};
+
+     \addplot[DRAMSP,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}} , col sep =tab]             {hypervolume/optical-flow-1instance/results/BindingsDSE-optical-flow-1instance.stats};
+     \addplot[DRAMSPMergingAlways,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab] {hypervolume/optical-flow-1instance/results/BindingsDSE-optical-flow-1instance-always-MRB.stats};
+     \addplot[DRAMSPMergingExplore,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]{hypervolume/optical-flow-1instance/results/BindingsDSE-optical-flow-1instance-explore-MRB.stats};
+
+  \nextgroupplot[title=\Large 2-Optical flow]
+     \addplot[ILPDRAMSP,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]              {hypervolume/optical-flow-2instances/results/ILP-optical-flow-2instances.stats};
+     \addplot[ILPDRAMSPMergingAlways,each nth point={25}] table[x index=0,y expr={{1-\thisrowno{6}}} , col sep =tab] {hypervolume/optical-flow-2instances/results/ILP-optical-flow-2instances-always-MRB.stats};
+     \addplot[ILPDRAMSPMergingExplore,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]{hypervolume/optical-flow-2instances/results/ILP-optical-flow-2instances-explore-MRB.stats};
+
+     \addplot[DRAMSP,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}} , col sep =tab]             {hypervolume/optical-flow-2instances/results/BindingsDSE-optical-flow-2instances.stats};
+     \addplot[DRAMSPMergingAlways,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab] {hypervolume/optical-flow-2instances/results/BindingsDSE-optical-flow-2instances-always-MRB.stats};
+     \addplot[DRAMSPMergingExplore,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]{hypervolume/optical-flow-2instances/results/BindingsDSE-optical-flow-2instances-explore-MRB.stats};
+
+  \nextgroupplot[title=\Large 3-Optical flow]
+     \addplot[ILPDRAMSP,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]              {hypervolume/optical-flow-3instances/results/ILP-optical-flow-3instances.stats};
+     \addplot[ILPDRAMSPMergingAlways,each nth point={25}] table[x index=0,y expr={{1-\thisrowno{6}}} , col sep =tab] {hypervolume/optical-flow-3instances/results/ILP-optical-flow-3instances-always-MRB.stats};
+     \addplot[ILPDRAMSPMergingExplore,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]{hypervolume/optical-flow-3instances/results/ILP-optical-flow-3instances-explore-MRB.stats};
+
+     \addplot[DRAMSP,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}} , col sep =tab]             {hypervolume/optical-flow-3instances/results/BindingsDSE-optical-flow-3instances.stats};
+     \addplot[DRAMSPMergingAlways,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab] {hypervolume/optical-flow-3instances/results/BindingsDSE-optical-flow-3instances-always-MRB.stats};
+     \addplot[DRAMSPMergingExplore,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]{hypervolume/optical-flow-3instances/results/BindingsDSE-optical-flow-3instances-explore-MRB.stats};
+
+  \nextgroupplot[title=\Large Video]
+     \addplot[ILPDRAMSP,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]              {hypervolume/video-1instance/results/ILP-video-object-counting-1instance.stats};
+     \addplot[ILPDRAMSPMergingAlways,each nth point={25}] table[x index=0,y expr={{1-\thisrowno{6}}} , col sep =tab] {hypervolume/video-1instance/results/ILP-video-object-counting-1instance-always-MRB.stats};
+     \addplot[ILPDRAMSPMergingExplore,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]{hypervolume/video-1instance/results/ILP-video-object-counting-1instance-explore-MRB.stats};
+
+     \addplot[DRAMSP,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}} , col sep =tab]             {hypervolume/video-1instance/results/BindingsDSE-video-object-counting-1instance.stats};
+     \addplot[DRAMSPMergingAlways,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab] {hypervolume/video-1instance/results/BindingsDSE-video-object-counting-1instance-always-MRB.stats};
+     \addplot[DRAMSPMergingExplore,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]{hypervolume/video-1instance/results/BindingsDSE-video-object-counting-1instance-explore-MRB.stats};
+
+  \nextgroupplot[title=\Large 2-Video]
+     \addplot[ILPDRAMSP,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]              {hypervolume/video-2instances-transformer/results/ILP-Transformer-video-object-counting-2instances.stats};
+     \addplot[ILPDRAMSPMergingAlways,each nth point={25}] table[x index=0,y expr={{1-\thisrowno{6}}} , col sep =tab] {hypervolume/video-2instances-transformer/results/ILP-Transformer-video-object-counting-2instances-always-MRB.stats};
+     \addplot[ILPDRAMSPMergingExplore,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]{hypervolume/video-2instances-transformer/results/ILP-Transformer-video-object-counting-2instances-explore-MRB.stats};
+
+     \addplot[DRAMSP,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}} , col sep =tab]             {hypervolume/video-2instances-transformer/results/Heuristic-Transformer-video-object-counting-2instances.stats};
+     \addplot[DRAMSPMergingAlways,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab] {hypervolume/video-2instances-transformer/results/Heuristic-Transformer-video-object-counting-2instances-always-MRB.stats};
+     \addplot[DRAMSPMergingExplore,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]{hypervolume/video-2instances-transformer/results/Heuristic-Transformer-video-object-counting-2instances-explore-MRB.stats};
+
+  \nextgroupplot[title=\Large 3-Video]
+    \addlegendimage{ILPDRAMSP}
+    \addlegendentry{\Large $\Reference^{ILP}$}
+    \addlegendimage{ILPDRAMSPMergingAlways}
+    \addlegendentry{\Large $\MergingAlways^{ILP}$}
+    \addlegendimage{ILPDRAMSPMergingExplore }
+    \addlegendentry{\Large $\MergingExplore^{ILP}$}
+    \addlegendimage{DRAMSP}
+    \addlegendentry{\Large $\Reference^{\fHeuristic}$}
+    \addlegendimage{DRAMSPMergingAlways}
+    \addlegendentry{\Large $\MergingAlways^{\fHeuristic}$}
+    \addlegendimage{DRAMSPMergingExplore }
+    \addlegendentry{\Large $\MergingExplore^{\fHeuristic}$}
+     \addplot[ILPDRAMSP,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]              {hypervolume/video-3instances/results/ILP-video-object-counting-3instances.stats};
+     \addplot[ILPDRAMSPMergingAlways,each nth point={25}] table[x index=0,y expr={{1-\thisrowno{6}}} , col sep =tab] {hypervolume/video-3instances/results/ILP-video-object-counting-3instances-always-MRB.stats};
+     \addplot[ILPDRAMSPMergingExplore,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]{hypervolume/video-3instances/results/ILP-video-object-counting-3instances-explore-MRB.stats};
+
+     \addplot[DRAMSP,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}} , col sep =tab]             {hypervolume/video-3instances/results/BindingsDSE-video-object-counting-3instances.stats};
+     \addplot[DRAMSPMergingAlways,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab] {hypervolume/video-3instances/results/BindingsDSE-video-object-counting-3instances-always-MRB.stats};
+     \addplot[DRAMSPMergingExplore,each nth point={25}] table[x index=0, y expr={{1-\thisrowno{6}}}, col sep =tab]{hypervolume/video-3instances/results/BindingsDSE-video-object-counting-3instances-explore-MRB.stats};
+
+\end{groupplot}
+
+}
+
+
+%\newcommand{\HypervolumeResultsB}{
+%\pgfplotsset{every tick label/.append style={font=\Large}}
+%\pgfplotsset{samples=200}
+%\begin{groupplot}[  
+%                    group style={
+%                    group name                 = MemoryFooprintDominance,
+%                    group size                 = 4 by 2,
+%                    xlabels at                 = edge bottom,
+%                    ylabels at                 = edge left,
+%		    vertical sep=1.7cm,
+%                    },
+%                    %height                     = 5cm,
+%                    %width                      = 6.5cm,
+%                    xlabel                     = {\Large Generation $i$},
+%                    ylabel                     = {\Large hypervolume},
+%                    legend style               = {at={(-0.6,-0.25)}},
+%                    legend columns             = 3,
+%                    ymajorgrids                = true,
+%                    xmajorgrids                = true,
+%                    grid style                 = dashed,
+%		    xtick={0,1000,2000,3000},
+%                  ]
+%
+%    \nextgroupplot[title=\Large Optical Flow 3]
+%       \addplot[DRAMSP] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab]             {edominance/architecture-4tiles/optical-flow/results/optical-flow.stats};
+%       \addplot[DRAMSPMergingAlways] table[x index=0, y expr = 1-\thisrowno{6} , col sep =tab] {edominance/architecture-4tiles/optical-flow/results/optical-flow-always-MRB.stats};
+%       \addplot[DRAMSPMergingExplore] table[x index=0, y expr = 1-\thisrowno{6} , col sep =tab]{edominance/architecture-4tiles/optical-flow/results/optical-flow-explore-MRB.stats};
+%
+%    \nextgroupplot[title=\Large Optical Flow 2]
+%       \addplot[DRAMSP] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab]             {edominance/architecture-4tiles/optical-flow-2instances/results/optical-flow-2instances.stats};
+%       \addplot[DRAMSPMergingAlways] table[x index=0, y expr = 1-\thisrowno{6} , col sep =tab] {edominance/architecture-4tiles/optical-flow-2instances/results/optical-flow-2instances-always-MRB.stats};
+%       \addplot[DRAMSPMergingExplore] table[x index=0, y expr = 1-\thisrowno{6} , col sep =tab]{edominance/architecture-4tiles/optical-flow-2instances/results/optical-flow-2instances-explore-MRB.stats};
+%
+%
+%    \nextgroupplot[title=\Large Video Object Counting 5]
+%%       \addplot[DRAMSP] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab]             {edominance/architecture-4tiles/video/results/video-object-counting.stats};
+%%       \addplot[DRAMSPMergingAlways] table[x index=0, y expr = 1-\thisrowno{6} , col sep =tab] {edominance/architecture-4tiles/video/results/video-object-counting-always-MRB.stats};
+%%       \addplot[DRAMSPMergingExplore] table[x index=0, y expr = 1-\thisrowno{6} , col sep =tab]{edominance/architecture-4tiles/video/results/video-object-counting-explore-MRB.stats};
+%
+%
+%    \nextgroupplot[title=\Large Sobel Sequential 5]
+%       \addplot[DRAMSP] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab]              {edominance/architecture-4tiles/sobel-sequential-5instances/results/sobel-sequential-instances5.stats};
+%       \addplot[DRAMSPMergingAlways] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab] {edominance/architecture-4tiles/sobel-sequential-5instances/results/sobel-sequential-instances5-always-MRB.stats};
+%       \addplot[DRAMSPMergingExplore] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab]{edominance/architecture-4tiles/sobel-sequential-5instances/results/sobel-sequential-instances5-explore-MRB.stats};
+%
+%    \nextgroupplot[title=\Large Sobel Sequential 10]
+%       \addplot[DRAMSP] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab]              {edominance/architecture-4tiles/sobel-sequential-10instances/results/sobel-sequential-instances10.stats};
+%       \addplot[DRAMSPMergingAlways] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab] {edominance/architecture-4tiles/sobel-sequential-10instances/results/sobel-sequential-instances10-always-MRB.stats};
+%       \addplot[DRAMSPMergingExplore] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab]{edominance/architecture-4tiles/sobel-sequential-10instances/results/sobel-sequential-instances10-explore-MRB.stats};
+%
+%   \nextgroupplot[title=\Large Sobel Sequential 20]
+%       \addplot[DRAMSP] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab]              {edominance/architecture-4tiles/sobel-sequential-20instances/results/sobel-sequential-instances20.stats};
+%       \addplot[DRAMSPMergingAlways] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab] {edominance/architecture-4tiles/sobel-sequential-20instances/results/sobel-sequential-instances20-always-MRB.stats};
+%       \addplot[DRAMSPMergingExplore] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab]{edominance/architecture-4tiles/sobel-sequential-20instances/results/sobel-sequential-instances20-explore-MRB.stats};
+%
+%   \nextgroupplot[title=\Large Sobel Parallel 5]
+%       \addplot[DRAMSP] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab]              {edominance/architecture-4tiles/sobel-parallel-5instances/results/sobel-parallel4-instances5.stats};
+%       \addplot[DRAMSPMergingAlways] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab] {edominance/architecture-4tiles/sobel-parallel-5instances/results/sobel-parallel4-instances5-always-MRB.stats};
+%       \addplot[DRAMSPMergingExplore] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab]{edominance/architecture-4tiles/sobel-parallel-5instances/results/sobel-parallel4-instances5-explore-MRB.stats};
+%
+%    \nextgroupplot[title=\Large Sobel Parallel 10]
+%       \addplot[DRAMSP] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab]              {edominance/architecture-4tiles/sobel-parallel-10instances/results/sobel-parallel4-instances10.stats};
+%       \addplot[DRAMSPMergingAlways] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab] {edominance/architecture-4tiles/sobel-parallel-10instances/results/sobel-parallel4-instances10-always-MRB.stats};
+%       \addplot[DRAMSPMergingExplore] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab]{edominance/architecture-4tiles/sobel-parallel-10instances/results/sobel-parallel4-instances10-explore-MRB.stats};
+%
+%\end{groupplot}
+%
+%}
+%
+%
+%\newcommand{\HypervolumeComparisonResults}{
+%\pgfplotsset{every tick label/.append style={font=\Large}}
+%\pgfplotsset{samples=200}
+%\begin{groupplot}[  
+%                    group style={
+%                    group name                 = MemoryFooprintDominance,
+%                    group size                 = 4 by 2,
+%                    xlabels at                 = edge bottom,
+%                    ylabels at                 = edge left,
+%		    vertical sep=1.7cm,
+%                    },
+%                    %height                     = 5cm,
+%                    %width                      = 6.5cm,
+%                    xlabel                     = {\Large Generation $i$},
+%                    ylabel                     = {\Large hypervolume},
+%                    legend style               = {at={(-0.6,-0.25)}},
+%                    legend columns             = 3,
+%                    ymajorgrids                = true,
+%                    xmajorgrids                = true,
+%                    grid style                 = dashed,
+%		    xtick={0,1000,2000,3000},
+%                  ]
+%
+%  \nextgroupplot[title=\Large Sobel]
+%     \addplot[DRAMSP] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab]              {edominance/comparison-approaches/sobel-sequential/results/sobel-sequential.stats};
+%     \addplot[DRAMSPMergingAlways] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab] {edominance/comparison-approaches/sobel-sequential/results/sobel-sequential-always-MRB.stats};
+%     \addplot[DRAMSPMergingExplore] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab]{edominance/comparison-approaches/sobel-sequential/results/sobel-sequential-explore-MRB.stats};
+%
+%     \addplot[DRAMSP,dashed] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab]              {edominance/comparison-approaches/sobel-sequential/results/FCFS-sobel-sequential.stats};
+%     \addplot[DRAMSPMergingAlways,dashed] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab] {edominance/comparison-approaches/sobel-sequential/results/FCFS-sobel-sequential-always-MRB.stats};
+%     \addplot[DRAMSPMergingExplore,dashed] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab]{edominance/comparison-approaches/sobel-sequential/results/FCFS-sobel-sequential-explore-MRB.stats};
+%
+%  \nextgroupplot[title=\Large Sobel Parallel]
+%%     \addplot[DRAMSP] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab]              {edominance/architecture-4tiles/sobel-parallel/results/sobel-parallel4.stats};
+%%     \addplot[DRAMSPMergingAlways] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab] {edominance/architecture-4tiles/sobel-parallel/results/sobel-parallel4-always-MRB.stats};
+%%     \addplot[DRAMSPMergingExplore] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab]{edominance/architecture-4tiles/sobel-parallel/results/sobel-parallel4-explore-MRB.stats};
+%
+%  \nextgroupplot[title=\Large Multicamera ]
+%%     \addplot[DRAMSP] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab]              {edominance/architecture-4tiles/multicamera-1instance/results/multicamera-1instance.stats};
+%%     \addplot[DRAMSPMergingAlways] table[x index=0, y expr = 1-\thisrowno{6} , col sep =tab]  {edominance/architecture-4tiles/multicamera-1instance/results/multicamera-1instance-always-MRB.stats};
+%%     \addplot[DRAMSPMergingExplore] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab]{edominance/architecture-4tiles/multicamera-1instance/results/multicamera-1instance-explore-MRB.stats};
+%
+%  \nextgroupplot[title=\Large Multicamera 2]
+%%     \addplot[DRAMSP] table[x index=0, y expr = 1-\thisrowno{6} , col sep =tab]               {edominance/architecture-4tiles/multicamera/results/multicamera.stats};
+%%     \addplot[DRAMSPMergingAlways] table[x index=0, y expr = 1-\thisrowno{6} , col sep =tab]  {edominance/architecture-4tiles/multicamera/results/multicamera-always-MRB.stats};
+%%     \addplot[DRAMSPMergingExplore] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab]{edominance/architecture-4tiles/multicamera/results/multicamera-explore-MRB.stats};
+%
+%
+%  \nextgroupplot[title=\Large Multicamera 3]
+%%     \addplot[DRAMSP] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab]              {edominance/architecture-4tiles/multicamera-3instances/results/multicamera-3instances.stats};
+%%     \addplot[DRAMSPMergingAlways] table[x index=0, y expr = 1-\thisrowno{6} , col sep =tab]  {edominance/architecture-4tiles/multicamera-3instances/results/multicamera-3instances-always-MRB.stats};
+%%     \addplot[DRAMSPMergingExplore] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab]{edominance/architecture-4tiles/multicamera-3instances/results/multicamera-3instances-explore-MRB.stats};
+%
+%
+%
+%  \nextgroupplot[title=\Large Foreground 4]
+%     \addplot[DRAMSP] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab]              {edominance/comparison-approaches/foreground-4instances/results/foreground-4instances.stats};
+%     \addplot[DRAMSPMergingAlways] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab] {edominance/comparison-approaches/foreground-4instances/results/foreground-4instances-always-MRB.stats};
+%     \addplot[DRAMSPMergingExplore] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab]{edominance/comparison-approaches/foreground-4instances/results/foreground-4instances-explore-MRB.stats};
+%
+%     \addplot[DRAMSP,dashed] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab]              {edominance/comparison-approaches/foreground-4instances/results/FCFS-foreground-4instances.stats};
+%     \addplot[DRAMSPMergingAlways,dashed] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab] {edominance/comparison-approaches/foreground-4instances/results/FCFS-foreground-4instances-always-MRB.stats};
+%     \addplot[DRAMSPMergingExplore,dashed] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab]{edominance/comparison-approaches/foreground-4instances/results/FCFS-foreground-4instances-explore-MRB.stats};
+%
+%
+%  \nextgroupplot[title=\Large Foreground 7]
+%%     \addplot[DRAMSP] table[x index=0, y expr = 1-\thisrowno{6}, col sep =tab]                {edominance/architecture-4tiles/foreground/results/foreground.stats};
+%%     \addplot[DRAMSPMergingAlways] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab] {edominance/architecture-4tiles/foreground/results/foreground-always-MRB.stats};
+%%     \addplot[DRAMSPMergingExplore] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab]{edominance/architecture-4tiles/foreground/results/foreground-explore-MRB.stats};
+%
+%
+%  \nextgroupplot[title=\Large Video Object Counting 3]
+%    \addlegendimage{DRAMSP}
+%    \addlegendentry{\Large $\Reference$}
+%    \addlegendimage{DRAMSPMergingAlways}
+%    \addlegendentry{\Large $\MergingAlways$}
+%    \addlegendimage{DRAMSPMergingExplore }
+%    \addlegendentry{\Large $\MergingExplore$}
+%
+%    \addlegendimage{DRAMSP}
+%    \addlegendentry{\Large $FCFS$}
+%    \addlegendimage{DRAMSPMergingAlways}
+%    \addlegendentry{\Large $FCFS_{Always}$}
+%    \addlegendimage{DRAMSPMergingExplore }
+%    \addlegendentry{\Large $FCFS_{Explore$}}
+%
+%%     \addplot[DRAMSP] table[x index=0, y expr = 1-\thisrowno{6}  , col sep =tab]             {edominance/architecture-4tiles/video-3instances/results/video-object-counting-3instances.stats};
+%%     \addplot[DRAMSPMergingAlways] table[x index=0, y expr = 1-\thisrowno{6} , col sep =tab] {edominance/architecture-4tiles/video-3instances/results/video-object-counting-3instances-always-MRB.stats};
+%%     \addplot[DRAMSPMergingExplore] table[x index=0, y expr = 1-\thisrowno{6} , col sep =tab]{edominance/architecture-4tiles/video-3instances/results/video-object-counting-3instances-explore-MRB.stats};
+%
+%\end{groupplot}
+%
+%}
+%

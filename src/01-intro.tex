@@ -1,0 +1,101 @@
+\section{Introduction}\label{sec:intro}
+
+Modern many-core systems provide ample computational power due to a large number of available cores.
+To exploit the available number of cores, applications should exhibit sufficient concurrency to fully utilize all cores.
+Imperative programming languages are often considered poorly suited for developing concurrent applications~\cite{2006_l-problem-with-threads}.
+Hence, applications should be specified using a \ac{MoC} that explicitly expresses concurrency, e.g., using a dataflow \ac{MoC}~\cite{d_1974-DennisDF}, where an application is represented by a \ac{DFG}.
+\ac{DFG} vertices represent \emph{actors}, and edges represent \emph{\revised{\ac{FIFO}} channels} transmitting \emph{tokens}.
+Actors thereby specify an application's computations.
+\begin{figure*}[ht!]
+  \vspace{-4mm}
+  \centering
+  \resizebox{\textwidth}{!}{\input{figs/specGraph-fig.tex}}
+  \caption{\label{fig:specification}On the left, an application graph $\pgraph$ consisting of a set of actors $\actor_i \in \SetActors$ communicating over a set of \ac{FIFO} channels $\channel_j \in \SetChannels$ is shown.
+    Channel capacities in terms of tokens $\Capacity(\channel_j)$ are illustrated by white boxes.
+    The token size in bytes $\Size(\channel_j)$ and the number of initial tokens $\Delay(\channel_j)$, e.g., one initial token for channel $\channel_1$ (black dot), is also illustrated.
+    On the right, a heterogeneous four-tile many-core architecture is modeled by an architecture graph $\rgraph$.
+    Processor cores are denoted $\core_i$, and tiles are denoted $\tile_j$.
+    Each core $\core_i \in \SetCores$ can, in principle, access any core-local memory $\memory_{\core_j} \in \SetMemoriesLocal$, any tile-local memory $\memory_{\tile_j} \in \SetTileLocalMemories$, as well as the global memory $\GlobalMemory$.
+    Dashed arcs represent mapping options from actors to cores and channels to memories.
+    To exemplify, mapping edges are illustrated for the actors $\actor_3$ and $\actor_5$ as well as the channel $\channel_4$.
+    However, to reduce visual clutter, only the resources of tile $\tile_1$ and the global memory are shown as targets for these mappings.
+    In the proposed approach, actors can be mapped in principle (light red arcs) to all cores of a type that supports the execution of the actor, e.g., cores of type $\coretype_1$ for actor $\actor_3$ and cores of type $\coretype_2$ or $\coretype_3$ for actor $\actor_4$.
+    In contrast, channels can generally be mapped (light green arcs) to any memory.\vspace{-3mm}}
+\end{figure*}
+The dynamics of a dataflow graph is given by the notion of firings.
+An actor is called enabled for firing (execution) if enough tokens have accumulated at its input channels.
+Per firing, it consumes tokens on its input channels and produces tokens at its outputs according to a set of \emph{firing rules}.
+In so-called \emph{marked graphs}~\cite{chep_1971-marked-graphs}, the firing rules are that at least one token must exist at each input of an actor to be enabled for firing.
+Per firing, it consumes exactly one token on each of its inputs and produces exactly one token at each of its outputs.
+\par
+One application domain well suited to use dataflow modeling is image processing.
+Generally, an image processing application consists of a graph of image processing filters, where each filter operates on its input and produces transformed image data at its outputs.
+Each filter of an image processing application can be naturally modeled by an actor. %consuming and producing data.
+\par
+In order to map a dataflow graph such as exemplified in \cref{fig:specification} (left) with explicit modeling of actors and channels onto a many-core target such as shown in \cref{fig:specification} (right), the actors must be properly mapped to individual cores, and the channels must be mapped to proper memories of the target architecture~\cite{Falk2019,Blickle1998}.
+Moreover, a schedule needs to be determined for the actor executions as well as the transport of data from and to the allocated channel memories so as to achieve a short period on the one hand while reducing the required memory footprint and core count on the other hand.
+\par
+One problem of dataflow \acp{MoC}, however, is that it does not allow multiple actors to read data from the same channel.
+Instead, multiple individual channels must be created for the multiple readers, thus creating copying and data overheads by introducing so-called \emph{multi-cast actors}.
+The only purpose of these multi-cast actors is to read the data from the producer and copy it to all consumer actors~\cite{Letras:2017,Keinert:2009,memFIFO}.
+An example of such a multi-cast actor is the actor $\actor_2$ highlighted in \cref{fig:specification} (left).
+Apart from high memory footprint requirements, these  actors also typically cause a huge amount of communication.
+\par
+\begin{figure*}[ht!]
+  \vspace{-4mm}
+  \hspace{2mm}
+  \begin{subfigure}[t]{0.9\columnwidth}
+    \centering
+%   \resizebox{0.75\columnwidth}{!}{
+    \scalebox{0.7}{\input{figs/appGraph-fig.tex}}
+    \caption{\label{fig:TokenBased}Channels $\channel_1$, $\channel_2$, and $\channel_3$ allocated in the global memory.}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{1.1\columnwidth}
+    \centering
+%   \resizebox{0.75\columnwidth}{!}{
+    \scalebox{0.7}{\input{figs/appGraphMRB-fig.tex}}
+    \caption{\label{fig:mergingChannel}\ac{MRB} $\channel_{\{1,2,3\}}$ replacing multi-cast actor $\actor_2$ and its adjacent channels.}
+  \end{subfigure}
+  \caption{\label{fig:fifoRealizations}
+  \revised{\ac{MRB} concept}: For an application graph shown in~\subreff{fig:TokenBased}, each channel connected to the multi-cast actor $\actor_2$ is realized as a \ac{FIFO} allocated in this example in the global memory $\GlobalMemory$.
+  In \subreff{fig:mergingChannel}, memory minimization is performed by merging the channels $\channel_1, \channel_2$, and $\channel_3$ into a single \ac{MRB} $\channel_{\{1,2,3\}}$.
+  As can be seen, the memory requirements for all channels $\channel_1, \channel_2$, and $\channel_3$ are identical, and each evaluates to $\Capacity(\channel)\cdot\Size(\channel) = 2 \cdot 38\text{\,kB} = 76\text{\,kB}$, resulting in an overall memory footprint of $3\cdot 76\text{\,kB} = 228\text{\,kB}$.
+  In contrast, the \ac{MRB} $\channel_{\{1,2,3\}}$ replacing the channels $\channel_1, \channel_2$, and $\channel_3$ and the multi-cast actor $\actor_2$ only requires $\Capacity(\channel_{\{1,2,3\}})\cdot\Size(\channel_{\{1,2,3\}}) = 4 \cdot 38\text{\,kB} = 152\text{\,kB}$.
+  The channel capacity of four tokens for the \ac{MRB} $\channel_{\{1,2,3\}}$ can be derived from the observation that across the two \acp{FIFO} (i.e., $\channel_1$ and  $\channel_2$) connecting actor $\actor_1$ to $\actor_3$ at most four tokens can ever accumulate.
+  The same holds for the \acp{FIFO} connecting actor $\actor_1$ to $\actor_4$, i.e., $\Capacity(\channel_{\{1,2,3\}}) = \Capacity(\channel_1) + \Capacity(\channel_2) = \Capacity(\channel_1) + \Capacity(\channel_3) = 4$.\vspace{-1mm}}
+\end{figure*}
+To avoid copying and the resulting data duplication, \cite{lft_2023-MRBs} recently introduced \revised{\acp{MRB}, where an \ac{MRB}} is a channel that has one writer and multiple readers that behave as if each reader has a dedicated channel of the very same channel data but stores each token in the channel only once, e.g., see~\cref{fig:mergingChannel}.
+A minimal memory footprint for an application results when each multi-cast actor (and their connected \acp{FIFO}) is replaced by an \ac{MRB}.
+But, as was stated in~\cite{lft_2023-MRBs}, this buffer replacement scheme may impact the minimum achievable period.
+Unfortunately, the approach presented in~\cite{lft_2023-MRBs} is also limited in
+(i) being restricted to simple bus-based homogeneous architectures and
+in (ii) ignoring the capacities of the on-chip memories.
+Often, many-core systems, particularly \acp{MPSoC}, are comprised of different core types and have dozens of cores with constrained on-chip memories connected via a hierarchical interconnect, e.g., see~\cref{fig:specification} (right).
+\par
+Coping with these deficiencies, this paper contributes a multi-objective \ac{DSE} approach that
+(i) considers memory-size constraints for all on-chip memories,
+(ii) explicitly models memory hierarchies,
+(iii) supports heterogeneous many-core platforms, i.e., core-type dependent actor execution times, and
+(iv) optimizes the buffer placement and overall scheduling to minimize the period (i.e., maximizing application throughput) by proposing the novel modulo scheduling-based heuristic \revised{\ac{CAPS-HMS}}.
+\ac{CAPS-HMS} periodically schedules actors on cores and read/write operations on hierarchical interconnect topologies in a very efficient way.
+To analyze the trade-off between memory footprint and period, our exploration also \emph{selectively} replaces multi-cast actors by \acp{MRB} and explores actor and \ac{FIFO} channel mappings on top of finding a periodic actor and memory access schedule.
+In addition to the minimization of the memory footprint and the period, the (weighted) number of allocated cores is also minimized.
+\par
+The paper is structured as follows:
+\revised{In \cref{sec:relwork}, related work is discussed.}
+\Cref{sec:fundamentals} presents the fundamental models of applications and architectures and introduces the notion of multi-cast actors, all forming a so-called \emph{specification graph} that serves as input to our optimization problem.
+Then, \cref{sec:design-space} introduces the design space of selective \ac{MRB} replacements, actor and channel bindings, as well as actor and communication scheduling.
+In~\cref{sec:dse}, a population-based \ac{DSE} approach is presented in which a \ac{MOEA} is used to explore the design space to find Pareto-optimal implementations.
+\Cref{sec:decoding} presents two alternative approaches for the combined periodic actor and buffer access scheduling problem:
+(i) an exact formulation based on an integer linear program and (ii) our novel scheduling heuristic \ac{CAPS-HMS} for the combined periodic scheduling of actors and communications between actors.
+Even though the \ac{ILP} modulo scheduling approach performs well in terms of solution times for small to mid-sized applications, the \ac{CAPS-HMS} heuristic provides superior results when tackling large applications because the \ac{ILP} runs into timeouts, or solution times would become prohibitively long.
+To evaluate the overall approach, experimental results are reported for three applications in terms of the quality of the found non-dominated sets of solutions in~\cref{sec:results}.
+It is shown for both \ac{CAPS-HMS} and the \ac{ILP} alternative, improvements in the quality of found solutions can be achieved when selectively replacing the multi-cast actors with \acp{MRB} when exploring the mappings of a dataflow streaming application to heterogeneous many-core architectures.
+In particular, for small to mid-size applications, the reported improvements range from $28\,\%$ to $66\,\%$ in the hypervolume score.
+In contrast, for the largest benchmark application, the reported improvement is even $90\,\%$ of the same hypervolume score.
+Moreover, when comparing the Pareto front quality of the \ac{CAPS-HMS} heuristic against the front achieved using the exact \ac{ILP} approach, the observed degradation of \ac{CAPS-HMS} turns out to be minor for all presented test applications.
+It will be shown that for the small and mid-sized applications used in the experiments, \ac{CAPS-HMS} is slightly inferior by just $7\,\%$ in terms of hypervolume compared to the \ac{ILP}.
+Particularly for large applications and with increasing complexity of the target architecture, the \ac{ILP} solution times turn out to become prohibitively long. 
+In contrast, the fast \ac{CAPS-HMS} outperforms the \ac{ILP} by $67\,\%$ in hypervolume for our large test application.
+\revised{\cref{sec:conclusions} concludes the paper.}

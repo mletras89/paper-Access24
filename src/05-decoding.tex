@@ -1,0 +1,265 @@
+\section{Decoding}\label{sec:decoding}
+
+In the following, we present and later evaluate two decoding approaches: (i) an integer linear program and (ii) a novel periodic scheduling heuristic called \acs{CAPS-HMS} for heterogeneous multi-core platforms with hierarchical memory organizations and integrating the scheduling of actors and communications between actors.
+
+\subsection{\acs{ILP}-based Decoding}\label{sec:ILP}
+
+First, we explain our \ac{ILP}-based decoding approach, as shown in~\cref{alg:period-via-ilp}.
+This algorithm decodes the genotype $\Genotype$ into the corresponding phenotype $(\Period, \SetBindings, \Capacity)$, as shown in~\cref{fig:opt4jOptimizationLoop}.
+
+%\LinesNotNumbered
+\begin{algorithm}[htb]
+  \scriptsize
+  \caption{\acs{ILP}-based Decoding}\label{alg:period-via-ilp}
+  \let\oldnl\nl% Store \nl in \oldnl
+  \newcommand{\nonl}{\renewcommand{\nl}{\let\nl\oldnl}}%
+  \SetKwProg{Fn}{Function}{}{}
+  \SetKwFunction{FPeriodViaILP}{decodeViaILP}
+  \SetKwInOut{Input}{Input}
+  \SetKwInOut{Output}{Output}
+  \SetKwRepeat{Do}{do}{while}
+  \Fn{\FPeriodViaILP{$\mrbgraph, \ChannelDecisions, \SetBindingsActors$}}{
+    \Input{Application graph $\mrbgraph$, channel decision function $\ChannelDecisions$, and the set of actor bindings $\SetBindingsActors$}
+    \Output{Period $\Period$, set of bindings $\SetBindings$, and the channel capacity function $\Capacity$}
+    \BlankLine
+%   \Do{\Cref{eq:memoryConstraint} not satisfied \label{ln:ilp-loop-end}}{ \label{ln:ilp-loop-start}
+    \Do{$\exists \memory \in \SetMemories : \sum_{(\channel,\memory) \in \SetBindingsChannels} \Capacity(\channel) \cdot \Size(\channel) > \MemoryCapacity{\memory}$ \label{ln:ilp-loop-end}}{ \label{ln:ilp-loop-start}
+      $\SetBindingsChannels \leftarrow \texttt{determineChannelBindings}(\ChannelDecisions, \Capacity, \SetBindingsActors)$ \label{ln:ilp-derive-channel-bindings} \\
+%     $\SetActors_\resource \leftarrow \{ \actor \in \mrbgraph.\SetActors \mid \resource = \SetBindingsActors(\actor) \}\quad\forall \resource \in \SetResources$\\
+%     $\SetTasks_\resource \leftarrow \SetActors_\resource \cup \{ (\channel, \actor) \in \mrbgraph.\SetPGEdges \mid \resource \in \Routing(\SetBindingsActors(\actor), \SetBindingsChannels(\channel)) \}\quad\forall \resource \in \SetCores \cup \SetInterconnects$\\
+%     $\SetTasks_\resource \leftarrow \SetTasks_\resource \cup \{ (\actor, \channel) \in \mrbgraph.\SetPGEdges \mid \resource \in \Routing(\SetBindingsActors(\actor), \SetBindingsChannels(\channel)) \}\quad\forall \resource \in \SetCores \cup \SetInterconnects$\\
+      Solve \ac{ILP} \label{ln:ilp-solve} \\
+      \nonl
+        \begin{tabular}{lr@{\,}lr}
+          minimize                                                                    & $\Period$                                                        & $\in \RealsNonNegative$    & \AddEqLabel{eq:ilp-objective}\\
+          $\forall \task \in \SetTasks$                                               & $\startTime_\task$                                               & $\in \RealsNonNegative$    & \AddEqLabel{eq:def-start-times}\\
+          $\forall (\actor, \channel), (\channel, \actor') \in \mrbgraph.\SetPGEdges$ & $\startTime_{(\actor,\channel)} + \execTime_{(\actor,\channel)} - \Period\cdot\Delay(\channel)$ & $\leq \startTime_{(\channel,\actor')}$ & \AddEqLabel{eq:dep-actor-read}\\
+          $\forall (\channel,\actor) \in \mrbgraph.\SetPGEdges$                       & $\startTime_{(\channel,\actor)} + \execTime_{(\channel,\actor)}$ & $\leq \startTime_\actor$   & \AddEqLabel{eq:dep-actor-execute}\\
+          $\forall (\actor,\channel) \in \mrbgraph.\SetPGEdges$                       & $\startTime_\actor + \execTime_\actor$                           & $\leq \startTime_{(\actor,\channel)}$                                 & \AddEqLabel{eq:dep-actor-write}\\
+          $\forall \resource \in \SetResources\;\forall \task, \task' \in \SetTasks_\resource$ & $\startTime_\task + \execTime_\task - \Period$          & $\leq \startTime_{\task'}$ & \AddEqLabel{eq:cstr-resource}\\
+        \multicolumn{2}{l@{\,}}{$\forall \resource \in \SetInterconnects \cup \SetCores\;\forall \task, \task' \in \SetTasks_\resource \wedge \task \neq \task'$\hspace{1.7cm}$\order_{\task,\task'}$}
+                                                            & $\in \{0, 1\}$                              & \AddEqLabel{eq:def-order-edges}\\
+          & $\order_{\task,\task'} + \order_{\task',\task}$ & $= 1$                                       & \AddEqLabel{eq:cstr-order-one}\\
+        \multicolumn{4}{l}{$\forall \interconnect \in \SetInterconnects\;\forall \task, \task' \in \SetTasks_\interconnect \wedge \task \neq \task'$}\\
+          & $\startTime_\task + \execTime_\task - \bigDelay\cdot(1-\order_{\task,\task'})$                & $\leq \startTime_{\task'}$ & \AddEqLabel{eq:seq-communicate}\\
+        \multicolumn{4}{l}{$\forall \core \in \SetCores\;\forall \actor, \actor' \in \SetActors_\core \wedge \actor \neq \actor'\;\forall \task \in OUT(\actor), \task' \in IN(\actor')$}\\
+          & $\startTime_\task + \execTime_\task - \bigDelay\cdot(1-\order_{\actor,\actor'})$              & $\leq \startTime_{\task'}$ & \AddEqLabel{eq:seq-compute}
+        \end{tabular}\nl\\
+      Increase $\Capacity(\channel)$ to accommodate \ac{ILP} schedule \quad$\forall \channel \in \mrbgraph.\SetChannels$ \label{ln:ilp-increase-channel-capacities}\\
+    }
+    \Return $(\Period, \SetBindingsActors \cup \SetBindingsChannels, \Capacity)$
+  }
+\end{algorithm}
+%\LinesNumbered
+Note that the scheduling via \ac{ILP} is performed in a loop (\crefrange{ln:ilp-loop-start}{ln:ilp-loop-end}).
+The reason is that for an \ac{ILP}-derived schedule, the channel capacities might need to be increased to execute this schedule (\cref{ln:ilp-increase-channel-capacities}), and the channel bindings might need to be modified in consequence to accommodate the enlarged channels (\cref{ln:ilp-derive-channel-bindings}).
+The loop terminates when all channels fit into the memories they are bound to (\cref{ln:ilp-loop-end}).
+\par
+The objective of the \ac{ILP} itself is the minimization of the execution period $\Period$ (\cref{eq:ilp-objective}).
+Moreover, for each task $\task \in \SetTasks$, the \ac{ILP} determines a start time $\startTime_\task$ (\cref{eq:def-start-times}).
+\Crefrange{eq:dep-actor-read}{eq:dep-actor-write} encode the data dependencies of the application graph $\mrbgraph$.
+In particular, \cref{eq:dep-actor-read} denotes that a token cannot be read from a channel $\channel$ before it has been written into it, also considering the number of initial tokens $\Delay(\channel)$ of the channel.
+\Cref{eq:dep-actor-execute} ensures that each actor can only start after all its reads from ingoing edges have been performed, and \cref{eq:dep-actor-write} enforces that each actor write can only start after its actor computation has finished.
+\Cref{eq:cstr-resource} guarantees for each resource $\resource$ that all tasks $\task \in \SetTasks_\resource$ mapped to this resource are executed within a time interval of duration $\Period$.
+Finally, to ensure a feasible schedule, the \ac{ILP} must enforce that tasks mapped to the same resource have non-overlapping executions.
+For this purpose, sequentialization binary variables $\order_{\task,\task'}$ are introduced for each pair of tasks that share a resource (\cref{eq:def-order-edges}).
+Here, $\order_{\task,\task'} = 1$ denotes that task $\task$ must finish before task $\task'$ is started.
+Thus, exactly either $\order_{\task,\task'}$ or $\order_{\task',\task}$ must be one (\cref{eq:cstr-order-one}).
+These variables are then used to sequentialize the communication over the interconnects (\cref{eq:seq-communicate}) and the actor executions performed by the cores (\cref{eq:seq-compute}).
+In these equations, $\bigDelay \gg \Period$ is a value much greater than the execution period, that is used to disable the sequentialization constraint that task $\task$ must finish before task $\task'$ is started in the case that $\order_{\task,\task'} = 0$.
+The sequentialization of actors mapped to the same core (\cref{eq:seq-compute}) is enforced indirectly by constraining that all write tasks $\task \in OUT(\actor)$ of actor $\actor$ are finished before the read tasks $\task' \in IN(\actor')$ of actor $\actor'$ are started.
+This ensures that all reads of an actor, then the actor itself, and finally, all writes of the actor are executed in sequence without interspersing of reads and writes of other actors into this sequence.
+\par
+However, if actor $\actor$ is a sink actor (i.e., has no output edges) or actor $\actor'$ is a source actor (i.e., has no input edges), a simple definition of $OUT(\actor)$ and $IN(\actor')$ as the set of all output edges of actor $\actor$, respectively, the set of all input edges of actor $\actor'$ would fail to enforce the sequentialization that actor $\actor$ is completed before actor $\actor'$ fires.
+To handle these cases, $OUT(\actor)$ returns the set containing only the actor $\actor$ itself when this actor is a sink.
+Conversely, $IN(\actor')$ returns the set containing only the actor $\actor'$ itself when this actor is a source.
+Formally, $OUT(\actor)$ and $IN(\actor')$ are defined as follows:
+\scalebox{0.86}{\parbox{1.14\columnwidth}{
+\begin{align*}
+  OUT(\actor) = & \begin{cases}
+       \SetPGEdgesOut(\actor) & \text{if } \SetPGEdgesOut(\actor) \neq \emptyset \\
+       \{ \actor \}           & \text{otherwise}
+    \end{cases}&
+  IN(\actor') = & \begin{cases}
+       \SetPGEdgesIn(\actor') & \text{if } \SetPGEdgesIn(\actor') \neq \emptyset \\
+       \{ \actor' \}          & \text{otherwise}
+    \end{cases}
+\end{align*}}}
+Here, $\SetPGEdgesOut(\actor) = \{ (\hat{\actor}, \hat{\channel}) \in \mrbgraph.\SetPGEdgesOut \mid \hat{\actor} = \actor \}$ denotes the set of all output edges (i.e., write operations) of actor $\actor$ and, correspondingly, $\SetPGEdgesIn(\actor') = \{ (\hat{\channel}, \hat{\actor}) \in \mrbgraph.\SetPGEdgesIn \mid \hat{\actor} = \actor' \}$ denotes the set of all input edges (i.e., read operations) of actor $\actor'$.
+
+\subsection{Heuristic-based Decoding}\label{sec:heuristic}
+
+\begin{figure*}[ht]
+%  \begin{subfigure}[b]{\textwidth}
+  \resizebox{1.02\textwidth}{!}{
+  \begin{tikzpicture}
+     \ExampleHeuristic
+  \end{tikzpicture}
+  }
+  \caption{\label{fig:exHeuristicOne} Left: Example of given actor and channel bindings, with all communication channels bound to $\memory_{\tile_1}$, actors $\actor_1$ and $\actor_2$ bound to core $\core_1$, and actors $\actor_3$, $\actor_4$, and $\actor_5$ bound to cores $\core_2$, $\core_3$, and $\core_4$, respectively.
+    During scheduling, time intervals in the utilization sets $\Utilization_\resource$ are allocated to task executions, e.g., in the partial schedule depicted in the middle, the execution of actor $\actor_1$ is allocating the time interval $[0,2[ \subseteq \Utilization_{\core_1}$ in the utilization set of core $\core_1$.
+    This partial schedule represents the state when the actors $\actor_1$, $\actor_2$, and $\actor_3$ and all their read and write operations have already been scheduled, and the heuristic is trying to schedule actor $\actor_4$ with its read and write operations.
+    In this state, the read $(\channel_3,\actor_4)$, execute (actor $\actor_4$), and write $(\actor_4,\channel_5)$ sequence has to be delayed from $7$ to $10$ due to contention in the interconnect $\crossbar{1}$, i.e., the interconnect is already occupied by the read $(\channel_2,\actor_3)$ and the write $(\actor_3,\channel_4)$.
+    The final schedule is depicted on the right, where all actors and their read and write operations are shown in the schedule interval $[0, 10[$.
+    Note that the depicted tasks are from different iterations, e.g., the execution of actor $\actor_4$ is from one iteration in the past, while the execution of actor $\actor_5$ is from two iterations in the past.}
+\end{figure*}
+
+To speed up evaluation during exploration, we propose an alternative heuristic-based decoding outlined in~\cref{alg:period-via-heuristic}.
+%for finding periodic schedules for marked graphs using the heuristic-based decoding outlined in~\cref{alg:period-via-heuristic}.
+This algorithm decodes the input genotype $\Genotype$ into the corresponding phenotype $(\Period, \SetBindings, \Capacity)$, as shown in \cref{fig:opt4jOptimizationLoop}.
+\par
+\begin{algorithm}[t!]
+  \scriptsize
+  \caption{Heuristic-based Decoding}\label{alg:period-via-heuristic}
+  \SetKwRepeat{Do}{do}{while}
+  \SetKwFunction{FindPeriod}{decodeViaHeuristic}
+  \SetKw{False}{false}
+  \SetKw{True}{true}
+  \SetKw{Break}{break}
+  \SetKw{Continue}{continue}
+  \SetKwInOut{Input}{Input}
+  \SetKwInOut{Output}{Output}
+  \SetKwProg{Fn}{Function}{}{}
+  \Fn{\FindPeriod{$\mrbgraph, \ChannelDecisions, \SetBindingsActors$}}{
+    \Input{Application graph $\mrbgraph$, channel decision function $\ChannelDecisions$, and the set of actor bindings $\SetBindingsActors$}
+    \Output{Period $\Period$, set of bindings $\SetBindings$, and the channel capacity function $\Capacity$}
+    $\SetBindingsChannels \leftarrow \texttt{determineChannelBindings}(\ChannelDecisions, \Capacity, \SetBindingsActors)$\label{ln:heuristic-initial-channel-bindings}\\
+    $\Period \leftarrow  \max\limits_{\forall \resource \in \SetCores \cup \SetInterconnects} \Big\lceil \sum\limits_{ \forall \task \in \SetTasks_\resource} \execTime_\task \Big\rceil $ \label{ln:heuristic-MII}\\
+    \While{\True\label{ln:heuristic-remap-loop-begin}}{
+      \While{$\neg\canSchedule(\mrbgraph,\SetBindingsActors,\SetBindingsChannels,\Period)$\label{ln:heuristic-schedule-loop-begin}}{
+        $\Period \leftarrow \Period + 1$\label{ln:heuristic-schedule-loop-end}}
+      Increase $\Capacity(\channel)$ to accommodate schedule \quad$\forall \channel \in \mrbgraph.\SetChannels$\label{ln:heuristic-increase-channel-capacities}\\
+      \If{$\forall \memory \in \SetMemories : \sum_{(\channel,\memory) \in \SetBindingsChannels} \Capacity(\channel) \cdot \Size(\channel) \leq \MemoryCapacity{\memory}$\label{ln:heuristic-check-memory-capacities}}{
+        \Break\label{ln:heuristic-remap-loop-terminate}}
+      $\SetBindingsChannels \leftarrow \texttt{determineChannelBindings}(\ChannelDecisions, \Capacity, \SetBindingsActors)$\label{ln:heuristic-update-channel-bindings}\label{ln:heuristic-remap-loop-end}}
+    \Return $(\Period,\SetBindingsActors \cup \SetBindingsChannels, \Capacity)$\label{ln:heuristic-return-phenotype}
+  }
+\end{algorithm}
+First, we determine an initial set of channel bindings $\SetBindingsChannels$ in~\cref{ln:heuristic-initial-channel-bindings}.
+Note that channels may need to be remapped later on (\cref{ln:heuristic-update-channel-bindings}) if it turns out that channel capacities need to be increased (\cref{ln:heuristic-increase-channel-capacities}) to accommodate the found schedule and at least one channel no longer fits into the memory it is bound to (checked in~\cref{ln:heuristic-check-memory-capacities}).
+After initial channel bindings have been determined in \cref{ln:heuristic-initial-channel-bindings}, a lower bound for the period $\Period$ is derived in~\cref{ln:heuristic-MII} from the resource utilization of cores and interconnects.
+Consider \cref{fig:exHeuristicOne} as an example, where bindings and timings are chosen for illustrative purposes with a communication time of one for all reads and writes, i.e., $\execTime_\task = 1\;\forall \task \in \SetPGEdges$.
+The bottleneck resource in this example is the crossbar $\crossbar{1}$ involved in five reads and five writes, leading to a lower bound of $10$ for the period $\Period$.
+\par
+A concrete schedule is calculated by the proposed scheduler \revised{\ac{CAPS-HMS}} depicted in~\cref{alg:canSchedule}.
+\ac{CAPS-HMS} is called with an application $\mrbgraph$, actor and channels bindings $\SetBindingsActors$ and $\SetBindingsChannels$, and a candidate period $\Period$.
+If a schedule with period $\Period$ is found, \textbf{true} is returned, \textbf{false} otherwise.
+This is used by the loop in~\crefrange{ln:heuristic-schedule-loop-begin}{ln:heuristic-schedule-loop-end} of~\cref{alg:period-via-heuristic} to successively increase the period until a schedule is found.
+As discussed previously, channel capacities may need to be enlarged to accommodate the found schedule, possibly resulting in a need to remap channels no longer fitting into memory, necessitating a rescheduling with the updated channel bindings, as is done by the while loop in~\crefrange{ln:heuristic-remap-loop-begin}{ln:heuristic-remap-loop-end}.
+Otherwise, as soon as a schedule with a feasible period $\Period$ is found and all channels fit into the memory they are bound to, \cref{ln:heuristic-remap-loop-terminate} terminates the loop.
+Then, the resulting phenotype $(\Period, \SetBindings, \Capacity)$ is returned in~\cref{ln:heuristic-return-phenotype}.
+\par
+$\canSchedule$ shown in~\cref{alg:canSchedule} follows a greedy strategy, where tasks are scheduled as soon as possible on the resources they are bound to.
+All tasks are assigned a start time of execution within a given interval $[0, \Period[$, i.e., from 0 (included) to $\Period$ (excluded).
+Ultimately, this interval will contain tasks from different iterations to optimize resource utilization.
+To obtain a schedule within the interval $[0, \Period[$, \acs{CAPS-HMS} schedules one iteration of the application graph $\mrbgraph$, thereby wrapping task executions finishing later than the period $\Period$ back into the \emph{schedule interval} $[0, \Period[$ through modulo $\Period$ computation.
+Assuming the task $\task$ is executed in the interval $[\startTime_\task, \startTime_\task + \execTime_\task[$, then in the schedule interval $[0, \Period[$, it will occupy the time region given by $\fWrap(\Period,\startTime_\task, \execTime_\task) = \{ t\mod\Period \mid \startTime_\task \leq t < \startTime_\task + \execTime_\task \}$.
+For example, the execution of actor $\actor_3$ in the schedule depicted in~\cref{fig:exHeuristicOne} (to the right) is from 8 to 11, but it is wrapped into the schedule interval $[0, 10[$ with $\fWrap(10,8,3) = [8, 10[ \cup [0, 1[$.
+\par
+During scheduling, the \emph{resource utilization} of each core or interconnect resource $\resource \in \SetResources \setminus \SetMemories$ is tracked by a corresponding utilization set $\Utilization_\resource \subseteq [0,\Period[$ that contains all time intervals already occupied with scheduled tasks.
+Initially, all resources are free, i.e., the utilization sets are assigned the empty set (\cref{ln:heuristic-clear-utilization-sets} in~\cref{alg:canSchedule}).
+For example, in the state depicted by the partial schedule shown in the middle of~\cref{fig:exHeuristicOne}, the actors $\actor_1$, $\actor_2$, and $\actor_3$ and all their read and write operations have already been scheduled.
+In this state, the heuristic is trying to schedule actor $\actor_4$ with its read and write operations, observing the utilization sets $\Utilization_\crossbar{1} = [1,4[ \cup [5,8[$, $\Utilization_{\core_1} = [0,7[$, $\Utilization_{\core_2} = [0,2[ \cup [7,10[$, $\Utilization_{\core_3} = \Utilization_{\core_4} = \emptyset$.
+\par
+The goal of the scheduling heuristic $\canSchedule$ is to assign for each task $\task \in \SetTasks$ a as early as possible start time $\startTime_\task$ that conforms with the given bindings and satisfies the data dependencies.
+Channel capacities are not considered during scheduling but are adjusted in~\cref{alg:period-via-heuristic} to accommodate the found schedule.
+The start times are initialized with zero at algorithm start (\cref{ln:heuristic-zero-start-times} in~\cref{alg:canSchedule}) as, later on, the heuristic only delays start times to conform to data dependencies and resource constraints.
+$\fHeuristic$ considers for each actor a priority given by the topological sorting of $\mrbgraph$ (see \cref{ln:priority}).
+During scheduling, the heuristic keeps track of actors to be scheduled with the list $\ReadyList$ of ready actors, which is initialized in~\cref{ln:heuristic-init-readylist} as all actors that are initially ready to be fired, e.g., because they are source actors or there is at least one initial token contained in all input channels of the actor.
+Before any actor is selected, the ready list $\ReadyList$ must be sorted in descending order using the previously assigned priority.
+%To schedule the actors, we use a ready list $\ReadyList$ to track the set of fireable actors.
+%When the ready list $\ReadyList$ is empty, it means that all the actors have been successfully scheduled (see \cref{algH:stop}).
+\par
+Actor scheduling is performed by the loop in~\crefrange{ln:heuristic-begin-schedule-loop}{ln:heuristic-end-schedule-loop}, which either \emph{succeeds} (\cref{ln:heuristic-schedule-success}) when there are no longer any actors to be scheduled, i.e., $\ReadyList = \emptyset$, or \emph{fails} (\cref{ln:heuristic-schedule-failure}) when an actor can not be scheduled within the schedule interval $[0, \Period[$ due to insufficient free time remaining on at least one resource to schedule the actor and its read and write operations.
+This failure is indicated by the error flag $\varpi$ checked in (\cref{ln:heuristic-check-failure}).
+Within the scheduling loop, an actor $\actor$ to be scheduled is selected from the ready list $\ReadyList$, and its core $\core$ onto which it is bound is derived from the bindings $\SetBindingsActors$ (\cref{ln:heuristic-select-actor}).
+Then, the time $\execTime'_\actor$ that an actor $\actor$, including its communication tasks, requires to be scheduled on core $\core$ is computed.
+For this purpose, we sum the actor’s execution time $\execTime_{\actor}$ and the required times $\timeInputReads$ and $\timeOutputWrites$ for the actors read $\task \in \SetPGEdgesIn(\actor)$ and write $\task \in \SetPGEdgesOut(\actor)$ communication tasks (see \cref{ln:heuristic-actor-com-plus-exec-time}).
+To exemplify, for the actor $\actor_1$, $\execTime_{\SetPGEdgesIn(\actor_1)} = 0$ as the actor is a source actor having no inputs, $\execTime_{\SetPGEdgesOut(\actor_1)} = 1$ as there is a single write task with communication time $\execTime_{(\actor_1,\channel_1)} = 1$, resulting in an overall time including communication of $\execTime'_{\actor_1} = \execTime_{\SetPGEdgesIn(\actor_1)} + \execTime_{\actor_1} + \execTime_{\SetPGEdgesOut(\actor_1)} = 0 + 2 + 1 = 3$.
+\par
+\begin{algorithm}[t!]
+  \scriptsize
+  \caption{$\fHeuristic$}\label{alg:canSchedule}
+  \SetKwRepeat{Do}{do}{while}
+  \SetKwFunction{FMain}{$\canSchedule$}
+  \SetKw{Continue}{continue}
+  \SetKw{False}{false}
+  \SetKw{True}{true}
+  \SetKw{Break}{break}
+  \SetKwInOut{Input}{Input}
+  \SetKwInOut{Output}{Output}
+  \SetKwProg{Fn}{Function}{}{}
+  \SetKwFor{Case}{case}{}{end case}%
+
+  \Fn{\FMain{$\mrbgraph, \SetBindingsActors, \SetBindingsChannels, \Period$}}{
+    \Input{Application $\mrbgraph$, bindings $\SetBindingsActors$ and $\SetBindingsChannels$, and a candidate period $\Period$ }
+    \Output{\True if a schedule for $\mrbgraph$ of period $\Period$ is found, \False otherwise}
+    \parbox{1cm}{$\Utilization_{\resource}  \leftarrow \emptyset$}$\forall \resource \in \SetResources \setminus \SetMemories$ \label{ln:heuristic-clear-utilization-sets} \\
+    \parbox{1cm}{$\startTime_\task          \leftarrow 0        $}$\forall \task \in \SetTasks = \mrbgraph.\SetActors \cup \mrbgraph.\SetPGEdges$ \label{ln:heuristic-zero-start-times} \\
+    $z_{\actor}\leftarrow $ assign  topological sorting~\cite{cormen} as priority $\forall \actor \in \mrbgraph.\SetActors$\label{ln:priority} \\
+    $\ReadyList \leftarrow \{\actor \in \mrbgraph.\SetActors \mid \actor\textrm{ is ready to fire }\}$ \label{ln:heuristic-init-readylist}\\
+    \While{$\ReadyList \neq \emptyset$\label{ln:heuristic-begin-schedule-loop}}{
+      Sort $\ReadyList$ in descending order using priority $z$ \label{ln:sort} \\
+      $\actor \leftarrow \fPop(\ReadyList)$ ; $\core \leftarrow \SetBindingsActors(\actor)$ \label{ln:heuristic-select-actor} \\
+    $\timeInputReads \leftarrow \sum\limits_{\task \in \SetPGEdgesIn(\actor)} \execTime_{\task}$ ; $\timeOutputWrites \leftarrow \sum\limits_{\task \in \SetPGEdgesOut(\actor)} \execTime_{\task}$ ; $\execTime'_\actor \leftarrow \timeInputReads + \execTime_\actor + \timeOutputWrites$ \label{ln:heuristic-actor-com-plus-exec-time} \\
+      $\varpi \leftarrow \True$ \label{ln:heuristic-init-error-indicator} \\
+      \ForEach{$\startTime'_\actor \in [\startTime_\actor,\startTime_\actor+\Period[: \Utilization_\core \cap \fWrap(\Period, \startTime'_\actor, \execTime'_\actor) = \emptyset$\label{ln:heuristic-free-core-time-span}
+ }{
+        \parbox{2.6cm}{$(\task_{cns,1},\task_{cns,2},\ldots\task_{cns,|\SetPGEdgesIn(\actor)|})$}  $\leftarrow \SetPGEdgesIn(\actor)$\label{ln:heuristic-order-inputs}\\
+        \parbox{2.6cm}{$(\task_{prd,1},\task_{prd,2},\ldots\task_{prd,|\SetPGEdgesOut(\actor)|})$} $\leftarrow \SetPGEdgesOut(\actor)$\label{ln:heuristic-order-outputs}\\
+        \parbox{2.3cm}{$\startTime_{\task_{cns,i}} \leftarrow \startTime'_\actor                                     $}$ + \sum\limits_{j=1}^{i-1} \execTime_{\task_{cns,j}}\quad\forall i \in \{1,\ldots,|\SetPGEdgesIn(\actor)|\}$  \label{ln:heuristic-assign-read-times} \\
+        \parbox{2.3cm}{$\startTime_{\task_{prd,i}} \leftarrow \startTime'_\actor + \timeInputReads + \execTime_\actor$}$ + \sum\limits_{j=1}^{i-1} \execTime_{\task_{prd,j}}\quad\forall i \in \{1,\ldots,|\SetPGEdgesOut(\actor)|\}$ \label{ln:heuristic-assign-write-times} \\
+	\If{$\forall \task \in \SetPGEdgesIn(\actor) \cup \SetPGEdgesOut(\actor), \resource \in \Routing(\task) : \Utilization_\resource \cap \fWrap(\Period, \startTime_\task, \execTime_\task) = \emptyset$ \label{ln:heuristic-free-interconnects}}{
+                $\startTime_\actor \leftarrow \startTime'_\actor +\timeInputReads $ \label{ln:heuristic-update-actor-start-time}\\
+		$\Utilization_\core     \leftarrow \Utilization_\core     \cup \fWrap(\Period, \startTime_\actor,\execTime_\actor)$ \label{ln:heuristic-schedule-actor} \\
+		\parbox{2.5cm}{$\Utilization_\resource \leftarrow \Utilization_\resource \cup \fWrap(\Period, \startTime_\task, \execTime_\task)$} $\forall \task \in \SetPGEdgesIn(\actor) \cup \SetPGEdgesOut(\actor), \resource \in \Routing(\task)$ \label{ln:heuristic-schedule-com} \\
+                \parbox{2.5cm}{$\startTime_{\actor'} \leftarrow \max(\startTime_{\actor'}, \startTime'_\actor + \execTime'_{\actor})$}             $\forall (\actor,\channel), (\channel,\actor') \in \mrbgraph.\SetPGEdges \wedge \Delay(\channel) = 0$ \label{ln:heuristic-update-successor-start-times} \\
+                $\ReadyList \leftarrow (\ReadyList \setminus \{\actor\}) \cup \{\actor' \in \mrbgraph.\SetActors \mid \textrm{unscheduled actor }\actor'$ is ready due to the firing of actor $\actor\}$\label{ln:heuristic-update-readylist}\\
+                $\varpi \leftarrow \False$ ; \Break \label{ln:heuristic-clear-error-indicator}
+        }
+      }
+      \If{$\varpi$\label{ln:heuristic-check-failure}}{
+	\Return \False \label{ln:heuristic-schedule-failure}}\label{ln:heuristic-end-schedule-loop}
+    }
+    \Return \True \label{ln:heuristic-schedule-success}
+  }
+\end{algorithm}
+Next, the scheduling heuristics searches for a free time span $[\startTime'_\actor, \startTime'_\actor+\execTime'_\actor[$ in the utilization set $\Utilization_\core$ of core $\core$ (\cref{ln:heuristic-free-core-time-span}) to schedule the actor $\actor$ and its read and write operations.
+First, however, the error indicator $\varpi$ is set to \textbf{true} (\cref{ln:heuristic-init-error-indicator}).
+Later, in case the loop in~\crefrange{ln:heuristic-free-core-time-span}{ln:heuristic-clear-error-indicator} successfully schedules the actor and its communication, the error flag $\varpi$ will be reset to \textbf{false} to indicate success, and the loop will be terminated (\cref{ln:heuristic-clear-error-indicator}).
+In detail, \cref{ln:heuristic-free-core-time-span} iterates over start times $\startTime'_\actor$ that satisfies the data dependencies of actor $\actor$, i.e., $\startTime'_\actor \geq \startTime_\actor$, while simultaneously not overlapping with already scheduled tasks on core $\core$, i.e., $\Utilization_\core \cap \fWrap(\Period, \startTime'_\actor, \execTime'_\actor) = \emptyset$.
+Moreover, as the schedule is $\Period$ periodic, the heuristic only needs to examine start times $\startTime'_\actor < \startTime_\actor + \Period$.
+\par
+Next, the read $\task_{cns,i}$ and write $\task_{prd,i}$ operations of actor $\actor$ are identified in~\cref{ln:heuristic-order-inputs,ln:heuristic-order-outputs}.
+Then, for each read $\task_{cns,i}$ operation, a start time $\startTime_{\task_{cns,i}}$ is assigned from the time span $[\startTime'_{\actor}, \startTime'_{\actor}+\timeInputReads[$ before the execution of actor $\actor$ (see \cref{ln:heuristic-assign-read-times}).
+Conversely, for each write task $\task_{prd,i}$, a start time $\startTime_{\task_{prd,i}}$ is assigned from the time span $[\startTime'_{\actor}+\timeInputReads+\execTime_\actor,\startTime'_{\actor}+\execTime'_\actor[$ just after the execution of actor $\actor$ (see \cref{ln:heuristic-assign-write-times}).
+Subsequently, $\canSchedule$ checks for each communication task $\task \in \SetPGEdgesIn(\actor) \cup \SetPGEdgesOut(\actor)$ if all the (interconnect) resources $\resource \in \Routing(\task)$ traversed by the read or write operation $\task$ are available during the time span $[\startTime_\task,\startTime_\task+\execTime_\task[$ in which the communication operation is performed (\cref{ln:heuristic-free-interconnects}).
+If the interconnects are free, the start time of actor $\actor$ is updated (see \cref{ln:heuristic-update-actor-start-time}), actor $\actor$ is scheduled to core $\core$ (see \cref{ln:heuristic-schedule-actor}), and each communication task $\task \in \SetPGEdgesIn(\actor) \cup \SetPGEdgesOut(\actor)$ is scheduled to its traversed resources $\resource \in \Routing(\task)$ (see \cref{ln:heuristic-schedule-com}).
+Then, for each successor actor $\actor'$ of actor $\actor$, its start time $\startTime_{\actor'}$ is updated to respect the data dependency between actor $\actor$ and $\actor'$ (\cref{ln:heuristic-update-successor-start-times}).
+Next, actor $\actor$ is removed from the ready list $\ReadyList$, and all unscheduled actors $\actor'$ that have been enabled by firing actor $\actor$ are added to the ready list (\cref{ln:heuristic-update-readylist}).
+Finally, the foreach loop is terminated in~\cref{ln:heuristic-clear-error-indicator} to continue scheduling the next actor until all the actors have been scheduled (\cref{ln:heuristic-schedule-success}) or there is insufficient free time remaining on at least one resource to schedule all actors and their read and write operations (\cref{ln:heuristic-schedule-failure}).
+\par
+\revised{The complexity of the \ac{CAPS-HMS} heuristic can be derived from analyzing the nested loops in \cref{ln:heuristic-begin-schedule-loop,ln:heuristic-free-core-time-span,ln:heuristic-free-interconnects}.
+The outer while loop in~\cref{ln:heuristic-begin-schedule-loop}, which iterates over all tasks $\task \in \SetTasks$ to be scheduled, contributes to the overall complexity of~\cref{alg:canSchedule} with a factor of $|\SetTasks|$, with $\SetTasks = \SetActors \cup \SetPGEdges$.
+The foreach loop in~\cref{ln:heuristic-free-core-time-span} contributes to the overall complexity of~\cref{alg:canSchedule} also with a factor of $|\SetTasks|$, as we need to check at most $|\SetTasks|$ points in time.
+Finally, the impact of the iteration over all resources $\resource \in \Routing(\task)$ traversed by a communication task $\task$ of actor $\actor$ (see the if condition in~\cref{ln:heuristic-free-interconnects}) depends on the number of traversed resources limited by the number of interconnects $|\SetInterconnects|$, and to account also for the core the actor is bound to, this number increases by one, i.e., $|\SetInterconnects|+1$.
+In summary, the complexity of \ac{CAPS-HMS} is therefore $O(|\SetTasks|^2\cdot(|\SetInterconnects|+1))$, which is polynomial w.r.t. the number of tasks $|\SetTasks|$ to be scheduled.}
+%\revised{The complexity of the \ac{CAPS-HMS} heuristic can be derived from analyzing the nested loops in \cref{ln:heuristic-begin-schedule-loop,ln:heuristic-free-core-time-span,ln:heuristic-free-interconnects}. 
+%The expression in \cref{ln:heuristic-free-interconnects} represents a loop that iterates over both all edges (i.e., communication tasks $\task \in \SetPGEdgesIn(\actor)  \cup \SetPGEdgesOut(\actor)$) adjacent to actor $\actor$ and resources $\resource \in \Routing(\task)$ traversed by these communication tasks to check the if condition. 
+%Note that iterating over all adjacent edges to actor $\actor$ is also performed in \cref{ln:heuristic-actor-com-plus-exec-time,ln:heuristic-order-inputs,ln:heuristic-order-outputs,ln:heuristic-assign-read-times,ln:heuristic-assign-write-times,ln:heuristic-schedule-com,ln:heuristic-update-successor-start-times}. 
+%The complexity contribution of the iteration over all adjacent edges of an actor $\actor$ can be factored out by observing that all edges $\edge \in \SetPGEdges$ of $\mrbgraph$ will be iterated over when we have iterated over all actors $\actor \in \SetActors$ of $\mrbgraph$. 
+%The outer while loop in \cref{ln:heuristic-begin-schedule-loop}, which iterates over all actors, contributes to the overall complexity of \cref{alg:canSchedule} with a factor of $|\SetTasks|$, as $\SetTasks = \SetActors \cup \SetPGEdges$. 
+%Next, the complexity factor contribution of the loop in \cref{ln:heuristic-free-core-time-span} is examined. 
+%First, note that the loop searches for the earliest time an actor and its communication tasks can start. 
+%Therefore, the actor or at least one of its communication tasks will start immediately after another task has finished. 
+%The foreach loop in \cref{ln:heuristic-free-core-time-span} contributes to the overall complexity of \cref{alg:canSchedule} with a factor of $|\SetTasks|$, as we need to check at most $|\SetTasks|$ points in time. 
+%Finally, the impact of the iteration over all resources $\resource \in \Routing(\task)$ traversed by a communication task $\task$ of actor $\actor$ (see the if condition in \cref{ln:heuristic-free-interconnects}) depends on the number of traversed resources limited by the number of interconnects $|\SetInterconnects|$, and to account for the core the actor is bound to, this number has to be increased by one, i.e., $|\SetInterconnects|+1$. 
+%In summary, the complexity of \ac{CAPS-HMS} is $O(|\SetTasks|^2\cdot(|\SetInterconnects|+1))$, which is polynomial w.r.t. the number of tasks $|\SetTasks|$ to be scheduled.
+%}
+%\revised{In summary, the complexity of \ac{CAPS-HMS} is $O((|\SetTasks|)^2)$ which is polynomial w.r.t. the number of tasks $|\SetTasks|$ to be scheduled.
+%In a worst case, the number of operations to be executed by \cref{alg:canSchedule} are $|\SetTasks|$ tasks to be scheduled times the number of possible gaps in the utilization list $\Utilization$ that might also be $|\SetTasks|$ at most.
+%}
+\par
+We will see in~\cref{sec:results} that although our heuristic scheduler $\canSchedule$ does not guarantee to determine a schedule of minimal period $\Period$ for a given combination of graph, channel decision function, and actor bindings, it turns out to require much less execution time than using the \ac{ILP} scheduling approach presented in \cref{sec:ILP}.
+When comparing related Pareto front qualities, we will also show that the degradation is little for many test applications.
+Particularly for large applications and complexity of the target architecture, the \ac{ILP} solution times can become prohibitively long.

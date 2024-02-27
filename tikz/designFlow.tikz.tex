@@ -1,0 +1,81 @@
+\newcommand{\DesignFlowReshaped}{
+ \tikzstyle{myNode}=[rectangle, draw=black, rounded corners=8pt, inner sep=2pt, minimum height=1cm, minimum width=3cm]
+
+    \node[myNode, xshift=4.5cm, fill=orange!15,] (cre) {\textbf{Creator}};
+    \node[myNode, fill=green!15,] (rec) {\textbf{Recombinator}};
+    \node[myNode, yshift=-4cm, fill=blue!15, ] (sel) at (rec) {\textbf{Selector}};
+    \node[myNode, xshift=3.5cm, fill=red!15, ] (upd) at ($(rec.center)!0.5!(sel.center)$) {\textbf{Update}};
+
+%   \node[yshift=1cm, font=\it] (init) at (rec.north) {initial population};
+
+    \path[black, -latex] (cre) edge node[right, align=center,]{\begin{tabular}{c}\textit{initial}\\\textit{population}\end{tabular}  } (upd)
+    (rec) edge[bend left] node[below left, align=center]{\textit{offspring}} (upd)
+    (upd) edge[bend left] node[above left, align=center]{\textit{population}} (sel)
+    (sel) edge[bend left=40] node[right, align=center]{\textit{parents}} (rec);
+
+    \draw[densely dashed, black!50] (upd.north east) --++(40:3cm)--++(0:0.5cm);
+    \draw[densely dashed, black!50] (upd.south east) --++(-40:3cm)--++(0:0.5cm);
+
+
+    \node[myNode, fill=red!5,  xshift=5.5cm, yshift=1.5cm] (dec) at (upd)   {\textbf{Decoder}};
+    \node[myNode, fill=red!5,  xshift=5.5cm, yshift=-1.5cm] (eval) at (upd) {\textbf{Evaluators}};
+
+    \draw[-latex, black] (eval) -- node[right, align=center]{\begin{tabular}{c}\textit{objectives}\\$(\Period,\MemoryFootprint,\CoreCost)$ \end{tabular} }++(-90:1.5cm);
+    \draw[-latex, black] (dec) -- node[left, align=center]{\begin{tabular}{c} \textit{phenotype} \\ $(\Period,\SetBindings,\Capacity)$ \end{tabular}} (eval);
+
+    \node[above of=dec,yshift=0.5cm] (inputGenotype) {\begin{tabular}{c}$\Genotype=(\useMRB,\ChannelDecisions,\SetBindingsActors)$\end{tabular}};
+    \draw[-latex, black] (inputGenotype) -- node[right, align=center]{}(dec);
+
+
+    \node[myNode, fill=red!5, below of=upd , yshift=-5cm,xshift=-3cm] (decod)   {\textbf{Decoder}};
+    \draw[densely dashed, black!50] (decod.north east) --++(40:1.5cm)--++(0:0.5cm);
+    \draw[densely dashed, black!50] (decod.south east) --++(-40:1.5cm)--++(0:0.5cm);
+
+    \node[right of=decod, xshift=3cm,anchor= west,yshift=1cm] (subs)  {$\mrbgraph \leftarrow$ \texttt{substituteMRBs}$(\pgraph,\useMRB)$};
+    \matrix[matrix of math nodes,left delimiter=\lbrace,right of=decod, anchor=west, xshift=4cm, yshift=-0.5cm] (mat)
+    {
+      \texttt{decodeViaILP}(\mrbgraph,\ChannelDecisions,\SetBindingsActors) \\
+      \texttt{decodeViaHeuristic}(\mrbgraph,\ChannelDecisions,\SetBindingsActors)\\
+    };
+    \node [left=5pt of mat,yshift=1pt] {$(\Period,\SetBindings,\Capacity)\leftarrow$};
+}
+
+\newcommand{\DesignFlow}{
+ \tikzstyle{myNode}=[rectangle, draw=black, rounded corners=8pt, inner sep=2pt, minimum height=1cm, minimum width=3cm]
+
+    \node[myNode, xshift=4.5cm, fill=orange!15,] (cre) {\textbf{Creator}};
+    \node[myNode, fill=green!15,] (rec) {\textbf{Recombinator}};
+    \node[myNode, yshift=-4cm, fill=blue!15, ] (sel) at (rec) {\textbf{Selector}};
+    \node[myNode, xshift=3.5cm, fill=red!15, ] (upd) at ($(rec.center)!0.5!(sel.center)$) {\textbf{Update}};
+
+%   \node[yshift=1cm, font=\it] (init) at (rec.north) {initial population};
+
+    \path[black, -latex] (cre) edge node[right, align=center,]{\begin{tabular}{c}\textit{initial}\\\textit{population}\end{tabular}  } (upd)
+    (rec) edge[bend left] node[below left, align=center]{\textit{offspring}} (upd)
+    (upd) edge[bend left] node[above left, align=center]{\textit{population}} (sel)
+    (sel) edge[bend left=40] node[right, align=center]{\textit{parents}} (rec);
+
+    \draw[densely dashed, black!50] (upd.north east) --++(40:3cm)--++(0:0.5cm);
+    \draw[densely dashed, black!50] (upd.south east) --++(-40:3cm)--++(0:0.5cm);
+
+
+    \node[myNode, fill=red!5,  xshift=5.5cm, yshift=1.5cm] (dec) at (upd)   {\textbf{Decoder}};
+    \node[myNode, fill=red!5,  xshift=5.5cm, yshift=-1.5cm] (eval) at (upd) {\textbf{Evaluators}};
+
+    \draw[-latex, black] (eval) -- node[right, align=center]{\begin{tabular}{c}\textit{objectives}\\$(\Period,\MemoryFootprint,\CoreCost)$ \end{tabular} }++(-90:1.5cm);
+    \draw[-latex, black] (dec) -- node[left, align=center]{\begin{tabular}{c} \textit{phenotype} \\ $(\Period,\SetBindings,\Capacity)$ \end{tabular}} (eval);
+
+    \node[above of=dec,yshift=0.5cm] (inputGenotype) {\begin{tabular}{c}$\Genotype=(\useMRB,\ChannelDecisions,\SetBindingsActors)$\end{tabular}};
+    \draw[-latex, black] (inputGenotype) -- node[right, align=center]{}(dec);
+
+    \node[right of=dec, xshift=1cm,anchor= west] (subs)  {$\mrbgraph \leftarrow$ \texttt{substituteMRBs}$(\pgraph,\useMRB)$};
+
+    \matrix[matrix of math nodes,left delimiter=\lbrace,right of=dec, anchor=west, xshift=2cm, yshift=-1cm] (mat)
+    {
+      \texttt{decodeViaILP}(\mrbgraph,\ChannelDecisions,\SetBindingsActors) \\
+%      \texttt{decodeViaHeuristic}(\mrbgraph,\ChannelDecisions,\SetBindingsCoreTypes,\allocation)\\
+      \texttt{decodeViaHeuristic}(\mrbgraph,\ChannelDecisions,\SetBindingsActors)\\
+    };
+    \node [left=5pt of mat,yshift=1pt] {$(\Period,\SetBindings,\Capacity)\leftarrow$};
+}
+
